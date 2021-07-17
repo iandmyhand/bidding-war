@@ -9,7 +9,7 @@ import javax.persistence.*
 data class AuctionItem (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = -1,
+    var id: Long,
     var title: String? = null,
     var owner: String? = null,
     var description: String? = null,

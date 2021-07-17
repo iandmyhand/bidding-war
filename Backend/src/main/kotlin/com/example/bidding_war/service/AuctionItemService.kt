@@ -10,25 +10,14 @@ import reactor.core.scheduler.Schedulers
 @Service
 class AuctionItemService(val auctionItemRepository: AuctionItemRepository) {
 
-    fun register(actionItem: AuctionItem) = Mono.fromCallable {
-        auctionItemRepository.save(actionItem)
-    }.subscribeOn(Schedulers.parallel())
+    fun register(actionItem: AuctionItem) = auctionItemRepository.save(actionItem)
 
-    fun findAll() = Mono.fromCallable {
-        auctionItemRepository.findAll()
-    }.subscribeOn(Schedulers.parallel())
-        .flatMapMany { Flux.fromIterable(it) }
+    fun findAll() = auctionItemRepository.findAll()
 
-    fun findById(id: Long) =
-        Mono.fromCallable {
-            auctionItemRepository.findById(id)
-        }.subscribeOn(Schedulers.parallel())
+    fun findById(id: Long) = auctionItemRepository.findById(id)
 
-    fun update(actionItem: AuctionItem) = Mono.fromCallable {
-        auctionItemRepository.save(actionItem)
-    }.subscribeOn(Schedulers.parallel())
+    fun update(actionItem: AuctionItem) = auctionItemRepository.save(actionItem)
 
-    fun delete(id: Long) = Mono.fromCallable {
-        auctionItemRepository.deleteById(id)
-    }.subscribeOn(Schedulers.parallel())
+    fun delete(id: Long) = auctionItemRepository.deleteById(id)
+
 }

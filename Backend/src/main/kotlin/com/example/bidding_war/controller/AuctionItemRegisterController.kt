@@ -20,6 +20,6 @@ class AuctionItemController(val auctionItemService: AuctionItemService){
     fun register(@RequestBody auctionItem: AuctionItem): ResponseEntity<String> {
         auctionItemService.register(auctionItem)
         return ResponseEntity.ok(
-            "register complete")
+            "register complete $auctionItem")
     }
 }
