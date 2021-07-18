@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gradle/
+.idea/
+HELP.md
+build/
+src/main/resources/static/
+src/main/resources/templates/
