@@ -1,9 +1,9 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+Backend/HELP.md
+Backend/.gradle
+Backend/build/
+!Backend/gradle/wrapper/gradle-wrapper.jar
+!**/Backend/src/main/**/build/
+!**/Backend/src/test/**/build/
 
 ### STS ###
 .apt_generated
@@ -35,7 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-
-Backend/build/
-Backend/.gradle/
 Frontend/node_modules/
