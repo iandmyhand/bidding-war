@@ -1,0 +1,22 @@
+{{> layouts/header }}
+
+<dl class="text-center row">
+    <h1 class="display-5">상품 설명</h1>
+
+    <dt class="col-sm-3">제품명</dt>
+    <dd class="col-sm-9"><p>{{item.productName}}</p></dd>
+
+    <dt class="col-sm-3">제목</dt>
+    <dd class="col-sm-9"><p>{{item.title}}</p></dd>
+
+    <dt class="col-sm-3">내용</dt>
+    <dd class="col-sm-9"><p>{{item.content}}</p></dd>
+
+    <dt class="col-sm-3">가격</dt>
+    <dd class="col-sm-9"><p>{{item.price}}</p></dd>
+
+    <dt class="col-sm-3 text-truncate">생성시간</dt>
+    <dd class="col-sm-9"><p>{{item.createdTime}}</p></dd>
+</dl>
+
+{{> layouts/footer }}

@@ -4,7 +4,7 @@ import com.example.biddingwar.entity.Item
 
 class ItemCreateForm(val productName: String,
                      val title: String, val content:String,
-                     val price: Int, val userID: String, val userPWD: String) {
+                     val price: Int) {
 
     override fun toString(): String{
         return "ItemForm{\n" +

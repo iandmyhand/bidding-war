@@ -1,0 +1,25 @@
+{{> layouts/header }}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>제품명</td>
+            <td>제목</td>
+            <td>가격</td>
+            <td>생성시간</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    {{#items}}
+        <tr>
+            <td class="col-sm-3" onclick="">{{productName}}</td>
+            <td class="col-sm-3">{{title}}</td>
+            <td class="col-sm-3">{{price}}</td>
+            <td class="col-sm-3">{{createdTime}}</td>
+        </tr>
+    {{/items}}
+    </tbody>
+</table>
+
+{{> layouts/footer }}
