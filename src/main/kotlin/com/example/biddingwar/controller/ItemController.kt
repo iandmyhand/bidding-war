@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping
 class ItemController(@Autowired val itemRepository: ItemRepository) {
     @GetMapping("/item")
     fun listItem(model:Model): String{
-        return "listItem"
+        return "items/listItem"
     }
 
     @GetMapping("/item/search")
@@ -23,7 +23,7 @@ class ItemController(@Autowired val itemRepository: ItemRepository) {
 
     @GetMapping("/item/create")
     fun createItemForm(): String{
-        return "items/createItem"
+        return "items/createItemForm"
     }
 
     @PostMapping("/item/create")
