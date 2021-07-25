@@ -12,3 +12,4 @@ Bidding platform for Kotlin &amp; Spring framework study.
 
 1. 테스트 코드 작성하기
 2. 프론트 구현하기 - 목록조회/단건조회 +@상품 등록
+   - 참고 : https://www.baeldung.com/spring-boot-react-crud

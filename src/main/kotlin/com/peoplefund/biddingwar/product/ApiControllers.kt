@@ -14,8 +14,8 @@ class ProductController(
 ) {
 
     @PostMapping
-    fun createProduct(@RequestBody @Valid productDto: ProductDto): ResponseEntity<Any> {
-        val product: Product = productDto.of()
+    fun createProduct(@RequestBody @Valid productCreateRequest: ProductCreateRequest): ResponseEntity<Any> {
+        val product: Product = productCreateRequest.of()
         productRepository.save(product)
         return ResponseEntity
             .created(URI.create("/api/products/" + product.id))
@@ -23,24 +23,24 @@ class ProductController(
     }
 
     @GetMapping("/{id}")
-    fun getProduct(@PathVariable id: Long): ResponseEntity<ProductDto> {
+    fun getProduct(@PathVariable id: Long): ResponseEntity<ProductResponse> {
         val findProduct = productRepository
             .findById(id)
             .orElseThrow { NoRegisteredProduct() }
 
         return ResponseEntity
             .ok()
-            .body(ProductDto(findProduct))
+            .body(ProductResponse(findProduct))
     }
 
     @GetMapping
-    fun list(@ModelAttribute searchProduct: SearchProductDto): ResponseEntity<List<ProductDto>> {
+    fun list(@ModelAttribute searchProduct: SearchProductDto): ResponseEntity<List<ProductResponse>> {
         val findProducts = productService.list(searchProduct)
 
         return ResponseEntity
             .ok()
             .body(findProducts.map { product ->
-                ProductDto(product)
+                ProductResponse(product)
             })
     }
 
