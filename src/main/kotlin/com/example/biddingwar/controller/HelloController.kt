@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class HelloController {
     @GetMapping("/")
-    fun Hello(model: Model): String{
+    fun Init(model: Model): String{
         model["userName"] = "gwangho"
         model["content"] = "안녕하세요"
 

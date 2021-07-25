@@ -17,6 +17,4 @@ class ItemCreateForm(val productName: String,
     fun toEntity(): Item {
         return Item(null, productName, title, content, price)
     }
-
-
 }

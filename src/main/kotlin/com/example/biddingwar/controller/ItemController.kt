@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
@@ -52,10 +49,11 @@ class ItemController(@Autowired val itemRepository: ItemRepository) {
         return "items/list"
     }
 
-    @GetMapping("/detail{id}")
-    fun detailItem(model: Model, @PathVariable id: String): String{
-        model["item"] = itemRepository.findByIdOrNull(id.toInt().toLong())?:
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
+    @GetMapping("/detail")
+    fun detailItem(model: Model, @RequestParam id: Long): String{
+        model["item"] = itemRepository.findByIdOrNull(id)?:
+                throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
         return "items/detail"
     }
 }
+

@@ -5,10 +5,10 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-open class Item(
+class Item(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null,
+        val id: Long? = null ,
         @Column(name = "productName")
         var productName: String,
         @Column(name = "title")
