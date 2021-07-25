@@ -1,0 +1,26 @@
+GET http://localhost:8080/api/products?name=상
+Accept: application/json
+
+###
+GET http://localhost:8080/api/products/1
+Accept: application/json
+
+###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "상1",
+  "amount": 500000
+}
+
+###
+
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "name": "상품1"
+}
+
+###
