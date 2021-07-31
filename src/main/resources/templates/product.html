@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+</head>
+<body>
+    <div class="box-body" th:object="${product}">
+        <div th:text="${product.id}"> id </div>
+        <div th:text="${product.name}"> name </div>
+        <div th:text="${product.description}"> description </div>
+        <div th:text="${product.price}"> price </div>
+        <div th:text="${product.createdDate}"> createdDate </div>
+    </div>
+</body>
+</html>

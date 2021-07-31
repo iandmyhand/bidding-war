@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/resources/css/style.css}">
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>description</th>
+                <th>price</th>
+                <th>createdDate</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${products.empty}">
+                <td colspan="2"> No Books Available </td>
+            </tr>
+            <tr th:each="product : ${products}">
+                <td><span th:text="${product.id}"> id </span></td>
+                <td><span th:text="${product.name}"> name </span></td>
+                <td><span th:text="${product.description}"> description </span></td>
+                <td><span th:text="${product.price}"> price </span></td>
+                <td><span th:text="${product.createdDate}"> createdDate </span></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
