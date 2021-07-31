@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class ItemService(val repository: ItemRepository) {
-    fun getAll() = repository.findAll()
+    fun list() = repository.findAll()
 
     fun get(id: Long) = repository.findById(id)
 

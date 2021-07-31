@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 class ItemController(val service: ItemService) {
 
     @GetMapping
-    fun list() = ResponseEntity.ok(service.getAll())
+    fun list() = ResponseEntity.ok(service.list())
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long) = ResponseEntity.ok(service.get(id))
