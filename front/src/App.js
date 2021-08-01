@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import {useEffect, useState} from "react";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>경매 물품</h1>
+        <ItemList />
     </div>
   );
 }
 
-export default App;
+function ItemList() {
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        axios.get("/item").then(response => setItems(response.data))
+    }, [])
+
+    return (
+        <div>{
+            items.map(item => (
+                <ul>물품명: { item.title } / 시작가: { item.initialPrice} / 설명: { item.description } / 등록일시: { item.registered }</ul>
+            ))
+        }
+        </div>
+    )
+}
