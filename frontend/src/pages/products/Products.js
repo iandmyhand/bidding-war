@@ -36,12 +36,12 @@ const Products = () => {
     }, [products])
 
     return <div>상품 목록
-        {products.map(product => <div key={product.id}>{product.id} {product.name} {product.price {product.description}}</div>)}
+        {products.map(product => <div key={product.id}>{product.id} {product.name} {product.price} {product.description}}</div>)}
 
         상품 등록
         <input type="text" ref={inputName}/>
         <input type="number" ref={inputPrice}/>
-        <input type="number" ref={inputDescription}/>
+        <input type="text" ref={inputDescription}/>
         <button onClick={addProduct}>생성</button>
     </div>
 }
