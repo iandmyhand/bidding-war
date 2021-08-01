@@ -35,14 +35,26 @@ const Products = () => {
     useEffect(() => {
     }, [products])
 
-    return <div>상품 목록
+    return <div>
+        <h1>Bidding-War</h1>
         {products.map(product => <div key={product.id}>{product.id} {product.name} {product.price} {product.description}}</div>)}
 
-        상품 등록
-        <input type="text" ref={inputName}/>
-        <input type="number" ref={inputPrice}/>
-        <input type="text" ref={inputDescription}/>
-        <button onClick={addProduct}>생성</button>
+        <h2>상품 등록하기</h2>
+        <div>
+            <h3>상품명 : </h3>
+            <input type="text" ref={inputName}/>
+        </div>
+        <div>
+            <h3>상품 가격 : </h3>
+            <input type="number" ref={inputPrice}/>
+        </div>
+        <div>
+            <h3>상품 설명 : </h3>
+            <input type="text" ref={inputDescription}/>
+        </div>
+        <div>
+            <button onClick={addProduct}>상품 등록</button>
+        </div>
     </div>
 }
 
