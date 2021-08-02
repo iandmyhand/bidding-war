@@ -30,9 +30,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("org.projectlombok:lombok")
-    runtimeOnly("com.h2database:h2")
+    runtimeOnly("mysql:mysql-connector-java")
     annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
+    testImplementation("com.ninja-squad:springmockk:3.0.1")
+    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("com.google.guava:guava:30.1.1-jre")
 }
 
 tasks.withType<KotlinCompile> {

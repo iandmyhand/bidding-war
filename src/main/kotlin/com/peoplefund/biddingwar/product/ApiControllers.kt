@@ -34,7 +34,7 @@ class ProductController(
     }
 
     @GetMapping
-    fun list(@ModelAttribute searchProduct: SearchProductDto): ResponseEntity<List<ProductResponse>> {
+    fun list(@ModelAttribute searchProduct: ProductSearch): ResponseEntity<List<ProductResponse>> {
         val findProducts = productService.list(searchProduct)
 
         return ResponseEntity

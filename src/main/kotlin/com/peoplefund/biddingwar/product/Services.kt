@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ProductService(@Autowired val productRepository: ProductRepository) {
-    fun list(searchCondition: SearchProductDto): List<Product> {
+    fun list(searchCondition: ProductSearch): List<Product> {
 
         if (searchCondition.name != null) {
             return productRepository.findByNameContains(searchCondition.name)

@@ -21,7 +21,7 @@ data class ProductResponse(
     constructor(product: Product) : this(product.id, product.name, product.amount, product.description)
 }
 
-data class SearchProductDto(
+data class ProductSearch(
     val name: String?,
     // TODO : 이후 범위 검색 추가
 //    @Range(min=0, max=1_000_000_000) val minAmount: Long?,
