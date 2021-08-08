@@ -22,3 +22,22 @@ class BiddingWarService(val repository: BiddingWarRepository) {
         return productToDelete
     }
 }
+
+@Service
+@Transactional
+class BiddingWarUserService(val repository: BiddingWarUserRepository) {
+    fun signUP(user: User): Boolean {
+        val signedUpUsers: MutableIterable<User> = getAll()
+
+        for(signedUpUser in signedUpUsers) {
+            if (signedUpUser.user_name == user.user_name) {
+                return false
+            }
+        }
+
+        repository.save(user)
+        return true
+    }
+
+    fun getAll() = repository.findAll()
+}
