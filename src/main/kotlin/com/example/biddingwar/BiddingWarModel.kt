@@ -11,3 +11,10 @@ data class Product(
     var price: Int = 0,
     val description: String
 )
+
+@Entity
+data class User(
+    @Id @GeneratedValue val id: Long,
+    var user_name: String,
+    val password: String
+)
