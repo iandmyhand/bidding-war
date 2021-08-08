@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/bidding-war")
-
 class BiddingWarController(val service: BiddingWarService) {
 
     @GetMapping
@@ -29,5 +28,25 @@ class BiddingWarController(val service: BiddingWarService) {
     } else {
         ResponseEntity.status(404).body("존재하지 않는 PID: ${id} 입니다.")
     }
+}
 
+@RestController
+@RequestMapping("/bidding-war/users")
+class BiddingWarUserController(val service: BiddingWarUserService) {
+
+    @GetMapping
+    fun users() = ResponseEntity.ok(service.getAll())
+
+    @PostMapping
+    fun signUp(@RequestBody user: User) : ResponseEntity<String> {
+        val result = service.signUP(user)
+
+        if (!result) {
+            return ResponseEntity.status(404).body("중복 ID 입니다.")
+        }
+
+        return ResponseEntity.ok(
+                "회원가입 성공."
+        )
+    }
 }
