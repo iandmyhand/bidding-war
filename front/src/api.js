@@ -10,3 +10,5 @@ export const fetchProducts = () => client.get('/api/products')
 export const fetchProduct = (id) => client.get(`/api/products/${id}`)
 
 export const createProduct = (data) => client.post('/api/products', data)
+
+export const createUser = (data) => client.post('/api/users', data)
