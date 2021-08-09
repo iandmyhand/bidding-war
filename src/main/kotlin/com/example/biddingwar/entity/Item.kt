@@ -21,7 +21,6 @@ class Item(
         val createdTime: LocalDateTime = LocalDateTime.now()
         )
 {
-
         override fun toString(): String{
                 return "Item{\n" +
                         "\tid: " + this.id + "\n" +

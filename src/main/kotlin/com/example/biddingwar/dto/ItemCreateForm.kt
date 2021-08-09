@@ -1,10 +1,11 @@
 package com.example.biddingwar.dto
 
 import com.example.biddingwar.entity.Item
+import java.time.LocalDateTime
 
 class ItemCreateForm(val productName: String,
                      val title: String, val content:String,
-                     val price: Int) {
+                     val price: Int, val createTime:LocalDateTime? = null) {
 
     override fun toString(): String{
         return "ItemForm{\n" +
@@ -15,6 +16,11 @@ class ItemCreateForm(val productName: String,
     }
 
     fun toEntity(): Item {
-        return Item(null, productName, title, content, price)
+        if (createTime == null) {
+            return Item(null, productName, title, content, price)
+        }
+        else{
+            return Item(null, productName, title, content, price, createTime)
+        }
     }
 }

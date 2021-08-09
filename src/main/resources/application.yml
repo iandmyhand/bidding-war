@@ -1,0 +1,23 @@
+spring:
+  h2:
+    console:
+      enable: true # h2 DB, 웹 콘솔 접근 허용
+
+  datasource:
+    url: jdbc:h2:mem:testdb # memory를 db로 사용하겠다.
+    driver-class-name: org.h2.Driver
+    username: root
+    password:
+
+  jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+      hibernate:
+        ddl-auto: create-drop # 시작할 때, Drop Crate Alter 하고 종료될 떄, Drop
+      properties: # console에서 실행되는 sql을 보기 좋게 보기
+        hibernate:
+          format_sql: true
+          show_sql: true
+
+logging: # 로깅 레벨 디버그로 설정
+  level:
+    me.silvernine: DeBUG
