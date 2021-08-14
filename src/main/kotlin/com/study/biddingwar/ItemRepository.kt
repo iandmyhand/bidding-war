@@ -1,5 +1,5 @@
 package com.study.biddingwar
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.jpa.repository.JpaRepository
 
-interface ItemRepository : CrudRepository<Item, Long> // <entity type, primary key type>
+interface ItemRepository : JpaRepository<Item, Long> // <entity type, primary key type>

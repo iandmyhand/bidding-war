@@ -1,5 +1,6 @@
 package com.study.biddingwar
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -8,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 class ItemService(val repository: ItemRepository) {
     fun list() = repository.findAll()
 
-    fun get(id: Long) = repository.findById(id)
+    fun get(id: Long) = repository.findByIdOrNull(id)
 
     fun save(item: Item) = repository.save(item)
 

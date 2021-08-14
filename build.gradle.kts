@@ -25,7 +25,19 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module = "mockito-core")
+	}
+	testImplementation("io.mockk:mockk:1.12.0")
+//	testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
+//	testImplementation("io.kotest:kotest-assertions-core:4.6.1")
+//	testImplementation("io.kotest:kotest-property:4.6.1")
+}
+
+allOpen {
+	annotation("javax.persistence.Entity")
+	annotation("javax.persistence.MappedSuperclass")
+	annotation("javax.persistence.Embeddable")
 }
 
 tasks.withType<KotlinCompile> {
