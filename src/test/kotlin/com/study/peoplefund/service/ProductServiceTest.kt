@@ -6,7 +6,6 @@ import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -16,11 +15,6 @@ class ProductServiceTest @Autowired constructor(
         val productRepository: ProductRepository,
 ) {
     val productService = ProductService(productRepository)
-
-    @BeforeEach
-    fun setUp() {
-
-    }
 
     @Test
     fun `상품 등록`() {
