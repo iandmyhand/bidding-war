@@ -56,4 +56,3 @@ class ItemController(@Autowired val itemRepository: ItemRepository) {
         return "items/detail"
     }
 }
-

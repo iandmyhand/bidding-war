@@ -1,16 +1,16 @@
 package com.example.biddingwar.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.springframework.data.annotation.CreatedDate
-import java.time.LocalDateTime
+import lombok.Getter
+import lombok.Setter
 import javax.persistence.*
 
 @Entity
-@Table(name="USER")
+@Getter
+@Setter
 class User (
     @Id
-    @Column(name="number")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     val number: Long? = null,
 
     @JsonIgnore
@@ -18,7 +18,7 @@ class User (
     val userId: String,
 
     @JsonIgnore
-    @Column(name="user_pw", length=30)
+    @Column(name="user_pw", length=200)
     val userPw: String,
 
     @Column(name="user_name", length=20, unique=true)
@@ -27,11 +27,4 @@ class User (
     @JsonIgnore
     @Column(name="authority")
     val authority: String,
-
-    @JsonIgnore
-    @Column(name="activated")
-    val activated: Boolean=true,
-
-    @CreatedDate
-    val createdTime: LocalDateTime?,
 ) {}

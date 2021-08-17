@@ -10,14 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//class ItemControllerTests{
-//    @Test
-//    fun contextLoads(){
-//
-//    }
-//}
-
 @SpringBootTest
 class Tests(@Autowired val itemRepository: ItemRepository){
     @Test
@@ -33,7 +25,7 @@ class Tests(@Autowired val itemRepository: ItemRepository){
         )
 
         itemRepository.save(request.toEntity())
-        val response = itemRepository.findById(1)
+        val response = itemRepository.findById(1).get()
         val expected = Item(1, "갤럭시 노트10",
             "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, now)
 
@@ -43,27 +35,34 @@ class Tests(@Autowired val itemRepository: ItemRepository){
 
     @Test
     fun `상품 조회`(){
+        var now = LocalDateTime.now()
+
         val request1 = ItemCreateForm(
             productName = "갤럭시 노트10",
             title="스마트폰 팔아여",
             content="대략 2년정도 사용했네요",
-            price = 400_000
+            price = 400_000,
+            createTime = now
         )
         val request2 = ItemCreateForm(
             productName = "갤럭시 노트 10 5G",
             title="갤럭시 노트 10 팔아여",
             content="대략 1년정도 사용했네요",
-            price = 200_000
+            price = 200_000,
+            createTime = now
         )
 
         itemRepository.save(request1.toEntity())
         itemRepository.save(request2.toEntity())
         val response = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc("갤럭시 노트")
 
-        assertThat(response).first()
-            .isEqualTo(Item(1, "갤럭시 노트10", "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000))
-        assertThat(response).last()
-            .isEqualTo(Item(2, "갤럭시 노트10 5G", "갤럭시 노트 10 팔아여", "대략 1년정도 사용했네요", 200_000))
+        val expected1 = Item(1, "갤럭시 노트10", "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, now);
+        val expected2 = Item(2, "갤럭시 노트10 5G", "갤럭시 노트 10 팔아여", "대략 1년정도 사용했네요", 200_000, now)
+
+        assertThat(response.first().toString())
+            .isEqualTo(expected1.toString())
+        assertThat(response.last().toString())
+            .isEqualTo(expected2.toString())
     }
 }
 

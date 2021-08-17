@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping
 class HelloController {
     @GetMapping("/")
     fun Init(model: Model): String{
+        return "redirect:hello/";
+    }
+
+    @GetMapping("/hello")
+    fun Hello(model: Model): String{
         model["userName"] = "gwangho"
         model["content"] = "안녕하세요"
 
