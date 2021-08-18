@@ -1,7 +1,9 @@
 package com.example.biddingwar
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.security.MessageDigest
+import java.util.*
 import javax.servlet.http.HttpSession
 import javax.transaction.Transactional
 
@@ -37,31 +39,25 @@ class BiddingWarUserService(val repository: BiddingWarUserRepository) {
             }
         }
 
-        user.password = encodePassword(user.password)
-
+        val bcrypt = BCryptPasswordEncoder(11)
+        user.pwd = bcrypt.encode(user.password)
         repository.save(user)
+
         return true
     }
 
-    fun signIn(user: User, session: HttpSession): Boolean {
-        val dataUser: User? = repository.findByEmail(user.email)
-        val loginPassword: String = encodePassword(user.password)
+    fun signIn(userRequest: User): User? {
+        val user = repository.findByName(userRequest.name)
 
-        if (dataUser != null) {
-            if (loginPassword.equals(dataUser.password) {
-                session.setAttribute("user_id", dataUser.id)
-            }
+        if (user != null) {
+            user.session = Pair(user.id, UUID.randomUUID().toString())
+                return user
         }
 
-        return false
+        return null
 
     }
 
     fun getAll() = repository.findAll()
 
-    fun encodePassword(password: String): String{
-        val sha = MessageDigest.getInstance("SHA-256")
-        val hexa = sha.digest(password.toByteArray())
-        return hexa.fold("", {str, it -> str + "%02x".format(it)})
-    }
 }

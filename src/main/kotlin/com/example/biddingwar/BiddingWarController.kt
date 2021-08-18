@@ -42,11 +42,24 @@ class BiddingWarUserController(val service: BiddingWarUserService) {
         val result = service.signUP(user)
 
         if (!result) {
-            return ResponseEntity.status(404).body("중복 ID 입니다.")
+            return ResponseEntity.status(400).body("중복 ID 입니다.")
         }
 
         return ResponseEntity.ok(
                 "회원가입 성공."
         )
+    }
+
+    @PostMapping("/login")
+    fun signIn(@RequestBody user: User): ResponseEntity<String> {
+
+        val user = service.signIn(user)
+
+        return if (user != null) {
+            ResponseEntity.ok("로그인 성공")
+        } else {
+            ResponseEntity.status(401).body("로그인 실패")
+        }
+
     }
 }

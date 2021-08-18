@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository
 interface BiddingWarRepository: CrudRepository<Product, Long>
 
 interface BiddingWarUserRepository: CrudRepository<User, Long> {
-    fun findByEmail(email: String): User?
+    fun findByName(name: String?): User?
 }
