@@ -1,11 +1,16 @@
 package com.example.bidding_war.service
 
+import com.example.bidding_war.model.Session
 import com.example.bidding_war.model.User
+import com.example.bidding_war.repository.SessionRepository
 import com.example.bidding_war.repository.UserRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
-class UserService(val userRepository: UserRepository) {
+class UserService(val userRepository: UserRepository, val sessionRepository: SessionRepository) {
 
     fun register(user: User) = userRepository.save(user)
 
@@ -17,26 +22,27 @@ class UserService(val userRepository: UserRepository) {
 
     fun delete(id: Long) = userRepository.deleteById(id)
 
-    fun signIn(user: User): Boolean {
-        val signedInUsers: MutableIterable<User> = findAll()
+    @Transactional
+    fun signIn(user: User): ResponseEntity<String> {
+        val user = userRepository.findByEmailAndPassword(
+            account = user.email,
+            password = user.password
+        ).orElseThrow()
 
-        for(signedInUser in signedInUsers) {
-            if (signedInUser.email == user.email && signedInUser.password == user.password) {
-                return true
-            }
-        }
-        return false
+        val session = Session(
+            key = UUID.randomUUID().toString(),
+            email = user.email
+        )
+
+        sessionRepository.save(session)
+        return ResponseEntity.ok(
+            "login complete $user")
     }
 
-    fun signUp(user: User): Boolean {
-        val signedUpUsers: MutableIterable<User> = findAll()
-
-        for(signedUpUser in signedUpUsers) {
-            if (signedUpUser.email == user.email) {
-                return false
-            }
-        }
-        return true
+    fun signUp(user: User): ResponseEntity<String> {
+        userRepository.save(user).id!!
+        return ResponseEntity.ok(
+            "register complete $user")
     }
 
 

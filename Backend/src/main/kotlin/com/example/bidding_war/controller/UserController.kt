@@ -13,7 +13,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/users")
-class UserController(val userService: UserService, val sessionRepository: SessionRepository){
+class UserController(val userService: UserService){
 
     @GetMapping
     fun get_all() = ResponseEntity.ok(userService.findAll())
@@ -22,37 +22,8 @@ class UserController(val userService: UserService, val sessionRepository: Sessio
     fun get(@PathVariable id: Long) = ResponseEntity.ok(userService.findById(id))
 
     @PostMapping("/signUp")
-    fun signUp(@RequestBody user: User): ResponseEntity<String> {
-        val result = userService.signUp(user)
-
-        return if (!result) {
-            ResponseEntity.status(404).body("이미 존재하는 계정입니다.")
-        } else{
-            userService.register(user)
-            return ResponseEntity.ok(
-                "register complete $user"
-            )
-        }
-
-    }
+    fun signUp(@RequestBody user: User) = ResponseEntity.ok(userService.signUp(user))
 
     @PostMapping("/signIn")
-    fun signIn(@RequestBody user: User): ResponseEntity<String> {
-        val result = userService.signIn(user)
-
-        return if (result) {
-            val session = Session(
-                key = UUID.randomUUID().toString(),
-                email = user.email
-            )
-
-            sessionRepository.save(session)
-            ResponseEntity.ok(
-                "register complete $user")
-
-        } else{
-            ResponseEntity.status(404).body("존재하지 않는 계정입니다.")
-        }
-
-    }
+    fun signIn(@RequestBody user: User) = ResponseEntity.ok(userService.signIn(user))
 }
