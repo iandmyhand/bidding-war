@@ -1,8 +1,8 @@
 package com.example.biddingwar
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import org.hibernate.annotations.CreationTimestamp
+import java.time.LocalDateTime
+import javax.persistence.*
 
 @Entity
 data class Product(
@@ -15,6 +15,9 @@ data class Product(
 @Entity
 data class User(
     @Id @GeneratedValue val id: Long,
-    var user_name: String,
-    val password: String
+    var email: String,
+    var password: String,
+
+    @CreationTimestamp
+    var createDt: LocalDateTime = LocalDateTime.now()
 )

@@ -1,6 +1,8 @@
 package com.example.biddingwar
 
 import org.springframework.stereotype.Service
+import java.security.MessageDigest
+import javax.servlet.http.HttpSession
 import javax.transaction.Transactional
 
 @Service
@@ -30,14 +32,36 @@ class BiddingWarUserService(val repository: BiddingWarUserRepository) {
         val signedUpUsers: MutableIterable<User> = getAll()
 
         for(signedUpUser in signedUpUsers) {
-            if (signedUpUser.user_name == user.user_name) {
+            if (signedUpUser.email == user.email) {
                 return false
             }
         }
+
+        user.password = encodePassword(user.password)
 
         repository.save(user)
         return true
     }
 
+    fun signIn(user: User, session: HttpSession): Boolean {
+        val dataUser: User? = repository.findByEmail(user.email)
+        val loginPassword: String = encodePassword(user.password)
+
+        if (dataUser != null) {
+            if (loginPassword.equals(dataUser.password) {
+                session.setAttribute("user_id", dataUser.id)
+            }
+        }
+
+        return false
+
+    }
+
     fun getAll() = repository.findAll()
+
+    fun encodePassword(password: String): String{
+        val sha = MessageDigest.getInstance("SHA-256")
+        val hexa = sha.digest(password.toByteArray())
+        return hexa.fold("", {str, it -> str + "%02x".format(it)})
+    }
 }
