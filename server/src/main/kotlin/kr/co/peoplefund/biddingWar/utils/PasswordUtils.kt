@@ -8,12 +8,17 @@ import javax.crypto.spec.PBEKeySpec
 
 //probably this should be something like  a JavaEE Singleton...
 object PasswordUtils {
-    val random = SecureRandom()
+    private var generatedSalt: ByteArray? = null
+    private val random = SecureRandom()
 
-    fun generateSalt(): ByteArray {
-        val salt = ByteArray(16)
-        random.nextBytes(salt)
-        return salt
+    fun generateSalt(): ByteArray? {
+        if(generatedSalt == null) {
+            val salt = ByteArray(16)
+            random.nextBytes(salt)
+            generatedSalt = salt
+        }
+        print(generatedSalt.toString())
+        return generatedSalt
     }
 
     fun isExpectedPassword(password: String, salt: ByteArray, expectedHash: ByteArray): Boolean {
@@ -22,7 +27,7 @@ object PasswordUtils {
         return pwdHash.indices.all { pwdHash[it] == expectedHash[it] }
     }
 
-    fun hash(password: String, salt: ByteArray): ByteArray {
+    fun hash(password: String, salt: ByteArray?): ByteArray {
         val spec = PBEKeySpec(password.toCharArray(), salt, 1000, 256)
         try {
             val skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")

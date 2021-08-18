@@ -1,8 +1,6 @@
 package kr.co.peoplefund.biddingWar.controller
 
-import kr.co.peoplefund.biddingWar.controller.dto.ProductRequest
-import kr.co.peoplefund.biddingWar.controller.dto.ProductResponse
-import kr.co.peoplefund.biddingWar.controller.dto.UserRequest
+import kr.co.peoplefund.biddingWar.controller.dto.*
 import kr.co.peoplefund.biddingWar.service.ProductService
 import kr.co.peoplefund.biddingWar.service.UserService
 import org.springframework.http.ResponseEntity
@@ -34,6 +32,11 @@ class APIController(val productService: ProductService, val userService: UserSer
     fun apiRegisterUser(@RequestBody request: UserRequest): ResponseEntity<Void> {
         val id = userService.register(request)
         return ResponseEntity.created(URI.create("/api/users/$id")).build()
+    }
+
+    @PostMapping("/auth/login")
+    fun apiLogin(@RequestBody request: LoginRequest): ResponseEntity<LoginResponse> {
+        return ResponseEntity.ok(userService.login(request))
     }
 
 }
