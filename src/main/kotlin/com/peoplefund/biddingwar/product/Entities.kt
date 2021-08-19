@@ -12,3 +12,11 @@ class Product(
     var amount: Long,
     var description: String? = null,
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Long? = null)
+
+
+@Entity
+class User(
+    var userId: String,
+    var password: String,
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY) var id: Long? = null
+)

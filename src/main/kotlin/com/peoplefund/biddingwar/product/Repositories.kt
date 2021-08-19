@@ -7,3 +7,6 @@ import org.springframework.stereotype.Repository
 interface ProductRepository : CrudRepository<Product, Long> {
     fun findByNameContains(name: String): List<Product>
 }
+
+@Repository
+interface UserRepository: CrudRepository<User, Long>

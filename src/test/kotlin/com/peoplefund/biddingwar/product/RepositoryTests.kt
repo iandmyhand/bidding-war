@@ -55,3 +55,20 @@ class ProductRepositoryTests(@Autowired val productRepository: ProductRepository
         assertThat(product.amount).isEqualTo(expectedProduct.amount)
     }
 }
+
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
+class UserRepositoryTests(@Autowired val userRepository: UserRepository) {
+
+    @Test
+    internal fun signUp() {
+
+        val savedUser = userRepository.save(User("leon0517", "abcd1234"))
+
+        val findUser = userRepository.findById(savedUser.id!!).get()
+
+        assertThat(findUser.userId).isEqualTo(savedUser.userId)
+        assertThat(findUser.password).isEqualTo(savedUser.password)
+    }
+}
