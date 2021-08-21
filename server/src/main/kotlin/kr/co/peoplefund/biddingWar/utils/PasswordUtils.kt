@@ -17,7 +17,6 @@ object PasswordUtils {
             random.nextBytes(salt)
             generatedSalt = salt
         }
-        print(generatedSalt.toString())
         return generatedSalt
     }
 
