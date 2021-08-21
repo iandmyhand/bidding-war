@@ -41,5 +41,4 @@ class UserService(val userRepository: UserRepository, val sessionRepository: Ses
         val session = sessionRepository.findByKey(token).orElseThrow()
         println(session.email)
     }
-
 }
