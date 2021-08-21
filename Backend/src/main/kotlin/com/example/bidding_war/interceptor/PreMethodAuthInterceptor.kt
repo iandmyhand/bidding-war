@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class PostMethodAuthInterceptor(
+class PreMethodAuthInterceptor(
     val userService: UserService
 ) : HandlerInterceptor {
     override fun preHandle(

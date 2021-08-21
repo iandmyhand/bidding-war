@@ -8,4 +8,8 @@ export const fetchAllAuctionItems = () => client.get('/api/auctionItem')
 
 export const fetchAuctionItem = (id) => client.get(`/api/auctionItem/${id}`)
 
-export const createAuctionItem = (data) => client.post('/api/auctionItem', data)
+export const createAuctionItem = (data) => client.post('/api/auctionItem', data, {
+    "headers": {
+        "Authorization": `${sessionStorage.getItem("token")}`
+    }
+})

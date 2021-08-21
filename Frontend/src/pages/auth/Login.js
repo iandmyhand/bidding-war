@@ -1,6 +1,7 @@
 import React, {createRef, useEffect, useState} from 'react';
 import { Container, Button, Input } from '../../component/Login';
 import {signIn, signUp} from "../../api/user/user_api";
+import { setCookie } from '../../utils/cookie/cookie';
 
 const Login = () => {
     const inputEmail = createRef()
@@ -34,7 +35,8 @@ const Login = () => {
 
         if (response.status === 200) {
           window.alert("로그인을 완료했습니다.")
-          document.location.href("/")
+          sessionStorage.setItem("token",response.data.token)
+          window.location.replace("/")
           return
         }
         window.alert("아이디와 비밀번호를 확인해주세요.")

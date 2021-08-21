@@ -39,8 +39,7 @@ class UserService(
         sessionRepository.save(session)
 
         return SignInResponse(
-            token = session.token,
-            email = session.email
+            token = session.token
         )
     }
 

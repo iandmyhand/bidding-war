@@ -11,6 +11,6 @@ class Session(
     var expiration: LocalDateTime
 ) {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 }

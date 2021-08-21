@@ -36,7 +36,6 @@ const AuctionMain = props => {
 
   function registerAuctionItem(e){
     e.preventDefault();
-
     const registerAuctionItem = async () => {
       try{
         const response = await createAuctionItem({
@@ -49,10 +48,11 @@ const AuctionMain = props => {
 
         if (response.status === 200){
           window.alert("경매 물품을 등록하였습니다.")
-          onReset()
+          window.location.reload()
         }
       } catch(error){
-        window.alert(error)
+        window.alert("세션이 만료되었습니다. 로그인해주세요.")
+        window.location.replace("/login");
       }
       
     }

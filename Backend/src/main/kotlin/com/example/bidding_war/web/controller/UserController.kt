@@ -23,7 +23,6 @@ class UserController(val userService: UserService){
     @PostMapping("/signIn")
     fun signIn(@RequestBody request: SignInRequest): ResponseEntity<SignInResponse> {
         val signInResponse = userService.signIn(request)
-
         return ResponseEntity.ok(signInResponse)
     }
 }

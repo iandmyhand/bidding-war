@@ -1,6 +1,6 @@
 package com.example.bidding_war.config
 
-import com.example.bidding_war.interceptor.PostMethodAuthInterceptor
+import com.example.bidding_war.interceptor.PreMethodAuthInterceptor
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
 class WebConfig(
-    val postMethodAuthInterceptor: PostMethodAuthInterceptor
+    val preMethodAuthInterceptor: PreMethodAuthInterceptor
 ) : WebMvcConfigurer {
 
     override fun addCorsMappings(registry: CorsRegistry) {
@@ -17,8 +17,9 @@ class WebConfig(
     }
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(postMethodAuthInterceptor)
-            .addPathPatterns("*")
-            .excludePathPatterns("/api/users/")
+        registry.addInterceptor(preMethodAuthInterceptor)
+            .addPathPatterns("/**")
+            .excludePathPatterns("/api/users/**")
+            .excludePathPatterns("/api/users/signIn")
     }
 }
