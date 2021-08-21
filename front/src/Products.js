@@ -48,24 +48,26 @@ const Products = () => {
             )}
             </tbody>
         </table>
-        <table>
-            <thead>
-            <tr><td colSpan={2}>상품등록</td></tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>상품이름:</td>
-                <td><input type="text" ref={inputName}/></td>
-            </tr>
-            <tr>
-                <td>상품가격:</td>
-                <td><input type="number" ref={inputPrice}/></td>
-            </tr>
-            <tr>
-                <td><button onClick={registerProduct}>상품 생성하기</button></td>
-            </tr>
-            </tbody>
-        </table>
+        <form>
+            <table>
+                <thead>
+                <tr><td colSpan={2}>상품등록</td></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>상품이름:</td>
+                    <td><input type="text" ref={inputName}/></td>
+                </tr>
+                <tr>
+                    <td>상품가격:</td>
+                    <td><input type="number" ref={inputPrice}/></td>
+                </tr>
+                <tr>
+                    <td><button onClick={registerProduct}>상품 생성하기</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 }
 
