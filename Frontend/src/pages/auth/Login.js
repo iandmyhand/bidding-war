@@ -16,13 +16,17 @@ const Login = () => {
           console.log(response)
 
           if (response.status === 201) {
-              window.alert("회원가입 완료")
+              window.alert("회원가입을 완료했습니다. 로그인 해주세요!")
               return
           }
 
-          window.alert('회원가입에 실패했습니다.')
       } catch(error){
-        window.alert(error)
+          if (error.response.status === 409){
+              window.alert('이미 존재하는 계정입니다.')
+          }
+          else{
+              window.alert('회원가입에 실패했습니다.')
+          }
       }
 
   }
@@ -38,10 +42,9 @@ const Login = () => {
           sessionStorage.setItem("token",response.data.token)
           window.location.replace("/")
           return
-        }
-        window.alert("아이디와 비밀번호를 확인해주세요.")
+        }      
       } catch(error){
-        window.alert(error)
+        window.alert("아이디와 비밀번호를 확인해주세요. 계정이 없다면 회원가입을 해주세요.")
       }
     
 }
