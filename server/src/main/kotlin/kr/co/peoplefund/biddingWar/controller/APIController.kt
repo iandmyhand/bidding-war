@@ -14,6 +14,10 @@ class APIController(val productService: ProductService, val userService: UserSer
 
     @PostMapping("/products")
     fun apiRegisterProduct(@RequestBody request: ProductRequest): ResponseEntity<Void> {
+        val token = request.token
+        println(token)
+        userService.validateToken(token)
+
         val id = productService.register(request)
         return ResponseEntity.created(URI.create("/api/products/$id")).build()
     }

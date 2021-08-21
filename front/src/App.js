@@ -8,20 +8,20 @@ const App = () => {
 
     let authComponent;
 
-    if(!token) {
+    if(token) {
+        authComponent = <LoggedInMessage userId={userId} token={token} />;
+    } else {
         authComponent = (
             <React.Fragment>
                 <Login setUserId={setUserId} setToken={setToken} />
                 <RegisterUser />
             </React.Fragment>
         );
-    } else {
-        authComponent = <LoggedInMessage userId={userId} token={token} />;
     }
 
     return (
         <div className="App">
-            <Products />
+            <Products token={token} />
             {authComponent}
         </div>
     );

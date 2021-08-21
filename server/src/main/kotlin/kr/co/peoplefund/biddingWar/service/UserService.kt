@@ -8,6 +8,7 @@ import kr.co.peoplefund.biddingWar.domain.repository.SessionRepository
 import kr.co.peoplefund.biddingWar.domain.repository.UserRepository
 import kr.co.peoplefund.biddingWar.utils.PasswordUtils
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -33,6 +34,12 @@ class UserService(val userRepository: UserRepository, val sessionRepository: Ses
         sessionRepository.save(session)
 
         return LoginResponse.of(user, session)
+    }
+
+    @Transactional(readOnly = true)
+    fun validateToken(token: String) {
+        val session = sessionRepository.findByKey(token).orElseThrow()
+        println(session.email)
     }
 
 }
