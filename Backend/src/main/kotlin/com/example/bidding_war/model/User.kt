@@ -7,13 +7,14 @@ import javax.persistence.*
 
 @Entity
 data class User (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
-    var email: String? = null,
-    var password: String? = null,
+    @Column(unique = true)
+    var email: String,
+    var password: String,
     var createDate: Date = Date()
 ) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long?= null
 
     @PrePersist
     private fun setCrDate() { createDate = Date() }

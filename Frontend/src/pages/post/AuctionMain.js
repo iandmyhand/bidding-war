@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 const AuctionMain = props => {
-  const baseUrl = "http://localhost:8080"
+  const baseUrl = "http://localhost:8080/api"
 
   const [inputs, setInputs] = useState({
     title: '',

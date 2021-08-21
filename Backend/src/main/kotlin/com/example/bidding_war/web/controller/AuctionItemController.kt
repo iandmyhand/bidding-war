@@ -1,4 +1,4 @@
-package com.example.bidding_war.controller
+package com.example.bidding_war.web.controller
 
 import com.example.bidding_war.model.AuctionItem
 import com.example.bidding_war.service.AuctionItemService
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/auctionItem")
+@RequestMapping("/api/auctionItem")
 class AuctionItemController(val auctionItemService: AuctionItemService){
 
     @GetMapping

@@ -6,7 +6,7 @@ import CommonTableRow from '../../component/table/CommonTableRow';
 import axios from "axios";
 
 const AuctionItemList = props => {
-  const baseUrl = "http://localhost:8080"
+  const baseUrl = "http://localhost:8080/api"
   
   const [auctionItems, setAuctionItems] = useState([]);
 

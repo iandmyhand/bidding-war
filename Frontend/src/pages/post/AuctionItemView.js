@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 // import { getPostByNo } from '../../Data';
+import baseUrl from 'constants'
 import './auctionItem.css';
 import axios from "axios";
 
 const AuctionItemView = ({ history, location, match }) => {
   const [data, setAuctionItem] = useState([]);
-  const baseUrl = "http://localhost:8080"
   const id = match.params.id;
 
   async function getAuctionItemById(id){
