@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 class Item(
     @Id
     @GeneratedValue
-    var id: Long? = null,
+    val id: Long? = null,
 
     var seller: String,
 

@@ -1,6 +1,8 @@
 package com.study.biddingwar
 
 import io.mockk.*
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -9,15 +11,17 @@ import org.junit.jupiter.api.TestInstance
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ItemServiceTest {
 
-    private var repository = mockk<ItemRepository>()
+    @MockK
+    private lateinit var repository: ItemRepository
 
+    @InjectMockKs
     private lateinit var service: ItemService
 
     private lateinit var itemList: List<Item>
 
     @BeforeAll
     fun setUp() {
-        service = ItemService(repository)
+        MockKAnnotations.init(this)
 
         // Given
         itemList = listOf(

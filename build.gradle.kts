@@ -17,12 +17,13 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
@@ -32,6 +33,7 @@ dependencies {
 //	testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
 //	testImplementation("io.kotest:kotest-assertions-core:4.6.1")
 //	testImplementation("io.kotest:kotest-property:4.6.1")
+	testImplementation("org.springframework.security:spring-security-test")
 }
 
 allOpen {

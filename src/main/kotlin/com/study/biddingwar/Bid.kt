@@ -6,7 +6,7 @@ import javax.persistence.* // Spring Data JPA(Java Persistance API)
 class Bid(
     @Id
     @GeneratedValue
-    var id: Long? = null,
+    val id: Long? = null,
 
     @ManyToOne
     var item: Item,
