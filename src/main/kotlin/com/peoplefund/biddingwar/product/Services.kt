@@ -1,6 +1,7 @@
 package com.peoplefund.biddingwar.product
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,12 +18,14 @@ class ProductService(@Autowired val productRepository: ProductRepository) {
 
 
 @Service
-class UserService(@Autowired val userRepository: UserRepository) {
-    fun signUp(userRequestBody: UserSignupRequest): User {
-        if (userRepository.existsUserByUserId(userRequestBody.userId)) {
+class UserService(@Autowired val userRepository: UserRepository, @Autowired val passwordEncoder: PasswordEncoder) {
+    fun signUp(signupUser: UserSignupRequest): User {
+        if (userRepository.existsUserByUserId(signupUser.userId)) {
             throw AlreadyExistUserException()
         }
 
-        return userRepository.save(userRequestBody.entityOf())
+        val encodedPassword = passwordEncoder.encode(signupUser.password)
+
+        return userRepository.save(User(signupUser.userId, encodedPassword))
     }
 }
