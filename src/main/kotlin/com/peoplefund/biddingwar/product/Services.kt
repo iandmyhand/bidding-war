@@ -14,3 +14,15 @@ class ProductService(@Autowired val productRepository: ProductRepository) {
         return productRepository.findAll().toList()
     }
 }
+
+
+@Service
+class UserService(@Autowired val userRepository: UserRepository) {
+    fun signUp(userRequestBody: UserSignupRequest): User {
+        if (userRepository.existsUserByUserId(userRequestBody.userId)) {
+            throw AlreadyExistUserException()
+        }
+
+        return userRepository.save(userRequestBody.entityOf())
+    }
+}

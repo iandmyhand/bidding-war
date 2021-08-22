@@ -3,6 +3,7 @@ package com.peoplefund.biddingwar.product
 import org.hibernate.validator.constraints.Range
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 data class ProductCreateRequest(
     @NotBlank val name: String,
@@ -27,3 +28,12 @@ data class ProductSearch(
 //    @Range(min=0, max=1_000_000_000) val minAmount: Long?,
 //    @Range(min=0, max=1_000_000_000) val maxAmount: Long?,
 )
+
+data class UserSignupRequest(
+    @Size(min=5, max=30) val userId: String,
+    @Size(min=5, max=20) val password: String
+) {
+    fun entityOf(): User {
+        return User(userId, password)
+    }
+}

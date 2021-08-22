@@ -2,6 +2,7 @@ package com.peoplefund.biddingwar.product
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import javax.validation.Valid
@@ -45,8 +46,31 @@ class ProductController(
     }
 
     @ExceptionHandler(NoRegisteredProduct::class)
-    fun handleIllegalArgsException(e: NoRegisteredProduct?): ResponseEntity<*>? {
-        return ResponseEntity.badRequest().build<Any>()
+    fun handleIllegalArgsException(e: NoRegisteredProduct?): ResponseEntity<Any> {
+        return ResponseEntity
+            .badRequest()
+            .build()
     }
 
+}
+
+
+@RestController
+@RequestMapping("/api")
+class UserController(@Autowired val userService: UserService) {
+    @PostMapping("/signup")
+    fun signUp(@RequestBody @Valid userRequestBody: UserSignupRequest, result: BindingResult): ResponseEntity<Any> {
+        val signedUpUser = userService.signUp(userRequestBody)
+
+        return ResponseEntity
+            .created(URI.create("/api/users/" + signedUpUser.userId))
+            .build()
+    }
+
+    @ExceptionHandler(AlreadyExistUserException::class)
+    fun handleIllegalArgsException(e: AlreadyExistUserException?): ResponseEntity<Any> {
+        return ResponseEntity
+            .badRequest()
+            .build()
+    }
 }

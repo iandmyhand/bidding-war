@@ -1,6 +1,8 @@
 package com.peoplefund.biddingwar.product
 
-import java.lang.RuntimeException
+import kotlin.RuntimeException
 
 
 class NoRegisteredProduct: RuntimeException()
+
+class AlreadyExistUserException: RuntimeException()

@@ -9,4 +9,6 @@ interface ProductRepository : CrudRepository<Product, Long> {
 }
 
 @Repository
-interface UserRepository: CrudRepository<User, Long>
+interface UserRepository: CrudRepository<User, Long> {
+    fun existsUserByUserId(userId: String): Boolean
+}
