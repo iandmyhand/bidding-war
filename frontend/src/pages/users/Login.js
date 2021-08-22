@@ -73,6 +73,7 @@ const Login = () => {
             })
 
             window.alert('로그인 성공!')
+            window.location.replace("/products")
         } catch (error) {
             console.log(error)
             window.alert("로그인 실패!")
