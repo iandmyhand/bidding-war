@@ -6,6 +6,7 @@ import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import ProductEdit from "./component/ProductEdit";
 import SignUp from "./component/SignUp";
 import SignIn from "./component/SignIn";
+import Profile from "./component/Profile";
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path='/products/:id' component={ProductEdit}/>
           <Route path='/signup' exact={true} component={SignUp}/>
           <Route path='/signin' exact={true} component={SignIn}/>
+          <Route path='/profile' exact={true} component={Profile}/>
         </Switch>
       </Router>
   );

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component
 @Configuration
 class WebConfig: WebSecurityConfigurerAdapter() {
 
-    @Throws(java.lang.Exception::class)
     override fun configure(http: HttpSecurity) {
         http
             .cors().disable()
