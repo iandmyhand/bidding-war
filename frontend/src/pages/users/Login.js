@@ -1,9 +1,10 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {signUpUser} from "../../api";
+import {signUpUser, signInUser} from "../../api";
 import styled from "styled-components";
 
 const Login = () => {
     const [products, setProducts] = useState([])
+    const inputEmail = createRef()
     const inputName = createRef()
     const inputPassword = createRef()
 
@@ -43,23 +44,46 @@ const Login = () => {
     const signUp = async () => {
         try {
             console.log('sign-up!')
-            console.log(inputName.current.value)
+            console.log(inputEmail.current.value)
             console.log(inputPassword.current.value)
 
             await signUpUser({
-                'user_name': inputName.current.value,
-                'password': inputPassword.current.value,
+                'email': inputEmail.current.value,
+                'pwd': inputPassword.current.value,
             })
+
+            window.alert("회원가입 성공!")
         } catch (error) {
-            window.alert("존재하는 ID 입니다.")
+            console.log(error)
+            window.alert("회원가입 실패")
+        }
+    }
+
+    const signIn = async () => {
+        try {
+            console.log('sign-in!')
+            console.log({
+                'email': inputEmail.current.value,
+                'pwd': inputPassword.current.value,
+            })
+
+            await signInUser({
+                'email': inputEmail.current.value,
+                'pwd': inputPassword.current.value,
+            })
+
+            window.alert('로그인 성공!')
+        } catch (error) {
+            console.log(error)
+            window.alert("로그인 실패!")
         }
     }
 
     return <Container>
-        <h1>Login</h1>
+        <h1>Bidding-War</h1>
         <div>
-            <h3>ID</h3>
-            <Input type="text" ref={inputName} placeholder="아이디를 입력해주세요"/>
+            <h3>Email</h3>
+            <Input type="text" ref={inputEmail} placeholder="이메일을 입력해주세요"/>
         </div>
         <div>
             <h3>Password</h3>
@@ -67,7 +91,11 @@ const Login = () => {
         </div>
         &nbsp;
         <div>
-            <Button onClick={signUp}>로그인</Button>
+            <Button onClick={signIn}>로그인</Button>
+        </div>
+        &nbsp;
+        <div>
+            <Button onClick={signUp}>회원가입</Button>
         </div>
     </Container>
 }
