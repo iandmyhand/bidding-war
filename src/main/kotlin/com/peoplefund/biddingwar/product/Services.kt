@@ -28,4 +28,14 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
 
         return userRepository.save(User(signupUser.userId, encodedPassword))
     }
+
+    fun signIn(userRequestBody: UserSignupRequest): User {
+        val findUser = userRepository.findByUserId(userRequestBody.userId)
+
+        if (!passwordEncoder.matches(userRequestBody.password, findUser.password)) {
+            throw NoMatchedPasswordException()
+        }
+
+        return findUser
+    }
 }

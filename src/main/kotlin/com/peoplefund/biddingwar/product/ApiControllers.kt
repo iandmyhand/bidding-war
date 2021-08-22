@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import java.net.URI
+import javax.servlet.http.HttpSession
 import javax.validation.Valid
 
 @RestController
@@ -65,6 +66,22 @@ class UserController(@Autowired val userService: UserService) {
         return ResponseEntity
             .created(URI.create("/api/users/" + signedUpUser.userId))
             .build()
+    }
+
+    @PostMapping("/signin")
+    fun signIn(
+        @RequestBody @Valid
+        userRequestBody: UserSignupRequest,
+        result: BindingResult,
+        session: HttpSession,
+    ): ResponseEntity<UserSigninResponse> {
+
+        val signInUser = userService.signIn(userRequestBody)
+        val userSigninResponse = UserSigninResponse(signInUser)
+
+        session.setAttribute("loginMember", userSigninResponse)
+
+        return ResponseEntity.ok(userSigninResponse)
     }
 
     @ExceptionHandler(AlreadyExistUserException::class)

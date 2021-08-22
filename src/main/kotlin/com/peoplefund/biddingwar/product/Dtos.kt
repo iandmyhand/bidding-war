@@ -32,8 +32,10 @@ data class ProductSearch(
 data class UserSignupRequest(
     @Size(min=5, max=30) val userId: String,
     @Size(min=5, max=20) val password: String
+)
+
+data class UserSigninResponse(
+    @Size(min=5, max=30) val userId: String,
 ) {
-    fun entityOf(): User {
-        return User(userId, password)
-    }
+    constructor(user: User) : this(user.userId)
 }
