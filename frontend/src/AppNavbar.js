@@ -21,6 +21,7 @@ export default class AppNavbar extends Component {
             <NavbarBrand tag={Link} to="/">메인화면</NavbarBrand>
             <NavbarBrand tag={Link} to="/products">상품</NavbarBrand>
             <NavbarBrand tag={Link} to="/signup">회원가입</NavbarBrand>
+            <NavbarBrand tag={Link} to="/signin">로그인</NavbarBrand>
         </Navbar>;
     }
 }
