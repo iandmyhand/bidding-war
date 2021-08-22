@@ -30,5 +30,12 @@
             </tr>
         </tbody>
     </table>
+    <form th:method="POST" th:action="@{/template/product}">
+        id: <input name="id"><br>
+        name: <input name="name"><br>
+        desc: <input name="description"><br>
+        price: <input name="price"><br>
+        <button type="submit">save</button>
+    </form>
 </body>
 </html>

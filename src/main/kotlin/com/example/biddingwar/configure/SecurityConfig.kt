@@ -23,12 +23,14 @@ class SecurityConfig(@Autowired private val accountService: AccountService,
     }
 
     override fun configure(http: HttpSecurity) {
-        http.anonymous()
+        http.csrf().disable().authorizeRequests()
+            .antMatchers("/template/product").authenticated()
+            .anyRequest().permitAll()
             .and()
             .formLogin()
             .successForwardUrl(LOGIN_SUCCESS_URL)
             .and()
             .authorizeRequests()
-            .anyRequest().authenticated()
+
     }
 }
