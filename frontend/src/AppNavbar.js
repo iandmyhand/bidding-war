@@ -18,7 +18,9 @@ export default class AppNavbar extends Component {
 
     render() {
         return <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
+            <NavbarBrand tag={Link} to="/">메인화면</NavbarBrand>
+            <NavbarBrand tag={Link} to="/products">상품</NavbarBrand>
+            <NavbarBrand tag={Link} to="/signup">회원가입</NavbarBrand>
         </Navbar>;
     }
 }

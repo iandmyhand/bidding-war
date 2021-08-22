@@ -42,7 +42,7 @@ class ProductList extends Component {
                 <td>{product.amount}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/products/" + product.id}>Edit</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/products/" + product.id}>내용 변경</Button>
                         {/*<Button size="sm" color="danger" onClick={() => this.remove(product.id)}>Delete</Button>*/}
                     </ButtonGroup>
                 </td>
@@ -54,15 +54,15 @@ class ProductList extends Component {
                 <AppNavbar/>
                 <Container fluid>
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/products/new">Add Client</Button>
+                        <Button color="success" tag={Link} to="/products/new">상품 추가</Button>
                     </div>
-                    <h3>Clients</h3>
+                    <h3>상품 목록</h3>
                     <Table className="mt-4">
                         <thead>
                         <tr>
                             <th width="30%">상품명</th>
                             <th width="30%">모집액</th>
-                            <th width="40%">Actions</th>
+                            <th width="40%">엑션</th>
                         </tr>
                         </thead>
                         <tbody>

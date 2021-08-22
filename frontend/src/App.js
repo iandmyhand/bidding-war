@@ -4,6 +4,7 @@ import Home from "./Home";
 import ClientList from "./component/ProductList";
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import ProductEdit from "./component/ProductEdit";
+import SignUp from "./component/SignUp";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path='/' exact={true} component={Home}/>
           <Route path='/products' exact={true} component={ClientList}/>
           <Route path='/products/:id' component={ProductEdit}/>
+          <Route path='/signup' exact={true} component={SignUp}/>
         </Switch>
       </Router>
   );
