@@ -30,6 +30,9 @@ class BiddingWarService(val repository: BiddingWarRepository) {
 @Service
 @Transactional
 class BiddingWarUserService(val repository: BiddingWarUserRepository) {
+
+    val bcrypt = BCryptPasswordEncoder(11)
+
     fun signUP(user: User): Boolean {
         val signedUpUsers: MutableIterable<User> = getAll()
 
@@ -39,7 +42,7 @@ class BiddingWarUserService(val repository: BiddingWarUserRepository) {
             }
         }
 
-        val bcrypt = BCryptPasswordEncoder(11)
+
         user.pwd = bcrypt.encode(user.password)
         repository.save(user)
 
@@ -47,15 +50,19 @@ class BiddingWarUserService(val repository: BiddingWarUserRepository) {
     }
 
     fun signIn(userRequest: User): User? {
-        val user = repository.findByName(userRequest.name)
+        // 이메일을 통한 유저 조회
+        val user = repository.findByEmail(userRequest.email)
 
         if (user != null) {
-            user.session = Pair(user.id, UUID.randomUUID().toString())
+            // 비밀번호 검증
+            if (bcrypt.matches(userRequest.pwd, user?.password)) {
+                user.session = Pair(user.id, UUID.randomUUID().toString())
+
                 return user
+            }
         }
 
         return null
-
     }
 
     fun getAll() = repository.findAll()
