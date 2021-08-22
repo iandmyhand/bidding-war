@@ -79,7 +79,7 @@ class UserController(@Autowired val userService: UserService) {
         val signInUser = userService.signIn(userRequestBody)
         val userSigninResponse = UserSigninResponse(signInUser)
 
-        session.setAttribute("loginMember", userSigninResponse)
+        session.setAttribute("loginMember", userSigninResponse.userId)
 
         return ResponseEntity.ok(userSigninResponse)
     }

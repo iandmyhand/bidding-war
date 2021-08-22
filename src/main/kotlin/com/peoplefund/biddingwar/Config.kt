@@ -1,6 +1,9 @@
 package com.peoplefund.biddingwar
 
-import com.peoplefund.biddingwar.product.*
+import com.peoplefund.biddingwar.product.Product
+import com.peoplefund.biddingwar.product.ProductRepository
+import com.peoplefund.biddingwar.product.UserService
+import com.peoplefund.biddingwar.product.UserSignupRequest
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
