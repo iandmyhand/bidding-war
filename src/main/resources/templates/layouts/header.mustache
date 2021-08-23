@@ -21,7 +21,13 @@
     </div>
 
     <div class="float-right">
-        <a class="navbar-brand active" aria-current="page" href="/user/signin">회원가입</a>
-        <a class="navbar-brand active" aria-current="page" href="/user/login">로그인</a>
+        {{#userId}}
+            <a class="navbar-brand active" aria-current="page" href="/user/logout">로그아웃</a>
+        {{/userId}}
+
+        {{^userID}}
+            <a class="navbar-brand active" aria-current="page" href="/user/signin">회원가입</a>
+            <a class="navbar-brand active" aria-current="page" href="/user/login">로그인</a>
+        {{/userID}}
     </div>
 </nav>

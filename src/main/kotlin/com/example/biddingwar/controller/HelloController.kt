@@ -4,26 +4,27 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 class HelloController {
-    @GetMapping("/")
-    fun Init(model: Model): String{
-        return "redirect:hello/";
+    @GetMapping("/", "/welcome")
+    fun init(model: Model): String{
+        return "redirect:/welcome/hello/";
     }
 
-    @GetMapping("/hello")
-    fun Hello(model: Model): String{
-        model["userName"] = "gwangho"
-        model["content"] = "안녕하세요"
+    @GetMapping("/welcome/hello")
+    fun hello(model: Model): String{
+        model["userName"] = "고객"
+        model["content"] = "환영합니다"
 
         return "greetings";
     }
 
-    @GetMapping("/bye")
-    fun Bye(model: Model): String{
-        model["userName"] = "gwangho"
-        model["content"] = "다음에 또 오세요"
+    @GetMapping("/welcome/bye")
+    fun bye(model: Model): String{
+        model["userName"] = "고객"
+        model["content"] = "다음에 뵙겠습니다"
 
         return "greetings";
     }

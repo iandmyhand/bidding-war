@@ -12,45 +12,68 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import javax.servlet.http.HttpSession
 
 @Controller
 @RequestMapping("/item")
 class ItemController(@Autowired val itemRepository: ItemRepository) {
 
     @GetMapping("/")
-    fun items(model:Model): String{
+    fun items(session: HttpSession, model:Model): String{
+        try {
+            model["userId"] = session.getAttribute("userId")
+        } catch(e: NullPointerException){
+            val i = 1
+        }
         model["items"] = itemRepository.findAll()
 
         return "items/list"
     }
 
     @GetMapping("/create")
-    fun createItemForm(): String{
-        return "items/createItemForm"
+    fun createItemForm(session: HttpSession, model:Model): String{
+        val userId = session.getAttribute("userId")
+
+        return if (userId == null){
+            "redirect:/user/login"
+        } else{
+            model["userId"] = userId
+
+            "items/createItemForm"
+        }
     }
     @PostMapping("/create")
-    fun createItem(form: ItemCreateForm, model: Model): String{
-        var item : Item = itemRepository.save(form.toEntity())
+    fun createItem(form: ItemCreateForm, session: HttpSession, model: Model): String{
+        val userId = session.getAttribute("userId")
 
-        println(item.toString())
-        model["item"] = item
+        return if (userId == null){
+            "redirect:/user/login"
+        } else{
+            model["item"] = itemRepository.save(form.toEntity())
+            model["userId"] = userId
 
-        return "items/detail";
+            "redirect:/welcome/hello"
+        }
     }
 
     @GetMapping("/search")
-    fun searchItemForm(): String{
+    fun searchItemForm(session: HttpSession, model: Model): String{
+        val userId = session.getAttribute("userId")
+
         return "items/searchItemForm"
     }
     @GetMapping("/list")
-    fun listItem(form: ItemSearchForm, model: Model): String {
+    fun listItem(form: ItemSearchForm, session: HttpSession, model: Model): String {
+        model["userId"] = session.getAttribute("userId")
         model["items"] = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc(form.productName)
 
         return "items/list"
     }
 
     @GetMapping("/detail")
-    fun detailItem(model: Model, @RequestParam id: Long): String{
+    fun detailItem(session: HttpSession, model: Model, @RequestParam id: Long): String{
+        model["userId"] = session.getAttribute("userId")
+
         model["item"] = itemRepository.findByIdOrNull(id)?:
                 throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
         return "items/detail"
