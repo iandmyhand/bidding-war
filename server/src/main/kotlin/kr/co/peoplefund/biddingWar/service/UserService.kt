@@ -29,7 +29,7 @@ class UserService(val userRepository: UserRepository, val sessionRepository: Ses
 
         val session = Session(
             key = UUID.randomUUID().toString(),
-            email = user.email
+            userId = user.id
         )
         sessionRepository.save(session)
 
@@ -39,6 +39,6 @@ class UserService(val userRepository: UserRepository, val sessionRepository: Ses
     @Transactional(readOnly = true)
     fun validateToken(token: String) {
         val session = sessionRepository.findByKey(token).orElseThrow()
-        println(session.email)
+        println(session.userId)
     }
 }

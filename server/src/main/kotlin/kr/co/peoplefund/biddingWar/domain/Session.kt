@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-class Session (@Column(unique = true) var key: String, var email: String){
+class Session (@Column(unique = true) var key: String, var userId: Long?){
     @Id
     @GeneratedValue
     var id: Long? = null
