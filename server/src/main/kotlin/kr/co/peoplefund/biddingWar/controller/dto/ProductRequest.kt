@@ -3,6 +3,7 @@ package kr.co.peoplefund.biddingWar.controller.dto
 import kr.co.peoplefund.biddingWar.domain.Product
 
 class ProductRequest(
+    val token: String,
     val name: String,
     val price: Long
 ) {

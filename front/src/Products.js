@@ -1,7 +1,7 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {createProduct, fetchProducts} from "./api";
 
-const Products = () => {
+const Products = ({token}) => {
     const [products, setProducts] = useState([])
     const inputName = createRef()
     const inputPrice = createRef()
@@ -12,11 +12,13 @@ const Products = () => {
         setProducts(response.data)
     }
 
-    const registerProduct = async () => {
+    const registerProduct = async (e) => {
+        e.preventDefault();
         console.log("name:" + inputName.current.value)
         console.log("price:" + inputPrice.current.value)
 
         await createProduct({
+            'token': token,
             'name': inputName.current.value,
             'price': inputPrice.current.value
         })
@@ -30,6 +32,34 @@ const Products = () => {
 
     useEffect(() => {
     }, [products])
+
+    let registerProductComponent;
+    if(token) {
+        registerProductComponent = <form onSubmit={registerProduct}>
+            <table>
+                <thead>
+                <tr><td colSpan={2}>상품등록</td></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>상품이름:</td>
+                    <td><input type="text" ref={inputName}/></td>
+                </tr>
+                <tr>
+                    <td>상품가격:</td>
+                    <td><input type="number" ref={inputPrice}/></td>
+                </tr>
+                <tr>
+                    <td><button type="submit">상품 생성하기</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    } else {
+        registerProductComponent = <p>
+            상품을 등록하려면 로그인을 해주세요!
+        </p>
+    }
 
     return <div>
         <table>
@@ -48,24 +78,7 @@ const Products = () => {
             )}
             </tbody>
         </table>
-        <table>
-            <thead>
-            <tr><td colSpan={2}>상품등록</td></tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>상품이름:</td>
-                <td><input type="text" ref={inputName}/></td>
-            </tr>
-            <tr>
-                <td>상품가격:</td>
-                <td><input type="number" ref={inputPrice}/></td>
-            </tr>
-            <tr>
-                <td><button onClick={registerProduct}>상품 생성하기</button></td>
-            </tr>
-            </tbody>
-        </table>
+        {registerProductComponent}
     </div>
 }
 
