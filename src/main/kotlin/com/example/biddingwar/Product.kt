@@ -16,6 +16,8 @@ data class Product(
 
     var price: Int,
 
+    var minimumPrice: Int,
+
     // @CreatedDate
     val createdDate: LocalDateTime = LocalDateTime.now(),
 )
