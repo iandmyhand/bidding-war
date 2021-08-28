@@ -3,6 +3,8 @@ package com.example.biddingwar.configure
 import com.example.biddingwar.account.Account
 import com.example.biddingwar.account.AccountRole
 import com.example.biddingwar.account.AccountService
+import com.example.biddingwar.product.Product
+import com.example.biddingwar.product.ProductService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -24,6 +26,8 @@ class BeanConfig {
 
             @Autowired
             lateinit var accountService: AccountService
+            @Autowired
+            lateinit var productService: ProductService
 
             @Throws(Exception::class)
             override fun run(args: ApplicationArguments) {
@@ -32,6 +36,15 @@ class BeanConfig {
                     "password",
                     mutableSetOf(AccountRole.ADMIN, AccountRole.USER))
                 accountService.saveAccount(admin)
+
+                val product = Product(
+                    1,
+                    "initial product",
+                    "initial product",
+                    0,
+                    10000,
+                )
+                productService.save(product)
             }
         }
     }

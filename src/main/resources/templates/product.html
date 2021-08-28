@@ -14,5 +14,31 @@
         <div th:text="${product.minimumPrice}"> price </div>
         <div th:text="${product.createdDate}"> createdDate </div>
     </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>user</th>
+            <th>price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${biddings.empty}">
+            <td colspan="2"> no one's bidding </td>
+        </tr>
+        <tr th:each="bidding : ${biddings}">
+            <td><span th:text="${bidding.account.email}"> name </span></td>
+            <td><span th:text="${bidding.price}"> bidding price </span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="box-body">
+        <form th:method="POST" >
+            id: <input name="id"><br>
+            price: <input name="price"><br>
+            <button type="submit">save</button>
+        </form>
+    </div>
 </body>
 </html>
