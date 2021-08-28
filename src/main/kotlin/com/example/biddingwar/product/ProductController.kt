@@ -1,5 +1,6 @@
-package com.example.biddingwar
+package com.example.biddingwar.product
 
+import com.example.biddingwar.product.ProductService
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 

@@ -1,4 +1,4 @@
-package com.example.biddingwar
+package com.example.biddingwar.product
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
