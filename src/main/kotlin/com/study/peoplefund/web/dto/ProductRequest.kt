@@ -9,7 +9,8 @@ data class ProductRequest(
     fun toProduct(): Product {
         return Product(
                 name = this.name,
-                price = this.price
+                minPrice = this.price,
+                currentPrice = this.price
         )
     }
 }

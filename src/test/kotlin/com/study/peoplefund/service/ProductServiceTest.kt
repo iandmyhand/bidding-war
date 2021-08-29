@@ -32,26 +32,29 @@ class ProductServiceTest @Autowired constructor(
                 },
                 {
                     assertThat(created)
-                            .extracting("name", "price")
-                            .isEqualTo(listOf("담보 채권", 100_000_000L))
+                            .extracting("name", "minPrice", "currentPrice")
+                            .isEqualTo(listOf("담보 채권", 100_000_000L, 100_000_000L))
                 }
         )
     }
 
     @Test
     fun `단건 조회`() {
-        val id = productRepository.save(Product(name = "개인 채권", 10_000_000L)).id!!
+        val id = productRepository.save(Product(
+                name = "개인 채권",
+                minPrice = 10_000_000L,
+                currentPrice = 10_000_000L)).id!!
 
         val detail = productService.detail(id)
         assertThat(detail).isEqualTo(
-                ProductResponse(id = id, name = "개인 채권", price = 10_000_000L)
+                ProductResponse(id = id, name = "개인 채권", minPrice = 10_000_000L, currentPrice = 10_000_000L)
         )
     }
 
     @Test
     fun `목록 조회`() {
-        productRepository.save(Product(name = "담보 채권", 100_000_000L))
-        productRepository.save(Product(name = "개인 채권", 100_000_00L))
+        productRepository.save(Product(name = "담보 채권", minPrice = 100_000_000L, currentPrice = 10_000_000L))
+        productRepository.save(Product(name = "개인 채권", minPrice = 100_000_00L, currentPrice = 10_000_000L))
 
         val list = productService.list()
         assertThat(list).hasSize(2)

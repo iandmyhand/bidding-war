@@ -74,7 +74,7 @@ const Products = () => {
                 alert('상품 등록에 실패했습니다.')
                 return
             }
-            
+
             await initProducts()
             alert('상품 등록에 성공했습니다.')
         } catch {
@@ -108,7 +108,14 @@ const Products = () => {
         />
 
         <strong>상품 목록</strong>
-        {products.map(product => <div key={product.id}>{product.id} {product.name} {product.price}</div>)}
+        <br/>
+        ======
+        <br/>
+        ID 채권명 최소가격 현재가격
+        <br/>
+        ======
+        {products.map(product =>
+            <div key={product.id}>{product.id} {product.name} {product.minPrice} {product.currentPrice}</div>)}
         <br/><br/>
 
         <strong>상품 등록</strong><br/>
