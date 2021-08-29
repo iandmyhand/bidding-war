@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {createProduct, fetchProducts} from "../../api";
+import {createProduct, fetchProducts, createBid} from "../../api";
 import styled from "styled-components";
 
 const Products = () => {
@@ -7,6 +7,7 @@ const Products = () => {
     const inputName = createRef()
     const inputPrice = createRef()
     const inputDescription = createRef()
+    const biddingPrice = createRef()
 
     const Container = styled.div`
       margin-top: 100px;
@@ -50,21 +51,31 @@ const Products = () => {
 
     const addProduct = async () => {
         try{
-            console.log('input!')
-            console.log(inputName.current.value)
-            console.log(inputPrice.current.value)
+            let session = window.sessionStorage.getItem('session')
+            console.log('session' + session)
 
             await createProduct({
                 'name': inputName.current.value,
                 'price': inputPrice.current.value,
                 'description': inputDescription.current.value
             })
-
             await initProducts()
         } catch (error) {
             window.alert("상품 등록에 실패했습니다. 다시 로그인해주세요")
-            window.location.replace("/")
+            console.log(error)
+            // window.location.replace("/")
         }
+    }
+
+    const addBid = async (productId) => {
+        let userId = window.sessionStorage.getItem('session')
+
+        await createBid({
+            'productId' : productId,
+            'biddingPrice' : biddingPrice.current.value,
+            'userId': userId,
+        }
+        )
     }
 
     useEffect(() => {
@@ -76,7 +87,16 @@ const Products = () => {
 
     return <Container>
         <h1>Bidding-War</h1>
-        {products.map(product => <div key={product.id}>{product.id}. {product.name} {product.price} {product.description}&nbsp;</div>)}
+        {
+            products.map(product => <div key={product.id}>
+            <div>상품ID : {product.id}</div>
+            <div>상품명: {product.name} </div>
+            <div>상품 가격: {product.price} </div>
+            <div>상품 설명 : {product.description}</div>
+            <Input type="text" ref={biddingPrice} placeholder="입찰가를 입력해주세요"/>
+            <Button onClick={() => addBid(product.id)}>입찰하기</Button>
+            &nbsp;</div>)
+        }
 
         <h2>상품 등록하기</h2>
         <div>
