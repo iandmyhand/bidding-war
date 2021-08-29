@@ -19,7 +19,6 @@ data class Product(
 data class User(
     @Id @GeneratedValue val id: Long,
     var email: String,
-    var name: String,
     var pwd: String,
     var session: Pair<Long, String>? = null,
 
@@ -29,7 +28,7 @@ data class User(
 
     override fun getPassword(): String = pwd
 
-    override fun getUsername(): String = name
+    override fun getUsername(): String = email
 
     override fun isAccountNonExpired(): Boolean = true
 

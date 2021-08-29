@@ -49,17 +49,22 @@ const Products = () => {
     }
 
     const addProduct = async () => {
-        console.log('input!')
-        console.log(inputName.current.value)
-        console.log(inputPrice.current.value)
+        try{
+            console.log('input!')
+            console.log(inputName.current.value)
+            console.log(inputPrice.current.value)
 
-        await createProduct({
-            'name': inputName.current.value,
-            'price': inputPrice.current.value,
-            'description': inputDescription.current.value
-        })
+            await createProduct({
+                'name': inputName.current.value,
+                'price': inputPrice.current.value,
+                'description': inputDescription.current.value
+            })
 
-        await initProducts()
+            await initProducts()
+        } catch (error) {
+            window.alert("상품 등록에 실패했습니다. 다시 로그인해주세요")
+            window.location.replace("/")
+        }
     }
 
     useEffect(() => {

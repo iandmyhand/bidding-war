@@ -11,8 +11,8 @@ class UserCustomService : UserDetailsService {
     @Autowired
     lateinit var userRepository: BiddingWarUserRepository
 
-    override fun loadUserByUsername(username: String?): User? {
-        return userRepository.findByName(username)
+    override fun loadUserByUsername(userEmail: String?): User? {
+        return userRepository.findByEmail(userEmail)
     }
 
 }
