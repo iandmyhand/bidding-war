@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {createProduct, createUser, fetchProducts, getToken} from "../../api";
+import {createProduct, createUser, fetchProducts, getToken, postBidding} from "../../api";
 import SignInOrSignUp from "../../components/SignInOrSignUp";
 
 const Products = () => {
@@ -17,6 +17,8 @@ const Products = () => {
     const signUpName = createRef()
     const productName = createRef()
     const productPrice = createRef()
+    const bidId = createRef()
+    const bidPrice = createRef()
 
     const signIn = async () => {
         try {
@@ -82,6 +84,24 @@ const Products = () => {
         }
     }
 
+    const bid = async () => {
+        try {
+            const response = await postBidding({
+                'id': bidId.current.value,
+                'price': bidPrice.current.value
+            }, user.token)
+
+            if (response.status !== 201) {
+                alert('입찰 신청에 실패했습니다.')
+                return
+            }
+
+            alert('입찰 신청에 성공했습니다.')
+        } catch {
+            alert('입찰 신청에 실패했습니다.')
+        }
+    }
+
     useEffect(() => {
         initProducts().then()
     }, [])
@@ -122,6 +142,13 @@ const Products = () => {
         채권: <input type="text" ref={productName}/><br/>
         금액: <input type="number" ref={productPrice}/><br/>
         <button onClick={addProduct}>생성</button>
+        <br/><br/>
+
+        <strong>입찰</strong>
+        <br/>
+        채권 ID: <input type="number" ref={bidId}/><br/>
+        금액: <input type="number" ref={bidPrice}/><br/>
+        <button onClick={bid}>신청</button>
         <br/><br/>
     </div>
 }

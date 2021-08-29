@@ -21,8 +21,7 @@ class ProductTest @Autowired constructor(
     fun `상품 생성 테스트`() {
         val product = Product(
                 name = "담보채권",
-                minPrice = 100_000_000L,
-                currentPrice = 100_000_000L
+                minPrice = 100_000_000L
         )
 
         productRepository.save(product)
@@ -30,7 +29,7 @@ class ProductTest @Autowired constructor(
         val saved = productRepository.findAll().first()
 
         assertThat(saved)
-                .extracting(Product::name, Product::minPrice, Product::currentPrice)
-                .isEqualTo(listOf("담보채권", 100_000_000L, 100_000_000L))
+                .extracting(Product::name, Product::minPrice)
+                .isEqualTo(listOf("담보채권", 100_000_000L))
     }
 }

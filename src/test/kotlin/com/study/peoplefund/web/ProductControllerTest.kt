@@ -36,7 +36,7 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @BeforeEach
     fun setUp() {
-        doNothing().`when`(authService).validateToken(anyString())
+        doReturn(1L).`when`(authService).validateToken(anyString())
     }
 
     @Test
@@ -65,13 +65,11 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
                         id = 1L,
                         name = "담보 채권",
                         minPrice = 100_000_000L,
-                        currentPrice = 100_000_000L
                 ),
                 ProductResponse(
                         id = 2L,
                         name = "개인 채권",
                         minPrice = 100_000_000L,
-                        currentPrice = 100_000_000L
                 )
         )
 
@@ -90,7 +88,6 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
                 id = 1L,
                 name = "담보 채권",
                 minPrice = 100_000_000L,
-                currentPrice = 100_000_000L
         )
 
         `when`(productService.detail(1L)).thenReturn(
@@ -98,7 +95,6 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
                         id = 1L,
                         name = "담보 채권",
                         minPrice = 100_000_000L,
-                        currentPrice = 100_000_000L
                 )
         )
 

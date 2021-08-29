@@ -5,16 +5,14 @@ import com.study.peoplefund.domain.Product
 data class ProductResponse(
         val id: Long,
         val name: String,
-        val minPrice: Long,
-        val currentPrice: Long
+        val minPrice: Long
 ) {
     companion object {
         fun of(product: Product): ProductResponse {
             return ProductResponse(
                     id = product.id!!,
                     name = product.name,
-                    minPrice = product.minPrice,
-                    currentPrice = product.currentPrice
+                    minPrice = product.minPrice
             )
         }
 

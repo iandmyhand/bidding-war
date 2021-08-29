@@ -18,3 +18,9 @@ export const createProduct = (data, token) => client.post('/api/products', data,
         "Authorization": `${token}`
     }
 })
+
+export const postBidding = (data, token) => client.post('/api/products/bidding', data, {
+    "headers": {
+        "Authorization": `${token}`
+    }
+})

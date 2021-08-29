@@ -46,7 +46,7 @@ class AuthService(
 
         val session = Session(
                 token = UUID.randomUUID().toString(),
-                account = user.account,
+                user = user,
                 expiration = LocalDateTime.now().plusMinutes(30L)
         )
 
@@ -54,16 +54,18 @@ class AuthService(
 
         return SignInResponse(
                 token = session.token,
-                account = session.account
+                account = user.account
         )
     }
 
     @Transactional(readOnly = true)
-    fun validateToken(token: String) {
+    fun validateToken(token: String): Long {
         val session = sessionRepository.findByToken(token).orElseThrow()
 
         if (session.expiration.isBefore(LocalDateTime.now())) {
             throw SecurityException()
         }
+
+        return session.user.id!!
     }
 }

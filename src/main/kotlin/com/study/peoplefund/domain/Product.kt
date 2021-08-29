@@ -12,7 +12,5 @@ class Product(
 
         var name: String,
 
-        var minPrice: Long,
-
-        var currentPrice: Long
+        var minPrice: Long
 )
