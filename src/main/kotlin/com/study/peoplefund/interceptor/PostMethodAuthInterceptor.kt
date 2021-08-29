@@ -1,6 +1,6 @@
 package com.study.peoplefund.interceptor
 
-import com.study.peoplefund.service.UserService
+import com.study.peoplefund.service.AuthService
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class PostMethodAuthInterceptor(
-        val userService: UserService
+        val authService: AuthService
 ) : HandlerInterceptor {
     override fun preHandle(
             request: HttpServletRequest,
@@ -21,7 +21,7 @@ class PostMethodAuthInterceptor(
 
         val token = request.getHeader("Authorization")
 
-        userService.validateToken(token)
+        authService.validateToken(token)
 
         return true
     }

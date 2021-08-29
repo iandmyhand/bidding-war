@@ -1,6 +1,6 @@
 package com.study.peoplefund.web
 
-import com.study.peoplefund.service.UserService
+import com.study.peoplefund.service.AuthService
 import com.study.peoplefund.web.dto.SignInRequest
 import com.study.peoplefund.web.dto.SignInResponse
 import com.study.peoplefund.web.dto.UserRequest
@@ -13,17 +13,17 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api/users")
-class UserController(val userService: UserService) {
+class AuthController(val authService: AuthService) {
 
     @PostMapping
     fun signUp(@RequestBody request: UserRequest): ResponseEntity<Void> {
-        val id = userService.signUp(request)
+        val id = authService.signUp(request)
         return ResponseEntity.created(URI.create("/api/users/$id")).build()
     }
 
     @PostMapping("/sign-in")
     fun signIn(@RequestBody request: SignInRequest): ResponseEntity<SignInResponse> {
-        val signInResponse = userService.signIn(request)
+        val signInResponse = authService.signIn(request)
 
         return ResponseEntity.ok(signInResponse)
     }

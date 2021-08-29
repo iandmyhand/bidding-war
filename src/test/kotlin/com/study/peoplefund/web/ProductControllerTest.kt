@@ -3,10 +3,14 @@ package com.study.peoplefund.web
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.study.peoplefund.service.ProductService
+import com.study.peoplefund.service.AuthService
 import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
+import com.study.peoplefund.web.dto.SignInRequest
+import com.study.peoplefund.web.dto.UserRequest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -23,9 +27,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @MockBean
+    lateinit var authService: AuthService
+
+    @MockBean
     lateinit var productService: ProductService
 
     val objectMapper = jacksonObjectMapper().registerModule(KotlinModule())
+
+    @BeforeEach
+    fun setUp() {
+        doNothing().`when`(authService).validateToken(anyString())
+    }
 
     @Test
     fun `상품 등록`() {

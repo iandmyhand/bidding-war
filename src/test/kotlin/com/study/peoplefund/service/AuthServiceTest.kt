@@ -2,6 +2,7 @@ package com.study.peoplefund.service
 
 import com.study.peoplefund.domain.repository.SessionRepository
 import com.study.peoplefund.domain.repository.UserRepository
+import com.study.peoplefund.security.PasswordHasher
 import com.study.peoplefund.web.dto.UserRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -9,13 +10,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import java.security.SecureRandom
 
 @DataJpaTest
-class UserServiceTest @Autowired constructor(
+class AuthServiceTest @Autowired constructor(
         val userRepository: UserRepository,
         val sessionRepository: SessionRepository
 ) {
-    val userService = UserService(userRepository, sessionRepository)
+    val userService = AuthService(userRepository, sessionRepository, PasswordHasher(SecureRandom()))
 
     @Test
     fun `회원가입`() {
@@ -34,8 +36,14 @@ class UserServiceTest @Autowired constructor(
                 },
                 {
                     assertThat(user)
-                            .extracting("account", "password", "name")
-                            .isEqualTo(listOf("kuenhwi", "abcd1234", "최근휘"))
+                            .extracting("account", "name")
+                            .isEqualTo(listOf("kuenhwi", "최근휘"))
+                },
+                {
+                    assertThat(user.password).isNotEqualTo("abcd1234")
+                },
+                {
+                    assertThat(user.salt).isNotEmpty()
                 }
         )
     }
