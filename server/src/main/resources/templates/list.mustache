@@ -1,0 +1,20 @@
+{{> header}}
+
+<table>
+<thead>
+    <tr>
+    <td>제품명</td>
+    <td>가격</td>
+    </tr>
+</thead>
+<tbody>
+    {{#items}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{price}}</td>
+        </tr>
+    {{/items}}
+</tbody>
+</table>
+
+{{> footer}}
