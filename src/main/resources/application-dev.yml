@@ -1,0 +1,44 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:${user.home}/db/h2/coupon;DB_CLOSE_DELAY=-1
+    #    url: jdbc:h2:mem:moneyspread;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    hikari:
+      pool-name: SpringBootHikariCP-pool
+      maximum-pool-size: 10
+      minimum-idle: 10
+      max-lifetime: 2000000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+        order_inserts: true
+        order_updates: true
+        #        generate_statistics: true
+        format_sql: true
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings:
+        web-allow-others: false
+logging:
+    level:
+      root: info
