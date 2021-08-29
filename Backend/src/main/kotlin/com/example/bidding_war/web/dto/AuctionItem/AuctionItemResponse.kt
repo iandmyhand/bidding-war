@@ -18,7 +18,7 @@ data class AuctionItemResponse(
                 owner = auctionItem.owner,
                 description = auctionItem.description,
                 startPrice = auctionItem.startPrice,
-                biddingPrice = auctionItem.biddingPrice
+                biddingPrice = auctionItem.minBiddingPrice
             )
         }
 

@@ -11,7 +11,7 @@ class AuctionItem (
     var owner: String,
     var description: String,
     var startPrice: Long,
-    var biddingPrice: Long,
+    var minBiddingPrice: Long,
     var createDate: Date = Date()
 ) {
     @Id

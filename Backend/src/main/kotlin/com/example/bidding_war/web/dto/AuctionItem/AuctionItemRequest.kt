@@ -15,7 +15,7 @@ data class AuctionItemRequest(
             owner = this.owner,
             description = this.description,
             startPrice = this.startPrice,
-            biddingPrice = this.biddingPrice
+            minBiddingPrice = this.biddingPrice
         )
     }
 }

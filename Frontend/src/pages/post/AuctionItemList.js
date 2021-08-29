@@ -5,7 +5,6 @@ import CommonTableColumn from '../../component/table/CommonTableColumn';
 import CommonTableRow from '../../component/table/CommonTableRow';
 import { fetchAllAuctionItems } from '../../api/auctionItem/auctionItem_api';
 const AuctionItemList = props => {
-  const baseUrl = "http://localhost:8080/api"
   
   const [auctionItems, setAuctionItems] = useState([]);
 

@@ -4,7 +4,6 @@ import { createAuctionItem } from '../../api/auctionItem/auctionItem_api';
 
 
 const AuctionMain = props => {
-  const baseUrl = "http://localhost:8080/api"
 
   const [inputs, setInputs] = useState({
     title: '',

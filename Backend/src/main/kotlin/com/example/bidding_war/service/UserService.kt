@@ -4,13 +4,9 @@ import com.example.bidding_war.model.Session
 import com.example.bidding_war.repository.SessionRepository
 import com.example.bidding_war.repository.UserRepository
 import com.example.bidding_war.utils.PasswordUtils
-import com.example.bidding_war.web.dto.Exception.IsAlreadyExistResponse
 import com.example.bidding_war.web.dto.User.SignInRequest
 import com.example.bidding_war.web.dto.User.SignInResponse
 import com.example.bidding_war.web.dto.User.UserRequest
-import com.example.bidding_war.web.dto.User.UserResponse
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
