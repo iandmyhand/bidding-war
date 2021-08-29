@@ -10,13 +10,8 @@ import Profile from "./component/Profile";
 
 
 function App() {
-  // const [products, setProducts] = useState([]);
-  //
-  // useEffect(async () => {
-  //   const response = await fetch('/api/products');
-  //   const body = await response.json()
-  //   setProducts(body)
-  // }, [])
+    const [userObj, setUserObj] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
       <Router>
