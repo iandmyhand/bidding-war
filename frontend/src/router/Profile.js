@@ -1,6 +1,6 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
-import AppNavbar from "../AppNavbar";
+import AppNavbar from "../component/AppNavbar";
 import {Container} from "reactstrap";
 
 function Profile({ user }) {

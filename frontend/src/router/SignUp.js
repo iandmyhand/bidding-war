@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
-import AppNavbar from "../AppNavbar";
+import AppNavbar from "../component/AppNavbar";
 
-class SignIn extends Component {
+class SignUp extends Component {
 
     emptyUser = {
         userId: '',
@@ -32,7 +32,7 @@ class SignIn extends Component {
         event.preventDefault();
         const {user} = this.state;
 
-        await fetch('/api/signin', {
+        await fetch('/api/signup', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -48,7 +48,7 @@ class SignIn extends Component {
         return <div>
             <AppNavbar/>
             <Container>
-                <h2>로그인</h2>
+                <h2>가입</h2>
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup>
                         <Label for="userId">ID</Label>
@@ -61,8 +61,8 @@ class SignIn extends Component {
                                onChange={this.handleChange} autoComplete="password"/>
                     </FormGroup>
                     <FormGroup>
-                        <Button color="primary" type="submit">로그인</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/">취소</Button>
+                        <Button color="primary" type="submit">SignUp</Button>{' '}
+                        <Button color="secondary" tag={Link} to="/products">Cancel</Button>
                     </FormGroup>
                 </Form>
             </Container>
@@ -70,4 +70,4 @@ class SignIn extends Component {
     }
 
 }
-export default withRouter(SignIn);
+export default withRouter(SignUp);
