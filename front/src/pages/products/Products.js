@@ -1,8 +1,8 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {createProduct, createUser, fetchProducts, getToken} from "../../api";
+import SignInOrSignUp from "../../components/SignInOrSignUp";
 
 const Products = () => {
-    const [signUpMessage, setSignUpMessage] = useState('')
     const [products, setProducts] = useState([])
     const [user, setUser] = useState({
         account: "",
@@ -19,13 +19,21 @@ const Products = () => {
     const productPrice = createRef()
 
     const signIn = async () => {
-        const response = await getToken({
-            'account': signInAccount.current.value,
-            'password': signInPassword.current.value
-        })
+        try {
+            const response = await getToken({
+                'account': signInAccount.current.value,
+                'password': signInPassword.current.value
+            })
 
-        console.log(response.data)
-        setUser(response.data)
+            if (response.status !== 200) {
+                alert('로그인에 실패했습니다.')
+            }
+
+            setUser(response.data)
+            alert('로그인에 성공했습니다.')
+        } catch {
+            alert('로그인에 실패했습니다.')
+        }
     }
 
     const signUp = async () => {
@@ -37,13 +45,13 @@ const Products = () => {
             })
 
             if (response.status === 201) {
-                setSignUpMessage('회원가입에 성공했습니다.')
+                alert('회원가입에 성공했습니다.')
                 return
             }
 
-            setSignUpMessage('회원가입에 실패했습니다.')
+            alert('회원가입에 실패했습니다.')
         } catch {
-            setSignUpMessage('회원가입에 실패했습니다.')
+            alert('회원가입에 실패했습니다.')
         }
 
     }
@@ -56,12 +64,22 @@ const Products = () => {
     }
 
     const addProduct = async () => {
-        await createProduct({
-            'name': productName.current.value,
-            'price': productPrice.current.value
-        }, user.token)
+        try {
+            const response = await createProduct({
+                'name': productName.current.value,
+                'price': productPrice.current.value
+            }, user.token)
 
-        await initProducts()
+            if (response.status !== 201) {
+                alert('상품 등록에 실패했습니다.')
+                return
+            }
+            
+            await initProducts()
+            alert('상품 등록에 성공했습니다.')
+        } catch {
+            alert('상품 등록에 실패했습니다.')
+        }
     }
 
     useEffect(() => {
@@ -69,37 +87,35 @@ const Products = () => {
     }, [])
 
     useEffect(() => {
-    }, [signUpMessage, products, user])
+    }, [products, user])
 
     return <div>
         <strong>유저정보</strong><br/>
         계정: {user.account}<br/>
         토큰: {user.token}
-
         <br/><br/>
-        <strong>로그인</strong><br/>
-        계정: <input type="text" ref={signInAccount}/><br/>
-        비밀번호: <input type="text" ref={signInPassword}/>
-        <button onClick={signIn}>로그인</button>
 
-        <br/><br/>
-        <strong>회원가입</strong><br/>
-        계정: <input type="text" ref={signUpAccount}/><br/>
-        비번: <input type="text" ref={signUpPassword}/><br/>
-        이름: <input type="text" ref={signUpName}/><br/>
-        <button onClick={signUp}>생성</button>
-        <br/>
-        {signUpMessage}
+        <SignInOrSignUp
+            signInAccount={signInAccount}
+            signInPassword={signInPassword}
+            signIn={signIn}
+            user={user}
+            signUpAccount={signUpAccount}
+            signUpPassword={signUpPassword}
+            signUpName={signUpName}
+            signUp={signUp}
+            visible={!!!user.token}
+        />
 
-        <br/><br/>
         <strong>상품 목록</strong>
         {products.map(product => <div key={product.id}>{product.id} {product.name} {product.price}</div>)}
-
         <br/><br/>
+
         <strong>상품 등록</strong><br/>
         채권: <input type="text" ref={productName}/><br/>
         금액: <input type="number" ref={productPrice}/><br/>
         <button onClick={addProduct}>생성</button>
+        <br/><br/>
     </div>
 }
 
