@@ -2,6 +2,7 @@ package com.example.biddingwar
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
 
@@ -15,7 +16,6 @@ class BiddingWarService(val repository: BiddingWarRepository) {
 
     fun save(product: Product, request: HttpServletRequest): Boolean {
         val session = request.session
-
         if (session.getAttribute("session") == null) {
             return false
         }
@@ -75,4 +75,26 @@ class BiddingWarUserService(val repository: BiddingWarUserRepository) {
 
     fun getAll() = repository.findAll()
 
+}
+
+@Service
+@Transactional
+class BiddingWarBidService(val bidRepository: BiddingWarBidRepository, val productRepository: BiddingWarRepository) {
+    fun getAll() = bidRepository.findAll()
+
+    fun getUserBids(userId: Long): List<Bid>? {
+        return bidRepository.findByUserId(userId)
+    }
+
+    fun saveBid(bid: Bid, request: HttpServletRequest): Boolean {
+        val product = productRepository.findById(bid.productId).get()
+
+        if (bid.biddingPrice > product.minimumPrice) {
+            product.minimumPrice = bid.biddingPrice
+            productRepository.save(product)
+        }
+
+        bidRepository.save(bid)
+        return true
+    }
 }

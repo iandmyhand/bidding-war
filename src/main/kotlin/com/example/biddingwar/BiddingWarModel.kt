@@ -12,7 +12,8 @@ data class Product(
     @Id @GeneratedValue val id: Long,
     var name: String,
     var price: Int = 0,
-    val description: String
+    val description: String,
+    var minimumPrice: Int = 0
 )
 
 @Entity
@@ -46,3 +47,12 @@ data class User(
         return authorities
     }
 }
+
+@Entity
+data class Bid(
+    @Id @GeneratedValue
+    val id: Long,
+    var productId: Long,
+    var userId: Long,
+    var biddingPrice: Int = 0,
+)
