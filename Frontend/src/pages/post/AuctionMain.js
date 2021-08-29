@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import AuctionItemList from './AuctionItemList';
-import axios from "axios";
+import { createAuctionItem } from '../../api/auctionItem/auctionItem_api';
 
 
 const AuctionMain = props => {
-  const baseUrl = "http://localhost:8080"
 
   const [inputs, setInputs] = useState({
     title: '',
@@ -36,25 +35,25 @@ const AuctionMain = props => {
 
   function registerAuctionItem(e){
     e.preventDefault();
-
-    let body = {
-      title: title,
-      owner: owner,
-      description: description,
-      startPrice: startPrice,
-      biddingPrice: biddingPrice
-    }
     const registerAuctionItem = async () => {
-      await axios
-            .post(baseUrl + "/auctionItem", body)
-            .then((response) => {
-              console.log(response.data)
-              onReset();
-              window.location.reload();
-            })
-            .catch((error) =>{
-              console.error(error);
-            })
+      try{
+        const response = await createAuctionItem({
+          title: title,
+          owner: owner,
+          description: description,
+          startPrice: startPrice,
+          biddingPrice: biddingPrice
+        })
+
+        if (response.status === 200){
+          window.alert("경매 물품을 등록하였습니다.")
+          window.location.reload()
+        }
+      } catch(error){
+        window.alert("세션이 만료되었습니다. 로그인해주세요.")
+        window.location.replace("/login");
+      }
+      
     }
     registerAuctionItem();
     console.log("아이템 추가됌.")

@@ -1,21 +1,16 @@
 package com.example.bidding_war.model
 
-
-import java.util.*
+import java.time.LocalDateTime
 import javax.persistence.*
 
-
 @Entity
-data class User (
+class Session(
     @Column(unique = true)
+    var token: String,
     var email: String,
-    var password: String,
-    var createDate: Date = Date()
+    var expiration: LocalDateTime
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?= null
-
-    @PrePersist
-    private fun setCrDate() { createDate = Date() }
+    var id: Long? = null
 }

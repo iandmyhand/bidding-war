@@ -6,17 +6,18 @@ import javax.persistence.*
 
 
 @Entity
-data class AuctionItem (
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
-    var title: String? = null,
-    var owner: String? = null,
-    var description: String? = null,
-    var startPrice: Long? = null,
-    var biddingPrice: Long? = null,
+class AuctionItem (
+    var title: String,
+    var owner: String,
+    var description: String,
+    var startPrice: Long,
+    var minBiddingPrice: Long,
     var createDate: Date = Date()
 ) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
     @PrePersist
     private fun setCrDate() { createDate = Date() }
 }

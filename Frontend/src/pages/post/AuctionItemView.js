@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-// import { getPostByNo } from '../../Data';
 import './auctionItem.css';
-import axios from "axios";
+import { fetchAuctionItem } from '../../api/auctionItem/auctionItem_api';
 
 const AuctionItemView = ({ history, location, match }) => {
   const [data, setAuctionItem] = useState([]);
-  const baseUrl = "http://localhost:8080"
   const id = match.params.id;
 
   async function getAuctionItemById(id){
-    await axios
-    .get(baseUrl + "/auctionItem/" + id)
+    await fetchAuctionItem(id)
     .then((response) => {
       setAuctionItem(response.data);
     })
     .catch((error) => {
-      console.error(error)
+      window.alert(error)
     })
   }
 

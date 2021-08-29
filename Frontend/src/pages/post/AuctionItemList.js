@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import CommonTable from '../../component/table/CommonTable';
 import CommonTableColumn from '../../component/table/CommonTableColumn';
 import CommonTableRow from '../../component/table/CommonTableRow';
-import axios from "axios";
-
+import { fetchAllAuctionItems } from '../../api/auctionItem/auctionItem_api';
 const AuctionItemList = props => {
-  const baseUrl = "http://localhost:8080"
   
   const [auctionItems, setAuctionItems] = useState([]);
 
@@ -15,13 +13,12 @@ const AuctionItemList = props => {
   }, [])
 
   async function getAuctions(){
-    await axios
-    .get(baseUrl + "/auctionItem")
+    await fetchAllAuctionItems()
     .then((response) => {
-      setAuctionItems(response.data);
+      setAuctionItems(response.data)
     })
     .catch((error) => {
-      console.error(error)
+      window.alert(error)
     })
   }
 

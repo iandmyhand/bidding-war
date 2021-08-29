@@ -30,6 +30,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.3.4")
     implementation("org.springdoc:springdoc-openapi-webflux-ui:1.3.4")
+    implementation("mysql:mysql-connector-java")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")

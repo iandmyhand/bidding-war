@@ -20,7 +20,7 @@ class AuctionItemAPITest @Autowired constructor(
     fun `경매 물품 단건 조회`() {
 
         val macBook = AuctionItem(
-            id = 1L, title = "맥북", owner = "건식", description = "회사 맥북", startPrice = 1300000, biddingPrice = 100000
+            title = "맥북", owner = "건식", description = "회사 맥북", startPrice = 1300000, minBiddingPrice = 100000
         )
 
         auctionItemService.register(macBook)
@@ -32,7 +32,7 @@ class AuctionItemAPITest @Autowired constructor(
                 AuctionItem::owner,
                 AuctionItem::description,
                 AuctionItem::startPrice,
-                AuctionItem::biddingPrice,
+                AuctionItem::minBiddingPrice,
             )
             .isEqualTo(
                 listOf(
@@ -45,7 +45,7 @@ class AuctionItemAPITest @Autowired constructor(
     fun `경매 물품 전체 조회`() {
 
         val Iphone = AuctionItem(
-            id = 2L, title = "아이폰", owner = "건식", description = "쓴지 1년됐음", startPrice = 800000, biddingPrice = 10000
+            title = "아이폰", owner = "건식", description = "쓴지 1년됐음", startPrice = 800000, minBiddingPrice = 10000
         )
 
         auctionItemService.register(Iphone)
