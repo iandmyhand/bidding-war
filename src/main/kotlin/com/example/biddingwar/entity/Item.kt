@@ -1,5 +1,6 @@
 package com.example.biddingwar.entity
 
+import lombok.Value
 import org.springframework.data.annotation.CreatedDate
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -18,7 +19,9 @@ class Item(
         @Column(name = "price")
         var price: Int,
         @CreatedDate
-        val createdTime: LocalDateTime = LocalDateTime.now()
+        val createdTime: LocalDateTime = LocalDateTime.now(),
+        @Column(name="minPrice")
+        var minPrice: Int = 0
         )
 {
         override fun toString(): String{

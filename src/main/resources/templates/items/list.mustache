@@ -7,16 +7,19 @@
             <td>제목</td>
             <td>가격</td>
             <td>생성시간</td>
+
+            <td>최소 입찰 가격</td>
         </tr>
     </thead>
 
     <tbody>
     {{#items}}
         <tr>
-            <td class="col-sm-3" onclick="">{{productName}}</td>
+            <td class="col-sm-3" onclick=""><a href="/item/detail/{{id}}">{{productName}}</a></td>
             <td class="col-sm-3">{{title}}</td>
             <td class="col-sm-3">{{price}}</td>
             <td class="col-sm-3">{{createdTime}}</td>
+            <td class="col-sm-3">{{minPrice}}</td>
         </tr>
     {{/items}}
     </tbody>

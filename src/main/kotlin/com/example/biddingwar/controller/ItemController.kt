@@ -1,8 +1,10 @@
 package com.example.biddingwar.controller
 
+import com.example.biddingwar.dto.BiddingCreateForm
 import com.example.biddingwar.dto.ItemCreateForm
 import com.example.biddingwar.dto.ItemSearchForm
 import com.example.biddingwar.entity.Item
+import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ItemRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -12,11 +14,14 @@ import org.springframework.ui.Model
 import org.springframework.ui.set
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 import javax.servlet.http.HttpSession
 
 @Controller
 @RequestMapping("/item")
-class ItemController(@Autowired val itemRepository: ItemRepository) {
+class ItemController(
+    @Autowired val itemRepository: ItemRepository,
+    @Autowired val bidRepository: BidRepository) {
 
     @GetMapping("/")
     fun items(session: HttpSession, model:Model): String{
@@ -70,12 +75,30 @@ class ItemController(@Autowired val itemRepository: ItemRepository) {
         return "items/list"
     }
 
-    @GetMapping("/detail")
-    fun detailItem(session: HttpSession, model: Model, @RequestParam id: Long): String{
+    @GetMapping("/detail/{itemID}")
+    fun detailItembyItemId(@PathVariable itemID: Long, session: HttpSession, model: Model): String{
+        model["item"] = itemRepository.findByIdOrNull(itemID)?:
+                throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
+
+        model["itemId"] = itemID
         model["userId"] = session.getAttribute("userId")
 
-        model["item"] = itemRepository.findByIdOrNull(id)?:
-                throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
+        model["bids"] = bidRepository.findAllByItemId(itemID)!!
+
         return "items/detail"
     }
+
+    @PostMapping("/bid")
+    fun bidItem(biddingCreateForm: BiddingCreateForm): String {
+        bidRepository.save(biddingCreateForm.toEntity())
+        var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)!!
+
+        if(item.minPrice == 0 || item.minPrice > biddingCreateForm.price){
+            item.minPrice = biddingCreateForm.price
+            itemRepository.save(item)
+        }
+
+        return "redirect:/item/detail/{${biddingCreateForm.itemId}}"
+    }
+
 }
