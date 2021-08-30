@@ -5,22 +5,21 @@ import javax.persistence.*
 
 
 @Entity
-class AuctionItem (
+class AuctionItem(
     var title: String,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     var owner: User?,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionitem")
-    val biddings: MutableList<Bidding>,
+    @OneToMany
+    val biddings: MutableList<Bidding>?,
 
     var description: String,
     var startPrice: Long,
     var minBiddingPrice: Long,
     var createDate: Date = Date(),
 
-) {
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

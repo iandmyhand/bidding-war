@@ -45,9 +45,9 @@ const AuctionItemList = props => {
                 <CommonTableColumn>
                   <Link to={`/auctionItem/${auctionItem.id}`}>{ auctionItem.title }</Link>
                 </CommonTableColumn>
-                <CommonTableColumn>{ auctionItem.owner }</CommonTableColumn>
+                <CommonTableColumn>{ auctionItem.owner.email }</CommonTableColumn>
                 <CommonTableColumn>{ Number(auctionItem.startPrice).toLocaleString('ko-KR') + " 원" }</CommonTableColumn>
-                <CommonTableColumn>{ Number(auctionItem.biddingPrice).toLocaleString('ko-KR') + " 원"}</CommonTableColumn>
+                <CommonTableColumn>{ Number(auctionItem.minBiddingPrice).toLocaleString('ko-KR') + " 원"}</CommonTableColumn>
                 <CommonTableColumn>{ formatDate(auctionItem.createDate)}</CommonTableColumn>
               </CommonTableRow>
             )

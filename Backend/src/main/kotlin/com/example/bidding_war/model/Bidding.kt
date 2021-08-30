@@ -5,15 +5,13 @@ import javax.persistence.*
 
 @Entity
 class Bidding (
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auctionitem_id")
-    var auctionItem: AuctionItem?,
+    @ManyToOne
+    var auctionItem: AuctionItem,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    var user: User?,
+    @ManyToOne
+    var user: User,
 
-    var price: Long,
+    var amount: Int,
 
     var createDate: Date = Date()
 ) {

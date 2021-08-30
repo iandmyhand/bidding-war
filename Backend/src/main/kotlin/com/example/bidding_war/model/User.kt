@@ -11,11 +11,11 @@ data class User (
     var email: String,
     var password: String,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    val auctionItems: MutableList<AuctionItem>,
+    @OneToMany
+    val auctionItems: MutableList<AuctionItem>? = null,
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    val biddingLists: MutableList<Bidding>,
+    @OneToMany
+    val biddingLists: MutableList<Bidding>? = null,
 
     var createDate: Date = Date()
 ) {
