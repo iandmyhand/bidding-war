@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class BiddingWarApplication
 
 fun main(args: Array<String>) {
-	runApplication<BiddingWarApplication>(*args)
+    runApplication<BiddingWarApplication>(*args)
 }

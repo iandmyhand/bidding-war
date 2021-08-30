@@ -1,0 +1,38 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  # 파일관리?
+  datasource:
+    driver-class-name: org.h2.Driver
+    # url: jdbc:h2:mem:jydb;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:${user.home}/db/h2/jydb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+
+  # h2-console
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings:
+        web-allow-others: false
+
+  # jpa 설정
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: info
+
+server:
+  port: 9090
