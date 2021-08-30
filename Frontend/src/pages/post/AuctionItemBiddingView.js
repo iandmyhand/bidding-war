@@ -38,7 +38,7 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
             window.location.reload()
             
           } catch(error){
-            if (error.response.status === 500){
+            if (error.response.status === 409){
                 window.alert("요청 가격보다 큰 입찰 금액이 이미 존재하거나, 최소 주문 금액보다 작습니다.")
                 window.location.reload()
             }

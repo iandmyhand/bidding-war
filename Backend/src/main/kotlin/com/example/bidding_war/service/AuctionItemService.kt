@@ -8,8 +8,10 @@ import com.example.bidding_war.repository.UserRepository
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemRequest
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemResponse
 import com.example.bidding_war.web.dto.AuctionItem.BidRequest
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.server.ResponseStatusException
 import kotlin.math.acos
 
 @Service
@@ -61,11 +63,11 @@ class AuctionItemService(
         val auctionItem = auctionItemRepository.findById(request.auctionItemId).orElseThrow()!!
 
         if (biddingRepository.existsByAmountGreaterThanEqualAndAuctionItemId(request.amount, request.auctionItemId)) {
-            throw IllegalArgumentException("요청 가격보다 큰 입찰 금액이 이미 존재합니다.")
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Conflict")
         }
 
         if (auctionItem.minBiddingPrice > request.amount){
-            throw IllegalArgumentException("요청 가격이 최소 주문 금액보다 작습니다.")
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Conflict")
         }
 
 
