@@ -6,15 +6,15 @@ import kr.co.peoplefund.biddingWar.domain.Bid
 class BidResponse (
     val id: Long,
     val productId: Long?,
-    val userId: Long,
+    val userId: Long?,
     val biddingPrice: Long
 ) {
     companion object {
         fun of(bid: Bid): BidResponse {
             return BidResponse(
                 id = bid.id!!,
-                productId = bid.productId,
-                userId = bid.userId,
+                productId = bid.product.id,
+                userId = bid.bidderId,
                 biddingPrice = bid.biddingPrice
             )
         }

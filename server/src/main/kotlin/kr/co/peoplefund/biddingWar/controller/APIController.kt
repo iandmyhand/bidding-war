@@ -65,12 +65,17 @@ class APIController(val userService: UserService, val productService: ProductSer
         println("${user1.id} / ${user1.email} / ${user1.password}")
         println("${user2.id} / ${user2.email} / ${user2.password}")
 
-        val loginRequest = LoginRequest("a", "a")
-        val loginResponse = userService.login(loginRequest)
-        val productRequest = ProductRequest(loginResponse.sessionKey, "test", 10, 5)
-        productService.register(user1, productRequest)
+        val loginRequest1 = LoginRequest("a", "a")
+        val loginResponse1 = userService.login(loginRequest1)
+        val loginRequest2 = LoginRequest("b", "b")
+        val loginResponse2 = userService.login(loginRequest2)
+        val productRequest = ProductRequest(loginResponse1.sessionKey, "test", 10, 5)
+        val productId = productService.register(user1, productRequest)
+        val bidRequest = user2.id?.let { BidRequest(loginResponse2.sessionKey, it, 7) }
+        bidRequest?.let {bidService.register(user2, productId, bidRequest)}
+
         val products = productService.list()
-        val hackResponse = user1.id?.let { HackResponse(loginResponse.sessionKey, it, products) }
+        val hackResponse = user1.id?.let { HackResponse(loginResponse1.sessionKey, it, products) }
         return ResponseEntity.ok(hackResponse)
     }
 

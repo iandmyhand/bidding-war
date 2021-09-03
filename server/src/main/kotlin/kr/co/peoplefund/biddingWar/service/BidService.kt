@@ -17,8 +17,7 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         if (product.owner == bidder) {
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not Acceptable")
         }
-        val bid = request.toBid()
-        bid.productId = productId
+        val bid = request.toBid(bidder, product)
         return bidRepository.save(bid).id!!
     }
 
