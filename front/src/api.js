@@ -11,6 +11,8 @@ export const fetchProduct = (id) => client.get(`/api/products/${id}`)
 
 export const createProduct = (data) => client.post('/api/products', data)
 
+export const createBid = (productId, data) => client.post('/api/products/' + productId + '/bids', data)
+
 export const createUser = (data) => {
     const promise = client.post('/api/users', data)
     console.log("create user succeed!!")

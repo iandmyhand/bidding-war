@@ -5,8 +5,9 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-class Product(var name: String, var price: Long, var minimumBiddingPrice: Long) {
+class Bid(var userId: Long, var biddingPrice: Long) {
     @Id
     @GeneratedValue
     var id: Long? = null
+    var productId: Long? = null
 }

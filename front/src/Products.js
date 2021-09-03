@@ -1,10 +1,13 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {createProduct, fetchProducts} from "./api";
+import {createProduct, fetchProducts, createBid} from "./api";
 
 const Products = ({token}) => {
     const [products, setProducts] = useState([])
     const inputName = createRef()
     const inputPrice = createRef()
+    const inputProductId = createRef()
+    const inputBiddingPrice = createRef()
+    const inputUserId = createRef()
 
     const initProducts = async () => {
         const response = await fetchProducts()
@@ -24,6 +27,19 @@ const Products = ({token}) => {
         })
 
         await initProducts()
+    }
+
+    const registerBid = async (e) => {
+        e.preventDefault();
+        console.log("productId:" + inputProductId.current.value)
+        console.log("userId:" + inputUserId.current.value)
+        console.log("biddingPrice:" + inputBiddingPrice.current.value)
+
+        await createBid(inputProductId.current.value, {
+            'token': token,
+            'userId': inputUserId.current.value,
+            'biddingPrice': inputBiddingPrice.current.value
+        })
     }
 
     useEffect(() => {
@@ -60,6 +76,30 @@ const Products = ({token}) => {
             상품을 등록하려면 로그인을 해주세요!
         </p>
     }
+    const registerBidComponent = <form onSubmit={registerBid}>
+        <table>
+            <thead>
+            <tr><td colSpan={3}>입찰</td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>상품번호:</td>
+                <td><input type="text" ref={inputProductId}/></td>
+            </tr>
+            <tr>
+                <td>유저ID:</td>
+                <td><input type="text" ref={inputUserId}/></td>
+            </tr>
+            <tr>
+                <td>입찰가:</td>
+                <td><input type="number" ref={inputBiddingPrice}/></td>
+            </tr>
+            <tr>
+                <td><button type="submit">입찰하기</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
 
     return <div>
         <table>
@@ -79,6 +119,7 @@ const Products = ({token}) => {
             </tbody>
         </table>
         {registerProductComponent}
+        {registerBidComponent}
     </div>
 }
 
