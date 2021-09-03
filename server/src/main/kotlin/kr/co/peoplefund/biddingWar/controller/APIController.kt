@@ -20,9 +20,6 @@ class APIController(val userService: UserService, val productService: ProductSer
         val session = userService.validateToken(token)
         val user = session.userId?.let { userService.getUser(it) }
         val id = user?.let { productService.register(it, request) }
-        userService.validateToken(token)
-
-        val id = productService.register(request)
         return ResponseEntity.created(URI.create("/api/products/$id")).build()
     }
 
@@ -42,9 +39,6 @@ class APIController(val userService: UserService, val productService: ProductSer
         val session = userService.validateToken(token)
         val user = session.userId?.let { userService.getUser(it) }
         val id = user?.let { bidService.register(it, productId, request) }
-        userService.validateToken(token)
-
-        val id = bidService.register(productId, request)
         return ResponseEntity.created(URI.create("/api/products$productId/bids/$id")).build()
     }
 
