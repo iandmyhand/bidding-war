@@ -7,11 +7,8 @@ import javax.persistence.*
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
 class Bid(
-    var bidderId: Long,
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
+    @ManyToOne var bidder: User,
     var biddingPrice: Long,
     @ManyToOne(fetch = FetchType.LAZY) var product: Product
-    ) {
-    @Id
-    @GeneratedValue
-    var id: Long? = null
-}
+    )

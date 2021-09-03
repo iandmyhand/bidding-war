@@ -11,7 +11,7 @@ class BidRequest(
 ) {
     fun toBid(bidder: User, product: Product): Bid {
         return Bid(
-            bidderId = this.userId,
+            bidder = bidder,
             biddingPrice = this.biddingPrice,
             product = product
         )

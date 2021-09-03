@@ -16,7 +16,7 @@ class ProductRequest(
             name = this.name,
             price = this.price,
             minimumBiddingPrice = this.minimumBiddingPrice,
-            mutableListOf<Bid>()
+            bids = mutableListOf<Bid>()
         )
     }
 }

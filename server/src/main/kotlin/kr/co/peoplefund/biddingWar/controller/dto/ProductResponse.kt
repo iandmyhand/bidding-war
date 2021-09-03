@@ -14,16 +14,13 @@ class ProductResponse (
         fun of(product: Product): ProductResponse {
             println("product: ${product.id} / ${product.owner.id}")
             product.bids.map {println("bid: ${it.id} / ${it.biddingPrice}")}
-            val res = ProductResponse(
+            return ProductResponse(
                 id = product.id!!,
                 name = product.name,
                 price = product.price,
                 minimumBiddingPrice = product.minimumBiddingPrice,
                 bids = product.bids
             )
-            if (res.bids.size > 0) {println(res.bids[0].id)}
-
-            return res
         }
 
         fun of(products: List<Product>): List<ProductResponse> {

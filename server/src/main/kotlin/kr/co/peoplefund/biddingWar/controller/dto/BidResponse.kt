@@ -14,7 +14,7 @@ class BidResponse (
             return BidResponse(
                 id = bid.id!!,
                 productId = bid.product.id,
-                userId = bid.bidderId,
+                userId = bid.bidder.id,
                 biddingPrice = bid.biddingPrice
             )
         }
