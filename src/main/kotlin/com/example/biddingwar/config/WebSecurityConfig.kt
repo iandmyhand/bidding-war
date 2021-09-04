@@ -1,6 +1,6 @@
-package com.example.biddingwar.configure
+package com.example.biddingwar.config
 
-import com.example.biddingwar.service.UserCustomService
+import com.example.biddingwar.service.user.UserCustomService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Configurable
 import org.springframework.context.annotation.Bean
