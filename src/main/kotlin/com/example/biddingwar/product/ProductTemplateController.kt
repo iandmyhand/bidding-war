@@ -23,7 +23,9 @@ class ProductTemplateController(val service: ProductService,
     }
 
     @RequestMapping(value=["/template/product"], method = [RequestMethod.POST])
-    fun createProduct(model: Model, product: Product):String {
+    fun createProduct(model: Model, product: Product, authentication: Authentication):String {
+        val account: Account = accountService.getUserByUsername(authentication.name)
+        product.seller = account
         service.save(product)
         model.addAttribute("products", service.getAll())
         return "products"

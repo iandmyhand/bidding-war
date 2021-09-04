@@ -14,6 +14,7 @@
                 <th>name</th>
                 <th>description</th>
                 <th>price</th>
+                <th>seller</th>
                 <th>createdDate</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td><span th:text="${product.description}"> description </span></td>
                 <td><span th:text="${product.price}"> price </span></td>
                 <td><span th:text="${product.minimumPrice}"> minimumPrice </span></td>
+                <td><span th:text="${product.seller.email}"> seller </span></td>
                 <td><span th:text="${product.createdDate}"> createdDate </span></td>
             </tr>
         </tbody>

@@ -1,5 +1,6 @@
 package com.example.biddingwar.product
 
+import com.example.biddingwar.account.Account
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -17,6 +18,9 @@ data class Product(
     var price: Int,
 
     var minimumPrice: Int,
+
+    @ManyToOne
+    var seller: Account?,
 
     // @CreatedDate
     val createdDate: LocalDateTime = LocalDateTime.now(),
