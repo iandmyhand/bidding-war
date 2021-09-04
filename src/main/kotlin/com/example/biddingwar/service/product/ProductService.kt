@@ -5,6 +5,7 @@ import com.example.biddingwar.repository.ProductRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
 
@@ -14,7 +15,7 @@ class ProductService(val repository: ProductRepository) {
 
     fun getAll(): ResponseEntity<MutableIterable<Product>> = ResponseEntity.ok().body(repository.findAll())
 
-    fun get(id: Long) = repository.findById(id)
+    fun get(id: Long): Optional<Product> = repository.findById(id)
 
     fun save(product: Product, request: HttpServletRequest): ResponseEntity<Product> {
         val session = request.session
