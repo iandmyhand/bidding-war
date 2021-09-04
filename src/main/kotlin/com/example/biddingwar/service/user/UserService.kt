@@ -34,7 +34,7 @@ class UserService(val repository: UserRepository) {
 
         if (user != null) {
             // 비밀번호 검증
-            if (bcrypt.matches(userRequest.pwd, user?.password)) {
+            if (bcrypt.matches(userRequest.pwd, user.password)) {
                 val session = request.session
                 session.setAttribute("session", user.id)
 
