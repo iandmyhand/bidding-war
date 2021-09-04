@@ -20,7 +20,7 @@ class BiddingWarController(val service: BiddingWarService) {
 
         return if (result) {
             ResponseEntity.ok(
-                "PID: ${product.id} (${product.name})이 등록 되었습니다."
+                "PID: ${product.id} (${product.name} 이 등록 되었습니다."
             )
         } else {
             ResponseEntity.status(404).body("상품 등록에 실패했습니다.")
@@ -61,10 +61,34 @@ class BiddingWarUserController(val service: BiddingWarUserService) {
         val user = service.signIn(user, request)
 
         return if (user != null) {
-            ResponseEntity.ok("로그인 성공")
+            ResponseEntity.ok("${user.id}")
         } else {
             ResponseEntity.status(401).body("로그인 실패")
         }
 
+    }
+}
+
+@RestController
+@RequestMapping("/bidding-war/bid")
+class BiddingWarBidController(val service: BiddingWarBidService) {
+
+    @GetMapping
+    fun bids() = ResponseEntity.ok(service.getAll())
+
+    @GetMapping("/{userId}")
+    fun userBids(@PathVariable userId: Long) = ResponseEntity.ok(service.getUserBids(userId))
+
+    @PostMapping
+    fun create(@RequestBody bid: Bid, request: HttpServletRequest): ResponseEntity<String> {
+        val result = service.saveBid(bid, request)
+
+        return if (result) {
+            ResponseEntity.ok(
+                "입찰 (입찰가:${bid.biddingPrice})이 등록 되었습니다."
+            )
+        } else {
+            ResponseEntity.status(404).body("입찰에 실패했습니다.")
+        }
     }
 }

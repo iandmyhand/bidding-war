@@ -9,8 +9,10 @@ export const fetchProducts = () => client.get('/bidding-war')
 
 export const fetchProduct = (id) => client.get(`/bidding-war/${id}`)
 
-export const createProduct = (data) => client.post('bidding-war', data)
+export const createProduct = (data) => client.post('bidding-war', data, { withCreadentials: true })
 
 export const signUpUser = (data) => client.post('bidding-war/users', data)
 
 export const signInUser = (data) => client.post('bidding-war/users/login', data)
+
+export const createBid = (data) => client.post('bidding-war/bid', data)

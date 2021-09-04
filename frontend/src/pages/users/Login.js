@@ -61,18 +61,13 @@ const Login = () => {
 
     const signIn = async () => {
         try {
-            console.log('sign-in!')
-            console.log({
-                'email': inputEmail.current.value,
-                'pwd': inputPassword.current.value,
-            })
-
-            await signInUser({
+            let result = await signInUser({
                 'email': inputEmail.current.value,
                 'pwd': inputPassword.current.value,
             })
 
             window.alert('로그인 성공!')
+            window.sessionStorage.setItem('session', result['data']);
             window.location.replace("/products")
         } catch (error) {
             console.log(error)
