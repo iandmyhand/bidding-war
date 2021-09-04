@@ -88,12 +88,6 @@ class BiddingWarBidService(val bidRepository: BiddingWarBidRepository, val produ
 
     fun saveBid(bid: Bid, request: HttpServletRequest): Boolean {
         val product = productRepository.findById(bid.productId).get()
-
-        if (bid.biddingPrice > product.minimumPrice) {
-            product.minimumPrice = bid.biddingPrice
-            productRepository.save(product)
-        }
-
         bidRepository.save(bid)
         return true
     }
