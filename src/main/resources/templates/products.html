@@ -26,6 +26,7 @@
                 <td><span th:text="${product.name}"> name </span></td>
                 <td><span th:text="${product.description}"> description </span></td>
                 <td><span th:text="${product.price}"> price </span></td>
+                <td><span th:text="${product.minimumPrice}"> minimumPrice </span></td>
                 <td><span th:text="${product.createdDate}"> createdDate </span></td>
             </tr>
         </tbody>
@@ -35,6 +36,7 @@
         name: <input name="name"><br>
         desc: <input name="description"><br>
         price: <input name="price"><br>
+        minimum price: <input name="minimumPrice"><br>
         <button type="submit">save</button>
     </form>
 </body>

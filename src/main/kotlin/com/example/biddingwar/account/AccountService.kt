@@ -20,4 +20,9 @@ class AccountService(@Autowired private val accountRepository: AccountRepository
         return accountRepository.findByEmail(username)?.getAuthorities()
             ?: throw UsernameNotFoundException("$username Can Not Found")
     }
+
+    fun getUserByUsername(username: String): Account {
+        return accountRepository.findByEmail(username)
+            ?: throw UsernameNotFoundException("$username can not found")
+    }
 }

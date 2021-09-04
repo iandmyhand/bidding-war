@@ -1,4 +1,4 @@
-package com.example.biddingwar
+package com.example.biddingwar.product
 
 import org.springframework.data.repository.CrudRepository
 

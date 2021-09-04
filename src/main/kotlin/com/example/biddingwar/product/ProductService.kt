@@ -1,5 +1,6 @@
-package com.example.biddingwar
+package com.example.biddingwar.product
 
+import com.example.biddingwar.product.ProductRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
