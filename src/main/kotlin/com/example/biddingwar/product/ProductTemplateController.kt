@@ -36,7 +36,7 @@ class ProductTemplateController(val service: ProductService,
         authentication: Authentication,
     ):String {
         service.getProduct(product_id).ifPresent {model.addAttribute("product", it)}
-        model.addAttribute("biddings", biddingService.getAll())
+        model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
         return "product"
     }
 
@@ -52,7 +52,7 @@ class ProductTemplateController(val service: ProductService,
         bidding.account = account
         biddingService.save(bidding)
         service.getProduct(product_id).ifPresent { model.addAttribute("product", it) }
-        model.addAttribute("biddings", biddingService.getAll())
+        model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
         return "product"
     }
 }

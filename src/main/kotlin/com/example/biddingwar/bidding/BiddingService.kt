@@ -9,8 +9,7 @@ class BiddingService(val repository: BiddingRepository){
 
     fun getAll() = repository.findAll()
 
-//    TODO: 상품아이디 별로 가져오도록
-    fun getBiddingByProduct(id: Long) = repository.findById(id)
+    fun getBiddingByProduct(productId: Long) = repository.findByProductId(productId)
 
     fun save(bidding: Bidding) = repository.save(bidding)
 }
