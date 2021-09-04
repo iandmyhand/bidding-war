@@ -10,15 +10,13 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/products")
 class ProductController(val service: ProductService) {
     @GetMapping
-    fun products() = ResponseEntity.ok(service.getAll())
+    fun products() = service.getAll()
 
     @GetMapping("/{id}")
     fun product(@PathVariable id: Long) = service.get(id)
 
     @PostMapping
-    fun create(@RequestBody product: Product, request: HttpServletRequest) : ResponseEntity<Product> {
-         return service.save(product, request)
-    }
+    fun create(@RequestBody product: Product, request: HttpServletRequest) = service.save(product, request)
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)

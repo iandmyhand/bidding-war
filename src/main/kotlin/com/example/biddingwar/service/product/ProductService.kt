@@ -12,7 +12,7 @@ import javax.transaction.Transactional
 @Transactional
 class ProductService(val repository: ProductRepository) {
 
-    fun getAll() = repository.findAll()
+    fun getAll(): ResponseEntity<MutableIterable<Product>> = ResponseEntity.ok().body(repository.findAll())
 
     fun get(id: Long) = repository.findById(id)
 
