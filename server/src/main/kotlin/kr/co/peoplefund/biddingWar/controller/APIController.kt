@@ -71,7 +71,7 @@ class APIController(val userService: UserService, val productService: ProductSer
         val loginResponse2 = userService.login(loginRequest2)
         val productRequest = ProductRequest(loginResponse1.sessionKey, "test", 10, 5)
         val productId = productService.register(user1, productRequest)
-        val bidRequest = user2.id?.let { BidRequest(loginResponse2.sessionKey, it, 7) }
+        val bidRequest = BidRequest(loginResponse2.sessionKey, 7)
         bidRequest?.let {bidService.register(user2, productId, bidRequest)}
 
         val products = productService.list()

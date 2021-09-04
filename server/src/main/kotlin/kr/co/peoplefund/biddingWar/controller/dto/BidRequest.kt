@@ -6,7 +6,6 @@ import kr.co.peoplefund.biddingWar.domain.User
 
 class BidRequest(
     val token: String,
-    val userId: Long,
     val biddingPrice: Long
 ) {
     fun toBid(bidder: User, product: Product): Bid {
