@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 class Tests(@Autowired val itemRepository: ItemRepository){
     @Test
     fun `상품 등록`() {
+        var userId = "123"
         var now = LocalDateTime.now()
 
         val request = ItemCreateForm(
@@ -24,10 +25,10 @@ class Tests(@Autowired val itemRepository: ItemRepository){
             createTime = now
         )
 
-        itemRepository.save(request.toEntity())
+        itemRepository.save(request.toEntity(userId))
         val response = itemRepository.findById(1).get()
         val expected = Item(1, "갤럭시 노트10",
-            "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, now)
+            "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, userId, now)
 
         assertThat(response.toString())
             .isEqualTo(expected.toString())
@@ -35,6 +36,7 @@ class Tests(@Autowired val itemRepository: ItemRepository){
 
     @Test
     fun `상품 조회`(){
+        var userId = "123"
         var now = LocalDateTime.now()
 
         val request1 = ItemCreateForm(
@@ -52,12 +54,12 @@ class Tests(@Autowired val itemRepository: ItemRepository){
             createTime = now
         )
 
-        itemRepository.save(request1.toEntity())
-        itemRepository.save(request2.toEntity())
+        itemRepository.save(request1.toEntity(userId))
+        itemRepository.save(request2.toEntity(userId))
         val response = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc("갤럭시 노트")
 
-        val expected1 = Item(1, "갤럭시 노트10", "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, now);
-        val expected2 = Item(2, "갤럭시 노트10 5G", "갤럭시 노트 10 팔아여", "대략 1년정도 사용했네요", 200_000, now)
+        val expected1 = Item(1, "갤럭시 노트10", "스마트폰 팔아여", "대략 2년정도 사용했네요", 400_000, userId, now);
+        val expected2 = Item(2, "갤럭시 노트10 5G", "갤럭시 노트 10 팔아여", "대략 1년정도 사용했네요", 200_000, userId, now)
 
         assertThat(response.first().toString())
             .isEqualTo(expected1.toString())
