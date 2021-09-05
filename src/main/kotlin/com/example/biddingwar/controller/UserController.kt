@@ -4,6 +4,7 @@ import com.example.biddingwar.dto.UserLoginForm
 import com.example.biddingwar.dto.UserSignInForm
 import com.example.biddingwar.entity.User
 import com.example.biddingwar.repository.UserRepository
+import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,11 +18,13 @@ import javax.servlet.http.HttpSession
 @RequestMapping("/user")
 class UserController(@Autowired val userRepository: UserRepository) {
 
+    @ApiOperation(value = "User sign in form", notes = "사용자 회원 가입 폼")
     @GetMapping("/signin")
     fun signin_get(): String {
         return "Users/signInForm"
     }
 
+    @ApiOperation(value = "process User sign in", notes = "사용자 회원 가입 처리")
     @PostMapping("/signin")
     fun signin_post(userForm : UserSignInForm): String{
         userRepository.save(userForm.toEntity())
@@ -29,6 +32,7 @@ class UserController(@Autowired val userRepository: UserRepository) {
         return "redirect:/user/login"
     }
 
+    @ApiOperation(value = "User login form", notes = "사용자 로그인 폼")
     @GetMapping("/login")
     fun login_get(session: HttpSession, model: Model): String {
         val userId = session.getAttribute("userId")
@@ -36,6 +40,7 @@ class UserController(@Autowired val userRepository: UserRepository) {
         return "Users/loginForm"
     }
 
+    @ApiOperation(value = "process User login", notes = "사용자 로그인 처리")
     @PostMapping("/login")
     fun login_post(userForm : UserLoginForm, session: HttpSession, model:Model): String{
         val (userId, userPw) = userForm.toEntity()
@@ -56,6 +61,7 @@ class UserController(@Autowired val userRepository: UserRepository) {
         return response
     }
 
+    @ApiOperation(value = "process User logout", notes = "사용자 로그인아웃 처리")
     @GetMapping("/logout")
     fun logout_post(session: HttpSession, model:Model): String{
         val userId = session.getAttribute("userId")
