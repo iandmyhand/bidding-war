@@ -15,4 +15,7 @@ class BiddingCreateForm(val itemId: Long, val userId: Long, val price: Int) {
     fun toEntity(): Bid {
         return Bid(null, itemId, userId, price)
     }
+    fun getUser(): Long{
+        return userId;
+    }
 }
