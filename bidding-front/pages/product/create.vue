@@ -9,26 +9,44 @@
       <label for="input-desc">Desc:</label>
       <b-form-input for="input-desc" v-model="desc" placeholder="Enter product desc"></b-form-input>
       <b-button @click="createProduct">create</b-button>
+      <b-button @click="sendEncryptTest">test</b-button>
   </div>
 </template>
 
 <script>
+const crypto = require('crypto');
 export default {
     data(){
         return{
+            publicKeys: {},
+            keys: "",
             group: "",
             name: "",
             price: 0,
             desc: ""
         }
     },
+    created(){
+        this.getRsaPublicKey()
+    },
     methods:{
+        async getRsaPublicKey(){
+            await this.$axios.get("https://dev-pf-security-support.s3.ap-northeast-2.amazonaws.com/public_key_cache/publicKeyCache.json")
+            .then(res=>{
+                this.publicKeys = res.data
+                console.log(this.publicKeys)
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+        },
         async createProduct(){
+            let publicKey = this.getPublicKey()
             const objData = {
-                product_group: this.group,
-                product_name: this.name,
+                product_group: this.encMessage(publicKey, this.group),
+                product_name: this.encMessage(publicKey, this.name),
                 product_price: this.price,
-                product_desc: this.desc
+                product_desc: this.encMessage(publicKey, this.desc)
             };
             const data = JSON.stringify(objData);
             await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
@@ -46,7 +64,50 @@ export default {
             .catch(error=>{
                 console.log(error)
             })
+        },
+        getPublicKey(){
+            console.log("test: " + this.publicKeys.next_public_key)
+            if(this.publicKeys!=undefined){
+                if(this.publicKeys.next_public_key_id!=undefined){
+                    return this.publicKeys.next_public_key
+                }else{
+                    return this.publicKeys.current_public_key
+                }
+            }
+        },
+        encMessage(publicKey, message){
+            console.log("use : "+publicKey)
+            var encrypt = this.$jsencrypt
+            publicKey = "-----BEGIN PUBLIC KEY-----\n" + publicKey + "\n-----END PUBLIC KEY-----\n"
+            // const privateKeyText = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCaTu8C6JfAAiRM9+ZUeHIyEonRgX74GLl4sTewPpHBor1JTvaBpzQwYTXd8qtd1M8c2pQ6XCiqOlZi3vlOtrNAZ8eG53hQox2swsxH0S+K8a7+1f5ay2c2+jHwMv2ofp3ZpxqXNLsqcC9gekdSkF9qTDgNkNOa4mczpqw/LqLzPGxge/63XDxEsIycUgSHKyqBZBshnUFmTdcyoeNYEWtoNakS6AsQnNihbyYMQxwwovCYmOc6eU4QXl8t/C0iaCitTwhbfhFUaIQFHvEcWbwahIxP1peYPqcGSDssS41i3+ULDMd7UnoLyB6VA4Tyb+jvFDwpQM7hLV2exIXmTtRFAgMBAAECggEATbVqkGBp63woo8pD6E4v1B+Z4DQCqRZqcOluTgd0h7tY784gPfLiSWrrIbbPrhU5qCI7e5hlsjRmxKvdiVJguxKIXNu8r381tobzMUebVbGYmyVRTpAYjos5Euna7Du3aqDIt1UK3LhaY4+w01d5daKkp9BDgEB8EHrjS35E+ZCu1gVu+qpqHXge2/G3Ew7umzWn2Ivu2m8BzxwgbdEggX+33PP3OsMXylxQg0TceTK3N04yrmex7bPSineQOa9j10r1kZP3IK4YTiiTu5E9/OAhccXZZCswxQxqh6h8Q7XYpT0cGCtxOHPtgbq53/qa5SeMbrmN3/6WWWWjPBe0EQKBgQDeyCHZIXl3vfRh69L0es+jfShlSq1RtAUggQoJgqbwYZC1bmRbmW5xIdgKNxwcjzBrID7SBh34ZWHZLGSDU3etgAdO/uz5G/wjTDbG8qdrCC7Y7QUe+Nj3ybyMBScULYOMHfXTaxAl9w9XcHvvPGi1f0cZMSh+SKH42AS/Yb1UTwKBgQCxURUDDVuz/XTNm/u8JYEmUjtgWCodoN0cmXh0pBpKO1tQr5+Lu5uZEUpDxFs33aUnSfTL+ingMMpSFMAhzzDJj2U5P7M/1hc7vJea6Yauaf/VEOnlQw7FmtN7ngNGklS2Ssa1WVSHva71VA978CMaPrq5vZBCP+XpMqDmLrnlKwKBgAb+DxnqlA5vFuGP7lIgHK5L+l2bh28eEF8hzbfYsvauiUU4jsvVOAMzBb3kVuyKjgF+xJoA+SXXwMd5Pjpk/0eh0hjnpXZ4K2TMOpfp+9k/K4FBhzyeoOi+Gz3l14EpoIxgUFvva1VVuNSMwkcTBVJVCV1ADr5P902BMjzzi2a/AoGBAKOnSTRa9ONnr5FBQRMCrnN2/BRM6voTiWAnCXTmLNmMdRhAL4nhKpgYzClFpkcmi5J6gLRufI3Nmj4tprLNrqKpdWxkLYVijGj3BBnXJRX/AT9eb/HIdW7OGhiC21UcI5Fn7IReIVVzLXKCFhR2q39CnEZn/igXH5SexMAOKkanAoGBAI7e7mclzIeD5XtG4mBRHQ9v9dA/YSOKdPjlecrFM+4sv+9x+skLjgPHToDSDs/SRbRlfI6F3iNWJJcli+AP5nzeTIsB89O1f3cZNyWuAmdZRdiGMpl4dozyYmrzo3QZ2xz6ixBWIw+oELC7VgRrBEg4wcJqRveziDRJWq4hDrSP"
+            // const privateKey = "-----BEGIN PRIVATE KEY-----\n" + privateKeyText + "\n-----END PRIVATE KEY-----\n"
 
+            // encrypt.setPublicKey(publicKey)
+            // encrypt.setPrivateKey(privateKey)
+            
+            let encMsg = crypto.publicEncrypt({key:publicKey, padding: crypto.constants.RSA_PKCS1_PADDING},
+                                                Buffer.from(this.group, 'utf8'))
+            encMsg = encMsg.toString('base64')
+            encMsg = encodeURIComponent(encMsg)
+
+            // encMsg = encrypt.encrypt(message)
+            console.log(encMsg)
+            // let decMsg = encrypt.decrypt(encMsg)
+            // let decMsg = crypto.privateDecrypt(privateKey, Buffer.from(encMsg, 'base64'))
+            // console.log(decMsg)
+            
+            return encMsg
+        },
+        async sendTest(){
+            let publicKey = this.getPublicKey()
+            // this.encMessage(publicKey, this.group)
+            await this.$axios.get("http://localhost:8080/bidding/v1/product?"+"msg="+this.encMessage(publicKey, this.group))
+            .then(res=>{
+                console.log(res.data)
+            })
+            .catch(error=>{
+                console.log(error)
+            })
         }
     }
 }

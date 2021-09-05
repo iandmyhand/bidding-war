@@ -1,8 +1,11 @@
 package com.study.biddingwar.domain.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.study.biddingwar.common.DecryptRsa
 
 data class ProductDto(
+
+    @field:DecryptRsa
     @get:JsonProperty("product_name")
     val productName:String,
     @get:JsonProperty("product_group")

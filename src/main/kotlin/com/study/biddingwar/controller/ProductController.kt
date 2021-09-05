@@ -1,5 +1,8 @@
 package com.study.biddingwar.controller
 
+import com.study.biddingwar.common.DecryptRsa
+import com.study.biddingwar.common.crypto.CryptoRsaUtils
+import com.study.biddingwar.domain.RsaKeyStore
 import com.study.biddingwar.domain.dto.ProductDto
 import com.study.biddingwar.domain.dto.ProductResultDto
 import com.study.biddingwar.service.ProductService
@@ -31,6 +34,11 @@ class ProductController(private val productService: ProductService) {
     fun createProduct(@RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
         val product = productService.createProduct(productDto)
         return ResponseEntity.ok().body(product)
+    }
+
+    @GetMapping("/product")
+    fun createProduct(@RequestParam("msg")@DecryptRsa message:String): ResponseEntity<String> {
+        return ResponseEntity.ok().body(message)
     }
 
     @PutMapping("/products/{id}")
