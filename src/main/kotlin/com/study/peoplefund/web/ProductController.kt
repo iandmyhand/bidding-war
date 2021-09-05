@@ -14,8 +14,8 @@ import java.net.URI
 class ProductController(val productService: ProductService) {
 
     @PostMapping
-    fun register(@RequestBody request: ProductRequest): ResponseEntity<Void> {
-        val id = productService.register(request)
+    fun register(@RequestBody request: ProductRequest, @AuthInfo userId: Long): ResponseEntity<Void> {
+        val id = productService.register(request, userId)
         return ResponseEntity.created(URI.create("/api/products/$id")).build()
     }
 

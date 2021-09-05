@@ -15,9 +15,6 @@ class UserArgumentResolver(
 ) : HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        println(parameter.getParameterAnnotation(AuthInfo::class.java) != null
-                && parameter.parameterType == Long::class.java)
         return parameter.getParameterAnnotation(AuthInfo::class.java) != null
                 && parameter.parameterType == Long::class.java
     }

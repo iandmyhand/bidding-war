@@ -2,12 +2,10 @@ package com.study.peoplefund.web
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.study.peoplefund.service.ProductService
 import com.study.peoplefund.service.AuthService
+import com.study.peoplefund.service.ProductService
 import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
-import com.study.peoplefund.web.dto.SignInRequest
-import com.study.peoplefund.web.dto.UserRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
@@ -42,66 +40,70 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun `상품 등록`() {
         val request = ProductRequest(
-                name = "담보채권",
-                price = 100_000_000L
+            name = "담보채권",
+            price = 100_000_000L
         )
 
         val requestJson = objectMapper.writeValueAsString(request)
 
-        `when`(productService.register(request)).thenReturn(1L)
+        `when`(productService.register(request, 1L)).thenReturn(1L)
 
         mockMvc.perform(post("/api/products")
-                .header("Authorization", "random_token")
-                .content(requestJson)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated)
-                .andDo(print())
+            .header("Authorization", "random_token")
+            .content(requestJson)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated)
+            .andDo(print())
     }
 
     @Test
     fun `목록 조회`() {
         val response = listOf(
-                ProductResponse(
-                        id = 1L,
-                        name = "담보 채권",
-                        minPrice = 100_000_000L,
-                ),
-                ProductResponse(
-                        id = 2L,
-                        name = "개인 채권",
-                        minPrice = 100_000_000L,
-                )
+            ProductResponse(
+                id = 1L,
+                sellerId = 1L,
+                name = "담보 채권",
+                minPrice = 100_000_000L,
+            ),
+            ProductResponse(
+                id = 2L,
+                sellerId = 1L,
+                name = "개인 채권",
+                minPrice = 100_000_000L,
+            )
         )
 
         `when`(productService.list()).thenReturn(response)
 
         mockMvc.perform(get("/api/products"))
-                .andExpect(status().isOk)
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(response)))
-                .andDo(print())
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)))
+            .andDo(print())
     }
 
     @Test
     fun `단건 조회`() {
         val response = ProductResponse(
-                id = 1L,
-                name = "담보 채권",
-                minPrice = 100_000_000L,
+            id = 1L,
+            sellerId = 1L,
+            name = "담보 채권",
+            minPrice = 100_000_000L,
         )
 
         `when`(productService.detail(1L)).thenReturn(
-                ProductResponse(
-                        id = 1L,
-                        name = "담보 채권",
-                        minPrice = 100_000_000L,
-                )
+            ProductResponse(
+                id = 1L,
+                sellerId = 1L,
+                name = "담보 채권",
+                minPrice = 100_000_000L,
+            )
         )
 
         mockMvc.perform(get("/api/products/1"))
-                .andExpect(status().isOk)
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(objectMapper.writeValueAsString(response)))
-                .andDo(print())
+            .andExpect(status().isOk)
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().json(objectMapper.writeValueAsString(response)))
+            .andDo(print())
     }
 }

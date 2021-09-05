@@ -129,13 +129,13 @@ const Products = () => {
 
         <strong>상품 목록</strong>
         <br/>
-        ======
+        ======`
         <br/>
-        ID 채권명 최소가격 현재가격
+        ID 판매자ID 채권명 최소가격
         <br/>
         ======
         {products.map(product =>
-            <div key={product.id}>{product.id} {product.name} {product.minPrice} {product.currentPrice}</div>)}
+            <div key={product.id}>{product.id} {product.sellerId} {product.name} {product.minPrice}</div>)}
         <br/><br/>
 
         <strong>상품 등록</strong><br/>

@@ -1,6 +1,7 @@
 package com.study.peoplefund.service
 
 import com.study.peoplefund.domain.Bidding
+import com.study.peoplefund.domain.Product
 import com.study.peoplefund.domain.repository.BiddingRepository
 import com.study.peoplefund.domain.repository.ProductRepository
 import com.study.peoplefund.domain.repository.UserRepository
@@ -9,7 +10,6 @@ import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.IllegalArgumentException
 
 @Service
 class ProductService(
@@ -19,8 +19,12 @@ class ProductService(
 ) {
 
     @Transactional
-    fun register(request: ProductRequest): Long {
-        val product = request.toProduct()
+    fun register(request: ProductRequest, sellerId: Long): Long {
+        val product = Product(
+            seller = userRepository.findById(sellerId).orElseThrow(),
+            name = request.name,
+            minPrice = request.price
+        )
         return productRepository.save(product).id!!
     }
 
