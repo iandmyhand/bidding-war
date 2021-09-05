@@ -3,10 +3,14 @@ package com.study.peoplefund.web
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.study.peoplefund.service.ProductService
+import com.study.peoplefund.service.AuthService
 import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
+import com.study.peoplefund.web.dto.SignInRequest
+import com.study.peoplefund.web.dto.UserRequest
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -23,9 +27,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @MockBean
+    lateinit var authService: AuthService
+
+    @MockBean
     lateinit var productService: ProductService
 
     val objectMapper = jacksonObjectMapper().registerModule(KotlinModule())
+
+    @BeforeEach
+    fun setUp() {
+        doReturn(1L).`when`(authService).validateToken(anyString())
+    }
 
     @Test
     fun `상품 등록`() {
@@ -39,6 +51,7 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
         `when`(productService.register(request)).thenReturn(1L)
 
         mockMvc.perform(post("/api/products")
+                .header("Authorization", "random_token")
                 .content(requestJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated)
@@ -48,8 +61,16 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun `목록 조회`() {
         val response = listOf(
-                ProductResponse(id = 1L, name = "담보 채권", price = 100_000_000),
-                ProductResponse(id = 2L, name = "개인 채권", price = 10_000_000)
+                ProductResponse(
+                        id = 1L,
+                        name = "담보 채권",
+                        minPrice = 100_000_000L,
+                ),
+                ProductResponse(
+                        id = 2L,
+                        name = "개인 채권",
+                        minPrice = 100_000_000L,
+                )
         )
 
         `when`(productService.list()).thenReturn(response)
@@ -63,10 +84,18 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `단건 조회`() {
-        val response = ProductResponse(id = 1L, name = "담보 채권", price = 100_000_000)
+        val response = ProductResponse(
+                id = 1L,
+                name = "담보 채권",
+                minPrice = 100_000_000L,
+        )
 
         `when`(productService.detail(1L)).thenReturn(
-                ProductResponse(id = 1L, name = "담보 채권", price = 100_000_000)
+                ProductResponse(
+                        id = 1L,
+                        name = "담보 채권",
+                        minPrice = 100_000_000L,
+                )
         )
 
         mockMvc.perform(get("/api/products/1"))

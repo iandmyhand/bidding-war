@@ -1,22 +1,21 @@
 package com.study.peoplefund.domain
 
-import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.ManyToOne
 
 @Entity
-class User(
+class Bidding(
         @Id
         @GeneratedValue
         var id: Long? = null,
 
-        @Column(unique = true)
-        var account: String,
+        @ManyToOne
+        var user: User,
 
-        var password: String,
+        @ManyToOne
+        var product: Product,
 
-        var name: String,
-
-        var salt: ByteArray
+        var price: Long
 )

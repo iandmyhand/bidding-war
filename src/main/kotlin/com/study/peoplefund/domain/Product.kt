@@ -5,8 +5,12 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 
 @Entity
-class Product(var name: String, var price: Long) {
-    @Id
-    @GeneratedValue
-    var id: Long? = null
-}
+class Product(
+        @Id
+        @GeneratedValue
+        var id: Long? = null,
+
+        var name: String,
+
+        var minPrice: Long
+)

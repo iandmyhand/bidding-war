@@ -19,7 +19,8 @@ class UserTest @Autowired constructor(
         val user = User(
                 account = "kuenhwi",
                 password = "abcd1234",
-                name = "choi"
+                name = "choi",
+                salt = "abcd".toByteArray()
         )
 
         userRepository.save(user)
@@ -35,11 +36,12 @@ class UserTest @Autowired constructor(
 
     @ParameterizedTest
     @CsvSource("kuenhwi,wrong", "wrong,abcd1234")
-    fun `실패하는 경우 로그인 테스트`(account: String, password: String) {
+    fun `실패하는 경우 로그인 쿼리 테스트`(account: String, password: String) {
         val user = User(
                 account = "kuenhwi",
                 password = "abcd1234",
-                name = "choi"
+                name = "choi",
+                salt = "abcd".toByteArray()
         )
 
         userRepository.save(user)

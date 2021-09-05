@@ -6,4 +6,6 @@ import java.util.*
 
 interface UserRepository : JpaRepository<User, Long?> {
     fun findByAccountAndPassword(account: String, password: String): Optional<User>
+
+    fun findByAccount(account: String): Optional<User>
 }
