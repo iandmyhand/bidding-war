@@ -15,6 +15,9 @@ class BidController(val service: BidService) {
     @GetMapping("/{userId}")
     fun userBids(@PathVariable userId: Long) = ResponseEntity.ok(service.getBidByUserId(userId))
 
+    @GetMapping("/{productId}")
+    fun productBids(@PathVariable productId: Long) = ResponseEntity.ok(service.getByProductId(productId))
+
     @PostMapping
     fun create(@RequestBody bid: Bid, request: HttpServletRequest): ResponseEntity<Bid> = service.saveBid(bid, request)
 }

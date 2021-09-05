@@ -18,11 +18,6 @@ class ProductService(val repository: ProductRepository) {
     fun get(id: Long): Optional<Product> = repository.findById(id)
 
     fun save(product: Product, request: HttpServletRequest): ResponseEntity<Product> {
-        val session = request.session
-        if (session.getAttribute("session") == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
-
         repository.save(product)
         return ResponseEntity.status(HttpStatus.CREATED).body(product)
     }

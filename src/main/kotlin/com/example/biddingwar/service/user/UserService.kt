@@ -38,7 +38,7 @@ class UserService(val repository: UserRepository) {
                 val session = request.session
                 session.setAttribute("session", user.id)
 
-                return ResponseEntity.ok().body("OK")
+                return ResponseEntity.ok().body("${user.id}")
             }
         }
 

@@ -20,14 +20,9 @@ class BidService(val repository: BidRepository) {
 
     fun getBidByUserId(userId: Long): List<Bid>? = repository.findByUserId(userId)
 
+    fun getByProductId(productId: Long): List<Bid>? = repository.findByProductId(productId)
+
     fun saveBid(bid: Bid, request: HttpServletRequest): ResponseEntity<Bid> {
-        val session = request.session
-
-        if (session.getAttribute("session") == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        }
-
-        bid.userId = session.getAttribute("session") as Long
         repository.save(bid)
         return ResponseEntity.ok().body(bid)
     }
