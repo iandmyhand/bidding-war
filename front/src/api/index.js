@@ -24,3 +24,5 @@ export const postBidding = (data, token) => client.post('/api/products/bidding',
         "Authorization": `${token}`
     }
 })
+
+export const fetchBiddingList = (productId) => client.get(`/api/products/${productId}/bidding-list`)

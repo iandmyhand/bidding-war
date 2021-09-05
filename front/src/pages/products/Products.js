@@ -1,14 +1,11 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {createProduct, createUser, fetchProducts, getToken, postBidding} from "../../api";
 import SignInOrSignUp from "../../components/SignInOrSignUp";
+import {Link} from "react-router-dom";
 
 const Products = () => {
     const [products, setProducts] = useState([])
-    const [user, setUser] = useState({
-        account: "",
-        token: "",
-        name: ""
-    })
+    const [hasToken, setHasToken] = useState(false)
 
     const signInAccount = createRef()
     const signInPassword = createRef()
@@ -31,8 +28,10 @@ const Products = () => {
                 alert('로그인에 실패했습니다.')
             }
 
-            setUser(response.data)
-            alert('로그인에 성공했습니다.')
+            sessionStorage.setItem('account', response.data.account)
+            sessionStorage.setItem('token', response.data.token)
+            sessionStorage.setItem('name', response.data.name)
+            setHasToken(true)
         } catch {
             alert('로그인에 실패했습니다.')
         }
@@ -70,7 +69,7 @@ const Products = () => {
             const response = await createProduct({
                 'name': productName.current.value,
                 'price': productPrice.current.value
-            }, user.token)
+            }, sessionStorage.getItem('token'))
 
             if (response.status !== 201) {
                 alert('상품 등록에 실패했습니다.')
@@ -79,17 +78,17 @@ const Products = () => {
 
             await initProducts()
             alert('상품 등록에 성공했습니다.')
-        } catch {
-            alert('상품 등록에 실패했습니다.')
+        } catch (e) {
+            alert(e)
         }
     }
 
     const bid = async () => {
         try {
             const response = await postBidding({
-                'id': bidId.current.value,
+                'productId': bidId.current.value,
                 'price': bidPrice.current.value
-            }, user.token)
+            }, sessionStorage.getItem('token'))
 
             if (response.status !== 201) {
                 alert('입찰 신청에 실패했습니다.')
@@ -107,35 +106,37 @@ const Products = () => {
     }, [])
 
     useEffect(() => {
-    }, [products, user])
+    }, [products, hasToken])
 
     return <div>
         <strong>유저정보</strong><br/>
-        계정: {user.account}<br/>
-        토큰: {user.token}
+        계정: {sessionStorage.getItem('account')}<br/>
+        토큰: {sessionStorage.getItem('token')}
         <br/><br/>
 
         <SignInOrSignUp
             signInAccount={signInAccount}
             signInPassword={signInPassword}
             signIn={signIn}
-            user={user}
             signUpAccount={signUpAccount}
             signUpPassword={signUpPassword}
             signUpName={signUpName}
             signUp={signUp}
-            visible={!!!user.token}
+            visible={!!!sessionStorage.getItem('token')}
         />
 
         <strong>상품 목록</strong>
         <br/>
-        ======`
+        ======
         <br/>
         ID 판매자ID 채권명 최소가격
         <br/>
         ======
         {products.map(product =>
-            <div key={product.id}>{product.id} {product.sellerId} {product.name} {product.minPrice}</div>)}
+            <div key={product.id}>
+                <Link
+                    to={`/products/${product.id}`}>{product.id}</Link> {product.sellerId} {product.name} {product.minPrice}
+            </div>)}
         <br/><br/>
 
         <strong>상품 등록</strong><br/>

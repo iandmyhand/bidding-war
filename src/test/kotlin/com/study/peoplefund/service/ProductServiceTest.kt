@@ -6,9 +6,11 @@ import com.study.peoplefund.domain.repository.ProductRepository
 import com.study.peoplefund.domain.repository.SessionRepository
 import com.study.peoplefund.domain.repository.UserRepository
 import com.study.peoplefund.helper.AuthHelper
+import com.study.peoplefund.web.dto.BidRequest
 import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertAll
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -76,5 +78,28 @@ class ProductServiceTest @Autowired constructor(
 
         val list = productService.list()
         assertThat(list).hasSize(2)
+    }
+
+    @Test
+    fun `판매자는 자신의 상품에 입찰할 수 없음`() {
+        // Given
+        val sellerId = createTestUser()
+
+        val productRequest = ProductRequest(
+            name = "담보 채권",
+            price = 10_000_000L
+        )
+
+        val productId = productService.register(productRequest, sellerId)
+
+        // When
+        val bidRequest = BidRequest(
+            productId = productId,
+            price = 12_000_000L
+        )
+
+        assertThatThrownBy {
+            productService.bid(bidRequest, sellerId)
+        }.isInstanceOf(IllegalArgumentException::class.java)
     }
 }

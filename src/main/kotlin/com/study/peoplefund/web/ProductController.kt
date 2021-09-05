@@ -3,6 +3,7 @@ package com.study.peoplefund.web
 import com.study.peoplefund.service.ProductService
 import com.study.peoplefund.web.arguments.user.AuthInfo
 import com.study.peoplefund.web.dto.BidRequest
+import com.study.peoplefund.web.dto.BiddingResponse
 import com.study.peoplefund.web.dto.ProductRequest
 import com.study.peoplefund.web.dto.ProductResponse
 import org.springframework.http.ResponseEntity
@@ -33,5 +34,10 @@ class ProductController(val productService: ProductService) {
     fun bid(@RequestBody request: BidRequest, @AuthInfo userId: Long): ResponseEntity<Void> {
         val id = productService.bid(request, userId)
         return ResponseEntity.created(URI.create("/api/products/bidding/$id")).build()
+    }
+
+    @GetMapping("/{productId}/bidding-list")
+    fun biddingListOfProduct(@PathVariable productId: Long): ResponseEntity<List<BiddingResponse>> {
+        return ResponseEntity.ok(productService.biddingListOfProduct(productId))
     }
 }
