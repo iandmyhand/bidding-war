@@ -30,7 +30,7 @@ class OpenApiConfig {
      */
     @Bean
     fun biddingOpenApi(): GroupedOpenApi? {
-        val path: Array<String> = arrayOf("/v1/product/**","/v1/products/**")
+        val path: Array<String> = arrayOf("/v1/product/**","/v1/products/**", "/v1/user/**")
         return GroupedOpenApi.builder()
             .group("service-product-api")
             .pathsToMatch(*path)
