@@ -1,4 +1,24 @@
 package com.example.bidding_war.model
 
-class Bidding {
+import java.util.*
+import javax.persistence.*
+
+@Entity
+class Bidding (
+    @ManyToOne
+    var auctionItem: AuctionItem,
+
+    @ManyToOne
+    var user: User,
+
+    var amount: Int,
+
+    var createDate: Date = Date()
+) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
+    @PrePersist
+    private fun setCrDate() { createDate = Date() }
 }

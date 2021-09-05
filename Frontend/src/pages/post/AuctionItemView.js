@@ -42,7 +42,7 @@ const AuctionItemView = ({ history, location, match }) => {
               </div>
               <div className="post-view-row">
                 <label>소유자</label>
-                <label>{ data.owner }</label>
+                <label>{ data.email }</label>
               </div>
               <div className="post-view-row">
                 <label>내용</label>
@@ -58,12 +58,14 @@ const AuctionItemView = ({ history, location, match }) => {
               </div>
               <div className="post-view-row">
                 <label>호가</label>
-                <label>{ Number(data.biddingPrice).toLocaleString('ko-KR') + " 원" }</label>
+                <label>{ Number(data.minBiddingPrice).toLocaleString('ko-KR') + " 원" }</label>
               </div>
             </>
           ) : '해당 게시글을 찾을 수 없습니다.'
         }
         <button className="post-view-go-list-btn" onClick={() => history.goBack()}>목록으로 돌아가기</button>
+        &nbsp;&nbsp;
+        <button className="post-view-go-list-btn" onClick={() => window.location.replace(`/auctionItem/${id}/bidding`)}>입찰 현황</button>
       </div>
     </>
   )

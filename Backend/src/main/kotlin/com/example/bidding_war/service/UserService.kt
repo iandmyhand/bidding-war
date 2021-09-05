@@ -1,6 +1,7 @@
 package com.example.bidding_war.service
 
 import com.example.bidding_war.model.Session
+import com.example.bidding_war.model.User
 import com.example.bidding_war.repository.SessionRepository
 import com.example.bidding_war.repository.UserRepository
 import com.example.bidding_war.utils.PasswordUtils
@@ -17,10 +18,11 @@ class UserService(
     val userRepository: UserRepository,
     val sessionRepository: SessionRepository
 ) {
+    fun findById(id: Long) = userRepository.findById(id)
 
     @Transactional
     fun signUp(request: UserRequest): Long {
-        val user = request.toUser()
+        val user = User(email = request.email, password = request.password)
         user.password = String(PasswordUtils.hash(user.password, PasswordUtils.generateSalt()), Charsets.UTF_16)
         val isExist = userRepository.existsByEmailAndPassword(request.email, user.password)
         return if (isExist){
@@ -41,14 +43,15 @@ class UserService(
 
         val session = Session(
             token = UUID.randomUUID().toString(),
-            email = user.email,
+            userId = user.id!!,
             expiration = LocalDateTime.now().plusMinutes(30L)
         )
 
         sessionRepository.save(session)
 
         return SignInResponse(
-            token = session.token
+            token = session.token,
+            userId = session.userId
         )
     }
 

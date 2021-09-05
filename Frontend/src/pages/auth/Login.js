@@ -40,6 +40,7 @@ const Login = () => {
         if (response.status === 200) {
           window.alert("로그인을 완료했습니다.")
           sessionStorage.setItem("token",response.data.token)
+          sessionStorage.setItem("user_id",response.data.userId)
           window.location.replace("/")
           return
         }      

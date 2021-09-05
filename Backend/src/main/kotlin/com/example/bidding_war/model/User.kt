@@ -10,6 +10,13 @@ data class User (
     @Column(unique = true)
     var email: String,
     var password: String,
+
+    @OneToMany
+    val auctionItems: MutableList<AuctionItem>? = null,
+
+    @OneToMany
+    val biddingLists: MutableList<Bidding>? = null,
+
     var createDate: Date = Date()
 ) {
     @Id

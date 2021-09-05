@@ -7,7 +7,7 @@ import javax.persistence.*
 class Session(
     @Column(unique = true)
     var token: String,
-    var email: String,
+    var userId: Long,
     var expiration: LocalDateTime
 ) {
     @Id

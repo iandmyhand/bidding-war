@@ -1,19 +1,25 @@
 package com.example.bidding_war.model
 
-
 import java.util.*
 import javax.persistence.*
 
 
 @Entity
-class AuctionItem (
+class AuctionItem(
     var title: String,
-    var owner: String,
+
+    @ManyToOne
+    var owner: User?,
+
+    @OneToMany
+    val biddings: MutableList<Bidding>?,
+
     var description: String,
     var startPrice: Long,
     var minBiddingPrice: Long,
-    var createDate: Date = Date()
-) {
+    var createDate: Date = Date(),
+
+    ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

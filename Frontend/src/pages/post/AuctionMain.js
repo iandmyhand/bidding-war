@@ -7,7 +7,6 @@ const AuctionMain = props => {
 
   const [inputs, setInputs] = useState({
     title: '',
-    owner: '',
     description: '',
     startPrice: '',
     biddingPrice: ''
@@ -18,7 +17,6 @@ const AuctionMain = props => {
   const onReset = () => {
     setInputs({
       title: '',
-      owner: '',
       description: '',
       startPrice: '',
       biddingPrice: ''
@@ -39,16 +37,16 @@ const AuctionMain = props => {
       try{
         const response = await createAuctionItem({
           title: title,
-          owner: owner,
+          owner: sessionStorage.getItem("user_id"),
           description: description,
           startPrice: startPrice,
-          biddingPrice: biddingPrice
+          minBiddingPrice: biddingPrice
         })
 
-        if (response.status === 200){
-          window.alert("경매 물품을 등록하였습니다.")
-          window.location.reload()
-        }
+        
+        window.alert("경매 물품을 등록하였습니다.")
+        window.location.reload()
+        
       } catch(error){
         window.alert("세션이 만료되었습니다. 로그인해주세요.")
         window.location.replace("/login");
@@ -72,8 +70,6 @@ const AuctionMain = props => {
             <center>물품 등록하기</center>
           </h2>
           <center><input name = "title" type = "text" required = {true} value = {title} onChange={onChange} placeholder="타이틀"/></center>
-          &nbsp;&nbsp;
-          <center><input name = "owner" type = "text" required = {true} value = {owner} onChange={onChange} placeholder="소유자"/></center>
           &nbsp;&nbsp;
           <center><input name = "description" type = "text" required = {true} value = {description} onChange={onChange} placeholder="설명" /></center>
           &nbsp;&nbsp;
