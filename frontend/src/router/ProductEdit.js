@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
-import AppNavbar from "../component/AppNavbar";
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
+import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 
 class ProductEdit extends Component {
 
@@ -55,7 +54,6 @@ class ProductEdit extends Component {
         const title = <h2>{product.id ? 'Edit Product' : 'Add Product'}</h2>;
 
         return <div>
-            <AppNavbar/>
             <Container>
                 {title}
                 <Form onSubmit={this.handleSubmit}>
@@ -79,4 +77,4 @@ class ProductEdit extends Component {
     }
 
 }
-export default withRouter(ProductEdit);
+export default ProductEdit;

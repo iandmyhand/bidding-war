@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import AppNavbar from "../component/AppNavbar";
+import React, {Component} from 'react';
+import {Button, ButtonGroup, Container, Table} from 'reactstrap';
+import {Link} from 'react-router-dom';
 
 class ProductList extends Component {
 
@@ -51,7 +50,6 @@ class ProductList extends Component {
 
         return (
             <div>
-                <AppNavbar/>
                 <Container fluid>
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/products/new">상품 추가</Button>

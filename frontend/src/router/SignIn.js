@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
-import AppNavbar from "../component/AppNavbar";
 
 class SignIn extends Component {
 
@@ -46,7 +45,6 @@ class SignIn extends Component {
     render() {
         const {user: user} = this.state;
         return <div>
-            <AppNavbar/>
             <Container>
                 <h2>로그인</h2>
                 <Form onSubmit={this.handleSubmit}>
@@ -70,4 +68,4 @@ class SignIn extends Component {
     }
 
 }
-export default withRouter(SignIn);
+export default SignIn;

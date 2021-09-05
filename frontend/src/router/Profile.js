@@ -1,13 +1,10 @@
 import React from "react";
-import {withRouter} from "react-router-dom";
-import AppNavbar from "../component/AppNavbar";
 import {Container} from "reactstrap";
 
 function Profile({ user }) {
     const { email, password, token } = user || {};
     return (
         <div>
-            <AppNavbar/>
             <Container fluid>
                 <h1>Profile</h1>
                 <dt>Email</dt>
@@ -21,5 +18,4 @@ function Profile({ user }) {
     );
 }
 
-// export default Profile;
-export default withRouter(Profile);
+export default Profile;
