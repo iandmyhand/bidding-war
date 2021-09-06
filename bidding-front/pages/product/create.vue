@@ -18,7 +18,7 @@ const crypto = require('crypto');
 export default {
     data(){
         return{
-            publicKeys: {},
+            rsaPublicKeys: {},
             keys: "",
             group: "",
             name: "",
@@ -33,7 +33,7 @@ export default {
         async getRsaPublicKey(){
             await this.$axios.get("https://dev-pf-security-support.s3.ap-northeast-2.amazonaws.com/public_key_cache/publicKeyCache.json")
             .then(res=>{
-                this.publicKeys = res.data
+                this.rsaPublicKeys = res.data
                 console.log(this.publicKeys)
             })
             .catch(error=>{
@@ -41,17 +41,20 @@ export default {
             })
         },
         async createProduct(){
-            let publicKey = this.getPublicKey()
+            let publicKeys = this.getPublicKey()
             const objData = {
-                product_group: this.encMessage(publicKey, this.group),
-                product_name: this.encMessage(publicKey, this.name),
+                product_group: this.encMessage(publicKeys.publicKey, this.group),
+                product_name: this.encMessage(publicKey.publicKey, this.name),
                 product_price: this.price,
-                product_desc: this.encMessage(publicKey, this.desc)
+                product_desc: this.encMessage(publicKey.publicKey, this.desc)
             };
             const data = JSON.stringify(objData);
             await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
                 {
-                    headers: { 'Content-Type': 'application/json;charset=UTF-8' }
+                    headers: { 
+                        'Content-Type': 'application/json;charset=UTF-8',
+                        'RSA-ENCRYPT-KEY-ID':publicKeys.keyId
+                    }
                 }
             )
             .then(res=>{
@@ -66,12 +69,17 @@ export default {
             })
         },
         getPublicKey(){
-            console.log("test: " + this.publicKeys.next_public_key)
-            if(this.publicKeys!=undefined){
-                if(this.publicKeys.next_public_key_id!=undefined){
-                    return this.publicKeys.next_public_key
+            console.log("test: " + this.rsaPublicKeys.next)
+            let publicKey, keyId
+            if(this.rsaPublicKeys!=undefined){
+                if(this.rsaPublicKeys.next!=undefined){
+                    publicKey = this.rsaPublicKeys.next.public_key
+                    keyId = this.rsaPublicKeys.next.key_id
+                    return { publicKey, keyId }
                 }else{
-                    return this.publicKeys.current_public_key
+                    publicKey = this.rsaPublicKeys.current.public_key
+                    keyId = this.rsaPublicKeys.current.key_id
+                    return { publicKey, keyId }
                 }
             }
         },
@@ -99,9 +107,14 @@ export default {
             return encMsg
         },
         async sendTest(){
-            let publicKey = this.getPublicKey()
+            let publicKeys = this.getPublicKey()
+
             // this.encMessage(publicKey, this.group)
-            await this.$axios.get("http://localhost:8080/bidding/v1/product?"+"msg="+this.encMessage(publicKey, this.group))
+            await this.$axios.get("http://localhost:8080/bidding/v1/product?"+"msg="+this.encMessage(publicKeys.publicKey, this.group),{
+                headers:{
+                    'RSA-ENCRYPT-KEY-ID':publicKeys.keyId
+                }
+            })
             .then(res=>{
                 console.log(res.data)
             })
