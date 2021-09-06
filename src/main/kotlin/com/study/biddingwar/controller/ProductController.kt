@@ -6,13 +6,16 @@ import com.study.biddingwar.domain.RsaKeyStore
 import com.study.biddingwar.domain.dto.ProductDto
 import com.study.biddingwar.domain.dto.ProductResultDto
 import com.study.biddingwar.service.ProductService
+import com.study.biddingwar.service.SecuritySupportService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.security.PrivateKey
 
 @RestController
 @RequestMapping("/v1")
-class ProductController(private val productService: ProductService) {
+class ProductController(private val productService: ProductService,
+                        private val securitySupportService: SecuritySupportService) {
 
     @GetMapping("/products")
     fun getProducts(@RequestParam(name="page")cPage:Int,
@@ -31,13 +34,23 @@ class ProductController(private val productService: ProductService) {
     }
 
     @PostMapping("/product")
-    fun createProduct(@RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
+    fun createProduct(@RequestHeader(name="RSA-ENCRYPT-KEY-ID")keyId:String,
+                      @RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
+        //rsa decryption body
+        val privateKeys: Map<String, PrivateKey?> = securitySupportService.getRsaPrivateKeys()?:(
+                throw RuntimeException("decrypt message essential RSA KEY NOT LOAD"))
+        val privateKey = privateKeys.get(keyId)
+        productDto.productGroup = CryptoRsaUtils.decryptMsg(productDto.productGroup, privateKey!!)!!
+        productDto.productName = CryptoRsaUtils.decryptMsg(productDto.productName, privateKey!!)!!
+        productDto.productDesc = CryptoRsaUtils.decryptMsg(productDto.productDesc, privateKey!!)!!
+
         val product = productService.createProduct(productDto)
+
         return ResponseEntity.ok().body(product)
     }
 
     @GetMapping("/product")
-    fun createProduct(@RequestParam("msg")@DecryptRsa message:String): ResponseEntity<String> {
+    fun createProductTest(@RequestParam("msg")@DecryptRsa message:String): ResponseEntity<String> {
         return ResponseEntity.ok().body(message)
     }
 
