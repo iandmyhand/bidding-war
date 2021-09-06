@@ -7,4 +7,4 @@ class NoRegisteredProduct: RuntimeException()
 
 class AlreadyExistUserException: RuntimeException()
 
-class NoMatchedPasswordException: RuntimeException()
+class NoMatchedSignInException: RuntimeException()

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import * as AuthService from "../services/AuthService";
 
 class SignIn extends Component {
 
@@ -27,19 +28,17 @@ class SignIn extends Component {
         this.setState({user});
     }
 
-    async handleSubmit(event) {
+    handleSubmit(event) {
+        let props = this.props
         event.preventDefault();
         const {user} = this.state;
-
-        await fetch('/api/signin', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user),
-        });
-        this.props.history.push('/');
+        let response = AuthService.signIn(user);
+        response.then(function (response) {
+            props.history.push('/');
+        })
+        response.catch(function (response) {
+            window.confirm("로그인 실패!");
+        })
     }
 
     render() {

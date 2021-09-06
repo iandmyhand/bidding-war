@@ -30,10 +30,12 @@ class UserService(@Autowired val userRepository: UserRepository, @Autowired val 
     }
 
     fun signIn(userRequestBody: UserSignupRequest): User {
-        val findUser = userRepository.findByUserId(userRequestBody.userId)
+        val findUser = userRepository
+            .findByUserId(userRequestBody.userId)
+            .orElseThrow { NoMatchedSignInException() }
 
         if (!passwordEncoder.matches(userRequestBody.password, findUser.password)) {
-            throw NoMatchedPasswordException()
+            throw NoMatchedSignInException()
         }
 
         return findUser

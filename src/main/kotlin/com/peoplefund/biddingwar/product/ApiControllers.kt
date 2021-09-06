@@ -85,7 +85,14 @@ class UserController(@Autowired val userService: UserService) {
     }
 
     @ExceptionHandler(AlreadyExistUserException::class)
-    fun handleIllegalArgsException(e: AlreadyExistUserException?): ResponseEntity<Any> {
+    fun handleAlreadyExistUserException(e: AlreadyExistUserException?): ResponseEntity<Any> {
+        return ResponseEntity
+            .badRequest()
+            .build()
+    }
+
+    @ExceptionHandler(NoMatchedSignInException::class)
+    fun handleNoMatchedSignInException(e: NoMatchedSignInException?): ResponseEntity<Any> {
         return ResponseEntity
             .badRequest()
             .build()

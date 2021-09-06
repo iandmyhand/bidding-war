@@ -2,6 +2,7 @@ package com.peoplefund.biddingwar.product
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
+import java.util.*
 
 @Repository
 interface ProductRepository : CrudRepository<Product, Long> {
@@ -12,6 +13,6 @@ interface ProductRepository : CrudRepository<Product, Long> {
 interface UserRepository: CrudRepository<User, Long> {
     fun existsUserByUserId(userId: String): Boolean
 
-    fun findByUserId(userId: String): User
+    fun findByUserId(userId: String): Optional<User>
 
 }
