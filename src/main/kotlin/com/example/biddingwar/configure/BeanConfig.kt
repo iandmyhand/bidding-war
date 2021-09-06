@@ -37,12 +37,19 @@ class BeanConfig {
                     mutableSetOf(AccountRole.ADMIN, AccountRole.USER))
                 accountService.saveAccount(admin)
 
+                val seller = Account(null,
+                    "seller@test.com",
+                    "password",
+                    mutableSetOf(AccountRole.ADMIN, AccountRole.USER))
+                accountService.saveAccount(seller)
+
                 val product = Product(
                     1,
                     "initial product",
                     "initial product",
                     0,
                     10000,
+                    seller
                 )
                 productService.save(product)
             }
