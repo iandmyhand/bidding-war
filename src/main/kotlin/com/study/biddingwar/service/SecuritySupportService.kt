@@ -43,5 +43,4 @@ class SecuritySupportService(private val securityRedisRepository: RedisRepositor
         }
         return null
     }
-
 }

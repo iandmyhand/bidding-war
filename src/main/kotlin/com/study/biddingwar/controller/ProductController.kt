@@ -34,16 +34,7 @@ class ProductController(private val productService: ProductService,
     }
 
     @PostMapping("/product")
-    fun createProduct(@RequestHeader(name="RSA-ENCRYPT-KEY-ID")keyId:String,
-                      @RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
-        //rsa decryption body
-        val privateKeys: Map<String, PrivateKey?> = securitySupportService.getRsaPrivateKeys()?:(
-                throw RuntimeException("decrypt message essential RSA KEY NOT LOAD"))
-        val privateKey = privateKeys.get(keyId)
-        productDto.productGroup = CryptoRsaUtils.decryptMsg(productDto.productGroup, privateKey!!)!!
-        productDto.productName = CryptoRsaUtils.decryptMsg(productDto.productName, privateKey!!)!!
-        productDto.productDesc = CryptoRsaUtils.decryptMsg(productDto.productDesc, privateKey!!)!!
-
+    fun createProduct(@RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
         val product = productService.createProduct(productDto)
 
         return ResponseEntity.ok().body(product)

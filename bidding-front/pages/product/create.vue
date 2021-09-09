@@ -42,18 +42,31 @@ export default {
         },
         async createProduct(){
             let publicKeys = this.getPublicKey()
+            // const objData = {
+            //     product_group: this.encMessage(publicKeys.publicKey, this.group),
+            //     product_name: this.encMessage(publicKeys.publicKey, this.name),
+            //     product_price: this.price,
+            //     product_desc: this.encMessage(publicKeys.publicKey, this.desc)
+            // };
+
             const objData = {
-                product_group: this.encMessage(publicKeys.publicKey, this.group),
-                product_name: this.encMessage(publicKeys.publicKey, this.name),
+                product_group: this.group,
+                product_name: this.name,
                 product_price: this.price,
-                product_desc: this.encMessage(publicKeys.publicKey, this.desc)
+                product_desc: this.desc
             };
-            const data = JSON.stringify(objData);
+            let data = JSON.stringify(objData);
+            console.log("data size : " + data.length)
+            const secretKey = this.randomCode()
+            const aseKey = this.encRsaMessage(publicKeys.publicKey, secretKey)
+            data = this.encAesMessage(secretKey, data)
+            
             await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
                 {
                     headers: { 
                         'Content-Type': 'application/json;charset=UTF-8',
-                        'RSA-ENCRYPT-KEY-ID':publicKeys.keyId
+                        'RSA-ENCRYPT-KEY-ID':publicKeys.keyId,
+                        'AES-ENCRYPT-KEY': aseKey
                     }
                 }
             )
@@ -83,7 +96,7 @@ export default {
                 }
             }
         },
-        encMessage(publicKey, message){
+        encRsaMessage(publicKey, message){
             // console.log("use : "+publicKey)
             // var encrypt = this.$jsencrypt
             publicKey = "-----BEGIN PUBLIC KEY-----\n" + publicKey + "\n-----END PUBLIC KEY-----\n"
@@ -107,6 +120,20 @@ export default {
             
             return encMsg
         },
+        encAesMessage(secretKey, message){
+            console.log(secretKey)
+            const iv = secretKey
+            const cihper = crypto.createCipheriv(
+             'aes-128-cbc',
+             Buffer.from(secretKey),
+             Buffer.from(iv)   
+            )
+
+            let encMsg = cihper.update(message, 'utf8', 'base64')
+            encMsg+=cihper.final('base64')
+
+            return encMsg
+        },
         async sendEncryptTest(){
             let publicKeys = this.getPublicKey()
 
@@ -122,6 +149,16 @@ export default {
             .catch(error=>{
                 console.log(error)
             })
+        },
+        randomCode(){
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'
+            const stringLength = 16
+            let randomstring = ''
+            for (let i = 0; i < stringLength; i++) {
+            const rnum = Math.floor(Math.random() * chars.length)
+            randomstring += chars.substring(rnum, rnum + 1)
+            }
+            return randomstring
         }
     }
 }
