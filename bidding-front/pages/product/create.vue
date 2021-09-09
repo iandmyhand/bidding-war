@@ -41,6 +41,7 @@ export default {
             })
         },
         async createProduct(){
+            const csrfToken = await this.getCsrfToken()
             let publicKeys = this.getPublicKey()
             // const objData = {
             //     product_group: this.encMessage(publicKeys.publicKey, this.group),
@@ -66,7 +67,8 @@ export default {
                     headers: { 
                         'Content-Type': 'application/json;charset=UTF-8',
                         'RSA-ENCRYPT-KEY-ID':publicKeys.keyId,
-                        'AES-ENCRYPT-KEY': aseKey
+                        'AES-ENCRYPT-KEY': aseKey,
+                        'X-CSRF-TOKEN': csrfToken
                     }
                 }
             )
@@ -149,6 +151,18 @@ export default {
             .catch(error=>{
                 console.log(error)
             })
+        },
+        async getCsrfToken(){
+          let csrfToken
+          await this.$axios.get("http://localhost:8081/pf-secure/v1/security/csrf-token")
+          .then(res=>{
+              csrfToken = res.data.csrf_token
+          })
+          .catch(error=>{
+              console.log(error)
+          })
+
+          return csrfToken
         },
         randomCode(){
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.study.biddingwar.domain.RsaKeyCache
 import com.study.biddingwar.domain.RsaKeyStore
 import com.study.biddingwar.repository.RedisRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.security.PrivateKey
 import javax.annotation.PostConstruct
@@ -14,7 +15,11 @@ class SecuritySupportService(private val securityRedisRepository: RedisRepositor
 
     @PostConstruct
     fun initRsaKetCache(){
-        refreshRsaKeyCache()
+        try {
+            refreshRsaKeyCache()
+        }catch(e: Exception){
+            logger.error(e.message)
+        }
     }
 
     fun refreshRsaKeyCache(){
@@ -43,4 +48,35 @@ class SecuritySupportService(private val securityRedisRepository: RedisRepositor
         }
         return null
     }
+
+    fun getCsrfToken(csrfToken:String): String {
+        return securityRedisRepository.get("csrf:$csrfToken") as String
+    }
+
+    fun getCsrfToken(userId:Long, csrfToken:String): String {
+        return securityRedisRepository.get("csrf:$userId:$csrfToken") as String
+    }
+
+    fun existCsrfToken(csrfToken:String): Boolean {
+        val isResult = securityRedisRepository.getLock("csrf:$csrfToken", csrfToken)
+        return isResult
+    }
+
+    fun existCsrfToken(userId:Long, csrfToken:String): Boolean {
+        val isResult = securityRedisRepository.getLock("csrf:$userId:$csrfToken", csrfToken)
+        return isResult
+    }
+
+    fun deleteCsrfToken(csrfToken: String){
+        securityRedisRepository.delete("csrf:$csrfToken")
+    }
+
+    fun deleteCsrfToken(userId:Long, csrfToken: String){
+        securityRedisRepository.delete("csrf:$userId:$csrfToken")
+    }
+
+    companion object{
+        private val logger = LoggerFactory.getLogger(this::class.java)
+    }
+
 }

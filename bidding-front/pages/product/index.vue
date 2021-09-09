@@ -17,15 +17,23 @@ export default {
             proudcts:{}
         }
   },
-  created(){
+  mounted(){
       this.load()
+  },
+  created(){
+      
   },
   methods:{
       async load(){
+           const csrfToken = await this.getCsrfToken()
+
           await this.$axios.get("http://localhost:8080/bidding/v1/products", {
               params:{
                   page: 1,
                   size: 10
+              },
+              headers:{
+                  'X-CSRF-TOKEN': csrfToken
               }
           })
           .then(res=>{
@@ -34,7 +42,21 @@ export default {
           .catch(error=>{
               console.log(error)
           })
+      },
+      async getCsrfToken(){
+          let csrfToken
+          await this.$axios.get("http://localhost:8081/pf-secure/v1/security/csrf-token")
+          .then(res=>{
+              csrfToken = res.data.csrf_token
+          })
+          .catch(error=>{
+              console.log(error)
+          })
+
+          return csrfToken
       }
+
+
   }
 }
 </script>
