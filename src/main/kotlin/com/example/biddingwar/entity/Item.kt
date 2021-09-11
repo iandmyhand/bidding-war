@@ -18,10 +18,12 @@ class Item(
         var content: String,
         @Column(name = "price")
         var price: Int,
+        @Column(name="user_id", length=20, unique=true)
+        val userId: String,
         @CreatedDate
         val createdTime: LocalDateTime = LocalDateTime.now(),
         @Column(name="minPrice")
-        var minPrice: Int = 0
+        var minPrice: Int = 0,
         )
 {
         override fun toString(): String{
@@ -31,6 +33,8 @@ class Item(
                         "\ttitle: " + this.title + "\n" +
                         "\tcontent: " + this.content + "\n" +
                         "\tprice: " + this.price + "\n" +
-                        "\tcreate_time: " + this.createdTime + "\n"
+                        "\tcreate_time: " + this.createdTime + "\n" +
+                        "\tuserId: " + this.userId + "\n" +
+                        "}"
         }
 }

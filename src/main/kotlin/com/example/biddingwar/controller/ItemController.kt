@@ -54,7 +54,7 @@ class ItemController(
         return if (userId == null){
             "redirect:/user/login"
         } else{
-            model["item"] = itemRepository.save(form.toEntity())
+            model["item"] = itemRepository.save(form.toEntity(session.getAttribute("userId") as String))
             model["userId"] = userId
 
             "redirect:/welcome/hello"
@@ -89,16 +89,21 @@ class ItemController(
     }
 
     @PostMapping("/bid")
-    fun bidItem(biddingCreateForm: BiddingCreateForm): String {
-        bidRepository.save(biddingCreateForm.toEntity())
+    fun bidItem(biddingCreateForm: BiddingCreateForm, session: HttpSession): String {
         var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)!!
 
-        if(item.minPrice == 0 || item.minPrice > biddingCreateForm.price){
-            item.minPrice = biddingCreateForm.price
-            itemRepository.save(item)
+        if(session.getAttribute("userId") as String == item.userId) {
+            return "redirect:/item/list"
         }
+        else{
+            bidRepository.save(biddingCreateForm.toEntity())
 
-        return "redirect:/item/detail/{${biddingCreateForm.itemId}}"
+            if(item.minPrice == 0 || item.minPrice > biddingCreateForm.price){
+                item.minPrice = biddingCreateForm.price
+                itemRepository.save(item)
+            }
+
+            return "redirect:/item/detail/${biddingCreateForm.itemId}"
+        }
     }
-
 }
