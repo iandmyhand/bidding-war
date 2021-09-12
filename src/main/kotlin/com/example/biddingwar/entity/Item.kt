@@ -22,8 +22,8 @@ class Item(
         val userId: String,
         @CreatedDate
         val createdTime: LocalDateTime = LocalDateTime.now(),
-        @Column(name="minPrice")
-        var minPrice: Int = 0,
+        @Column(name="status")
+        var status: String = "입찰중",
         )
 {
         override fun toString(): String{

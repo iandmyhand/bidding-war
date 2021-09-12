@@ -12,7 +12,7 @@ class Bid (
     @Column(name = "ItemId")
     var itemId: Long,
     @Column(name = "UserId")
-    var userId: Long,
+    var userId: String,
     @Column(name = "price")
     var price: Int,
     @CreatedDate

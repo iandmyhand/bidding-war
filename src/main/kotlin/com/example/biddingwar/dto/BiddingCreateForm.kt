@@ -2,7 +2,7 @@ package com.example.biddingwar.dto
 
 import com.example.biddingwar.entity.Bid
 
-class BiddingCreateForm(val itemId: Long, val userId: Long, val price: Int) {
+class BiddingCreateForm(val itemId: Long, val userId: String, val price: Int) {
 
     override fun toString(): String{
         return "ItemForm{\n" +
@@ -15,7 +15,7 @@ class BiddingCreateForm(val itemId: Long, val userId: Long, val price: Int) {
     fun toEntity(): Bid {
         return Bid(null, itemId, userId, price)
     }
-    fun getUser(): Long{
+    fun getUser(): String{
         return userId;
     }
 }
