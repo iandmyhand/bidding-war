@@ -40,11 +40,11 @@ class ItemControllerTest {
         val itemList = listOf(
             Item(
                 id=1,
-                seller="승완",
-                title="똥묻은변기",
+                seller="정빈",
+                title="우리집 나노의 스크레처",
                 initialPrice=100000,
                 category="생활용품",
-                description="아들의 똥이 묻은 하나뿐인 변기"
+                description="우리집 나노의 최애 스크레처"
             ),
         )
 
