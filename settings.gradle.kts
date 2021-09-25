@@ -1,1 +1,1 @@
-rootProject.name = "bidding-war"
+rootProject.name = "peoplefund"
