@@ -1,4 +1,4 @@
-package com.example.biddingwar.configure
+package com.example.biddingwar.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod

@@ -1,8 +1,8 @@
 package com.example.biddingwar.service
 
-import com.example.biddingwar.BiddingWarRepository
-import com.example.biddingwar.BiddingWarService
-import com.example.biddingwar.Product
+import com.example.biddingwar.repository.ProductRepository
+import com.example.biddingwar.service.product.ProductService
+import com.example.biddingwar.database.Product
 import io.kotlintest.shouldBe
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
-class ServiceTest @Autowired constructor(repository: BiddingWarRepository, ) {
+class Product @Autowired constructor(repository: ProductRepository, ) {
 
-    val service: BiddingWarService = BiddingWarService(repository)
+    val service = ProductService(repository)
 
     @Test
     fun canaryTest() {

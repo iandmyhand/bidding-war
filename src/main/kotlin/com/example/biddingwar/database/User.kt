@@ -1,20 +1,13 @@
-package com.example.biddingwar
+package com.example.biddingwar.database
 
 import org.hibernate.annotations.CreationTimestamp
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDateTime
-import javax.persistence.*
-
-@Entity
-data class Product(
-    @Id @GeneratedValue val id: Long,
-    var name: String,
-    var price: Int = 0,
-    val description: String,
-    var minimumPrice: Int = 0
-)
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
 @Entity
 data class User(
@@ -47,12 +40,3 @@ data class User(
         return authorities
     }
 }
-
-@Entity
-data class Bid(
-    @Id @GeneratedValue
-    val id: Long,
-    var productId: Long,
-    var userId: Long,
-    var biddingPrice: Int = 0,
-)

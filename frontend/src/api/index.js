@@ -5,14 +5,16 @@ const client = axios.create({
     baseURL: `http://localhost:8080`
 })
 
-export const fetchProducts = () => client.get('/bidding-war')
+export const fetchProducts = () => client.get('products')
 
-export const fetchProduct = (id) => client.get(`/bidding-war/${id}`)
+export const fetchProduct = (id) => client.get(`/products/${id}`)
 
-export const createProduct = (data) => client.post('bidding-war', data, { withCreadentials: true })
+export const createProduct = (data) => client.post('products', data)
 
-export const signUpUser = (data) => client.post('bidding-war/users', data)
+export const signUpUser = (data) => client.post('sign-up', data)
 
-export const signInUser = (data) => client.post('bidding-war/users/login', data)
+export const signInUser = (data) => client.post('sign-in', data)
 
-export const createBid = (data) => client.post('bidding-war/bid', data)
+export const createBid = (data) => client.post('bids', data)
+
+export const fetchBids = (id) => client.get('bids')

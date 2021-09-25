@@ -1,6 +1,10 @@
 import React, {createRef, useEffect, useState} from 'react';
 import {createProduct, fetchProducts, createBid} from "../../api";
 import styled from "styled-components";
+import {Button, Container, Input} from '../../components/Login';
+import CommonTable from '../../components/Table/CommonTable';
+import CommonTableColumn from '../../components/Table/CommonTableColumn';
+import CommonTableRow from '../../components/Table/CommonTableRow';
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -9,45 +13,29 @@ const Products = () => {
     const inputDescription = createRef()
     const biddingPrice = createRef()
 
-    const Container = styled.div`
-      margin-top: 100px;
-      padding: 20px;
-      text-align: center;
-    `;
-
-    const Button = styled.div`
-      font-size: 18px;
-      font-weight: 700;
-      line-height: 49px;
-      display: block;
-      width: 10%;
-      height: 5%;
-      margin-left: 45%;
-      cursor: pointer;
-      text-align: center;
-      color: #fff;
-      border-radius: 0;
-      background-color: #03c75a;
-    `;
-
-    const Input = styled.input`
-      position: relative;
-      overflow: hidden;
-      width: 20%;
-      height: 40px;
-      margin: 0 0 8px;
-      padding: 5px 39px 5px 11px;
-      border: solid 1px #dadada;
-      background: #fff;
-      box-sizing: border-box;
-    `;
-
     const initProducts = async () => {
         const response = await fetchProducts()
         console.log(response.data)
 
         setProducts(response.data)
     }
+
+    const BidButton = styled.div`
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 49px;
+      display: block;
+      width: 120px;
+      height: 50px;
+      margin-left: 45%;
+      margin-top: 5%;
+      margin-bottom: 5%;
+      cursor: pointer;
+      text-align: center;
+      color: #fff;
+      border-radius: 0;
+      background-color: #03c75a;
+    `;
 
     const addProduct = async () => {
         try{
@@ -57,25 +45,35 @@ const Products = () => {
             await createProduct({
                 'name': inputName.current.value,
                 'price': inputPrice.current.value,
-                'description': inputDescription.current.value
+                'description': inputDescription.current.value,
+                'user_id': session
             })
             await initProducts()
+            window.alert("상품 등록 완료")
         } catch (error) {
             window.alert("상품 등록에 실패했습니다. 다시 로그인해주세요")
-            console.log(error)
-            // window.location.replace("/")
+            window.location.replace("/")
         }
     }
 
     const addBid = async (productId) => {
-        let userId = window.sessionStorage.getItem('session')
-
-        await createBid({
-            'productId' : productId,
-            'biddingPrice' : biddingPrice.current.value,
-            'userId': userId,
+        try{
+            let userId = window.sessionStorage.getItem('session')
+            console.log(userId)
+            await createBid({
+                'product_id' : productId,
+                'bidding_price' : biddingPrice.current.value,
+                'user_id': userId,
+            })
+            window.alert("입찰완료")
+        } catch (error) {
+            window.alert("입찰에 실패했습니다.")
+            console.log(error)
         }
-        )
+    }
+
+    const getBids = async =>{
+        window.location.replace("/bids")
     }
 
     useEffect(() => {
@@ -87,17 +85,23 @@ const Products = () => {
 
     return <Container>
         <h1>Bidding-War</h1>
-        {
-            products.map(product => <div key={product.id}>
-            <div>상품ID : {product.id}</div>
-            <div>상품명: {product.name} </div>
-            <div>상품 가격: {product.price} </div>
-            <div>상품 설명 : {product.description}</div>
-            <Input type="text" ref={biddingPrice} placeholder="입찰가를 입력해주세요"/>
-            <Button onClick={() => addBid(product.id)}>입찰하기</Button>
-            &nbsp;</div>)
-        }
-
+        <h2>상품목록</h2>
+          <CommonTable headersName={['등록번호', '제품명', '호가', '제품설명']}>
+            {
+              products ? products.map((product) => {
+                return (
+                  <CommonTableRow key={product.id}>
+                    <CommonTableColumn>{ product.id }</CommonTableColumn>
+                    <CommonTableColumn>{ product.name }</CommonTableColumn>
+                    <CommonTableColumn>{ product.price }</CommonTableColumn>
+                    <CommonTableColumn>{ product.description }</CommonTableColumn>
+                    <BidButton onClick={() => addBid(product.id)}>입찰하기</BidButton>
+                    <BidButton onClick={getBids}>입찰 목록 조회</BidButton>
+                  </CommonTableRow>
+                )
+              }) : ''
+            }
+          </CommonTable>
         <h2>상품 등록하기</h2>
         <div>
             <h3>상품명</h3>

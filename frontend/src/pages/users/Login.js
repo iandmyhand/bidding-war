@@ -67,6 +67,7 @@ const Login = () => {
             })
 
             window.alert('로그인 성공!')
+            console.log(result['data'])
             window.sessionStorage.setItem('session', result['data']);
             window.location.replace("/products")
         } catch (error) {
