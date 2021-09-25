@@ -1,6 +1,6 @@
-package kr.co.peoplefund.biddingWar.domain.repository
+package com.study.biddingwar.domain.repository
 
-import kr.co.peoplefund.biddingWar.domain.Session
+import com.study.biddingwar.domain.Session
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.Optional
 
