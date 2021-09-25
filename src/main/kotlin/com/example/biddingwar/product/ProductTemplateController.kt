@@ -23,7 +23,9 @@ class ProductTemplateController(val service: ProductService,
     }
 
     @RequestMapping(value=["/template/product"], method = [RequestMethod.POST])
-    fun createProduct(model: Model, product: Product):String {
+    fun createProduct(model: Model, product: Product, authentication: Authentication):String {
+        val account: Account = accountService.getUserByUsername(authentication.name)
+        product.seller = account
         service.save(product)
         model.addAttribute("products", service.getAll())
         return "products"
@@ -36,7 +38,7 @@ class ProductTemplateController(val service: ProductService,
         authentication: Authentication,
     ):String {
         service.getProduct(product_id).ifPresent {model.addAttribute("product", it)}
-        model.addAttribute("biddings", biddingService.getAll())
+        model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
         return "product"
     }
 
@@ -52,7 +54,7 @@ class ProductTemplateController(val service: ProductService,
         bidding.account = account
         biddingService.save(bidding)
         service.getProduct(product_id).ifPresent { model.addAttribute("product", it) }
-        model.addAttribute("biddings", biddingService.getAll())
+        model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
         return "product"
     }
 }
