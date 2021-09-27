@@ -7,11 +7,24 @@ spring:
 
   # 파일관리?
   datasource:
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jydb?serverTimezone=Asia/Seoul&characterEncoding=utf8
+    username: jaeyoung
+    password: 'jaeyoung$#21'
+    hikari:
+      pool-name: SpringBootHikariCP-pool
+      maximum-pool-size: 10
+      minimum-idle: 10
+      max-lifetime: 2000000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      idle-timeout: 30000
+
+  #  driver-class-name: org.h2.Driver
     # url: jdbc:h2:mem:jydb;DB_CLOSE_DELAY=-1
-    url: jdbc:h2:file:${user.home}/db/h2/jydb;DB_CLOSE_DELAY=-1
-    username: sa
-    password:
+  #  url: jdbc:h2:file:${user.home}/db/h2/jydb;DB_CLOSE_DELAY=-1
+  #  username: sa
+  #  password:
 
   # h2-console
   h2:
@@ -25,8 +38,10 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
-    database: h2
-    database-platform: org.hibernate.dialect.H2Dialect
+  #  database: h2
+  #  database-platform: org.hibernate.dialect.H2Dialect
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
 

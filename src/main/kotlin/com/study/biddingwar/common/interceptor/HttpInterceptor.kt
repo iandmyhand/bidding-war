@@ -2,13 +2,14 @@ package com.study.biddingwar.common.interceptor
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.lang.Nullable
+import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.ModelAndView
 import java.net.http.HttpResponse
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@Configuration
+@Component
 class HttpInterceptor : HandlerInterceptor {
 
     override fun preHandle(httpRequest: HttpServletRequest,

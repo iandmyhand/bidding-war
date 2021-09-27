@@ -2,7 +2,7 @@ package com.study.biddingwar.domain.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class GoodsInfoDto(
+data class GoodsInfoDto(
     @get:JsonProperty("goods_id")
     val goodsId: Long,
 

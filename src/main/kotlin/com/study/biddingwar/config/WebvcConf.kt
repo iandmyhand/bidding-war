@@ -11,11 +11,4 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebvcConf(
    private val httpInterceptor: HttpInterceptor
 ): WebMvcConfigurer {
-
-    //@TODO : Interceptor, local, message 처리 등...
-    override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(httpInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/health/**")
-    }
 }
