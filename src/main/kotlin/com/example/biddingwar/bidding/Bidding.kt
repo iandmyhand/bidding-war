@@ -21,4 +21,6 @@ class Bidding (
     var account: Account?,
 
     var price: Int,
+
+    var is_selected: Boolean = false,
 )

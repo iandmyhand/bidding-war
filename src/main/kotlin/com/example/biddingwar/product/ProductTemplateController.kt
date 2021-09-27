@@ -37,8 +37,15 @@ class ProductTemplateController(val service: ProductService,
         model: Model,
         authentication: Authentication,
     ):String {
-        service.getProduct(product_id).ifPresent {model.addAttribute("product", it)}
+        val account: Account = accountService.getUserByUsername(authentication.name)
+        service.getProduct(product_id).ifPresent {
+            model.addAttribute("product", it)
+            if (account == it.seller) {
+                model.addAttribute("finish_bid", "finish_bid")
+            }
+        }
         model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
+
         return "product"
     }
 
@@ -53,6 +60,21 @@ class ProductTemplateController(val service: ProductService,
         val account: Account = accountService.getUserByUsername(authentication.name)
         bidding.account = account
         biddingService.save(bidding)
+        service.getProduct(product_id).ifPresent { model.addAttribute("product", it) }
+        model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
+        return "product"
+    }
+
+    @RequestMapping(value = ["/template/product/{product_id}/bid"], method = [RequestMethod.POST])
+    fun finishBidding(
+        @PathVariable("product_id") product_id: Long,
+        model: Model,
+        authentication: Authentication
+    ): String {
+        val highest_bidding = biddingService.getHighestBiddingByProduct(product_id)
+        highest_bidding?.is_selected = true
+        if (highest_bidding != null) {biddingService.save(highest_bidding)}
+
         service.getProduct(product_id).ifPresent { model.addAttribute("product", it) }
         model.addAttribute("biddings", biddingService.getBiddingByProduct(product_id))
         return "product"
