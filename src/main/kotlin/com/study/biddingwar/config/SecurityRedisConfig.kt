@@ -29,6 +29,7 @@ class SecurityRedisConfig(@Value("\${spring.redis.host}")
         val redisTemplate = RedisTemplate<String, Any>()
         redisTemplate.setConnectionFactory(redisConnectionFactory())
         redisTemplate.keySerializer = StringRedisSerializer()
+        redisTemplate.valueSerializer = StringRedisSerializer()
         redisTemplate.hashKeySerializer = StringRedisSerializer()
         return redisTemplate
     }

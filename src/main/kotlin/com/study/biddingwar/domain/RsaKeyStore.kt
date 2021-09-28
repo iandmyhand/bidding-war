@@ -1,5 +1,7 @@
 package com.study.biddingwar.domain
 
+import java.security.PrivateKey
+
 class RsaKeyStore {
     private var rsaKeyCache:RsaKeyCache? = null
 
@@ -21,5 +23,22 @@ class RsaKeyStore {
 
     fun getRsaKeyCache(): RsaKeyCache? {
         return rsaKeyCache
+    }
+
+    fun getRsaPrivateKeys(): Map<String, PrivateKey?>? {
+        val currnetKey: PrivateKey? = getRsaKeyCache()?.currentRsaKeyPair?.privateKey
+        val nextKey: PrivateKey? = getRsaKeyCache()?.nextRsaKeyPair?.privateKey
+
+        if (currnetKey != null && nextKey != null) {
+            return mapOf(
+                getRsaKeyCache()?.currentRsaKeyPair?.keyId.toString() to currnetKey,
+                getRsaKeyCache()?.nextRsaKeyPair?.keyId.toString() to nextKey
+            )
+        } else if (currnetKey != null) {
+            return mapOf(
+                getRsaKeyCache()?.currentRsaKeyPair?.keyId.toString() to currnetKey
+            )
+        }
+        return null
     }
 }

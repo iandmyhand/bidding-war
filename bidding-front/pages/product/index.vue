@@ -25,7 +25,7 @@ export default {
   },
   methods:{
       async load(){
-           const csrfToken = await this.getCsrfToken()
+        //    const csrfToken = await this.getCsrfToken()
 
           await this.$axios.get("http://localhost:8080/bidding/v1/products", {
               params:{
@@ -33,7 +33,7 @@ export default {
                   size: 10
               },
               headers:{
-                  'X-CSRF-TOKEN': csrfToken
+                //   'X-CSRF-TOKEN': csrfToken
               }
           })
           .then(res=>{
