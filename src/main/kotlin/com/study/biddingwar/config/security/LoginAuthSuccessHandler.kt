@@ -29,7 +29,7 @@ class LoginAuthSuccessHandler(private val sessionService: SessionService): Authe
                     response.writer.write("login ok")
                     response.status = 200
                 } catch (exception: Exception) {
-                    throw Exception("tlqk")
+                    throw Exception("login error !!")
                 }
             }
         }

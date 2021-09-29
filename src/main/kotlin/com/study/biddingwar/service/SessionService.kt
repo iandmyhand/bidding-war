@@ -38,7 +38,7 @@ class SessionService(private val securityRedisRepository: SecurityRedisRepositor
 
             securityRedisRepository.put(sessionDto.userId, jsonString)
         } catch (exception: Exception) {
-            throw Exception("rorkxsp")
+            throw Exception("sessionDto put error..!!")
         }
     }
 
