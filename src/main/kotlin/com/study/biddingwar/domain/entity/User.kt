@@ -19,12 +19,12 @@ class User: UserDetails {
 
     constructor(userId: String,
                 userName: String,
-                userPassword: String,
-                userNick: String){
+                userNick: String,
+                userPassword: String){
         this.userId = userId
         this.userName = userName
-        this.userPassword= userPassword
         this.userNick = userNick
+        this.userPassword= userPassword
     }
 
     @Id

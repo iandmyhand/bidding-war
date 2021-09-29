@@ -3,10 +3,11 @@ package com.study.biddingwar.config.security
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
+import org.springframework.stereotype.Component
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
+@Component
 class LoginAuthFailureHandler: AuthenticationFailureHandler {
     companion object{
         private val logger = LoggerFactory.getLogger(this::class.java)

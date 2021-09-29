@@ -10,8 +10,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.web.authentication.AuthenticationFailureHandler
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import java.util.*
 
 /**
@@ -19,10 +20,11 @@ import java.util.*
  */
 @Configuration
 @EnableWebSecurity
-class SecurityConf: WebSecurityConfigurerAdapter() {
+class SecurityConf(private val loginAuthFailureHandler: LoginAuthFailureHandler,
+                   private val loginAuthSuccessHandler: LoginAuthSuccessHandler
+): WebSecurityConfigurerAdapter() {
     companion object {
         const val SIGNIN_POINT: String = "/user/signin";
-        const val SIGNIN_FAIL_POINT: String = "/user/signin/fail"; // fail..?
         const val SIGNOUT_POINT: String = "/user/signout";
     }
 
@@ -33,11 +35,12 @@ class SecurityConf: WebSecurityConfigurerAdapter() {
 
         http
             .cors()
+                .configurationSource(corsConfigurationSource())
                 .and()
             .csrf()
                 .disable()
             .authorizeRequests()
-                .antMatchers("/v1/**", "/health/**")
+                .antMatchers("/v1/**", "/health/**", "/goods/**")
                     .permitAll()
                 .anyRequest()
                     .authenticated()
@@ -45,21 +48,38 @@ class SecurityConf: WebSecurityConfigurerAdapter() {
             .formLogin()
                 .loginProcessingUrl(SIGNIN_POINT)
                     .permitAll()
-                .failureHandler(LoginAuthFailureHandler())
-                .successHandler(LoginAuthSuccessHandler())
+                .failureHandler(loginAuthFailureHandler)
+                .successHandler(loginAuthSuccessHandler)
                 .usernameParameter("authId")
                 .passwordParameter("authPassword")
-            //  .failureForwardUrl(SIGNIN_FAIL_POINT)
                 .and()
             .logout()
                 .logoutUrl(SIGNOUT_POINT)
                 .permitAll()
+                .invalidateHttpSession(true)
                 .and()
+            .httpBasic()
+                .disable()
             .exceptionHandling()
                 .accessDeniedPage("/403")
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(customAuthProvider)
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val corsConfiguration = CorsConfiguration()
+        // 일단 전체 허용
+        corsConfiguration.allowedOrigins = Arrays.asList("*")
+        corsConfiguration.allowedMethods = Arrays.asList("*")
+        corsConfiguration.allowedHeaders = Arrays.asList("*")
+        // corsConfiguration.allowCredentials = true --> front 개발로인해 주석처리
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", corsConfiguration)
+
+        return source
     }
 }

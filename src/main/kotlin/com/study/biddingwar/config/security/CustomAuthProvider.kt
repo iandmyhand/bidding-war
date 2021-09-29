@@ -9,9 +9,12 @@ import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetails
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 import java.lang.String
 import kotlin.Boolean
 import kotlin.Long
@@ -33,6 +36,7 @@ class CustomAuthProvider(private val signInService: SignInService): Authenticati
             locale = Locale.ENGLISH
         }*/
 
+        // 아이디 및 패스워드 validation @todo 작업으로..~
         val authId = String.valueOf(authentication.principal)
         var authPw = String.valueOf(authentication.credentials)
 //      authPw = PasswordBCrypto.hashPassword(authPw)
@@ -57,8 +61,6 @@ class CustomAuthProvider(private val signInService: SignInService): Authenticati
         // 토큰 발행 --> @TODO : 리펙토링 필요
         val authenticationToken = UsernamePasswordAuthenticationToken(authId, authPw, roles)
         authenticationToken.details = sessionDto
-
-        SessionUtil.setSessionDto(sessionDto)
 
         return authenticationToken
     }

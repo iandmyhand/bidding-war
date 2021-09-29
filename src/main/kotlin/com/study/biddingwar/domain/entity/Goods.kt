@@ -46,7 +46,7 @@ class Goods {
     @Column(name = "create_date")
     @CreationTimestamp
     @Description("상품 생성일")
-    var crateDate: Instant?=Instant.now()
+    var createDate: Instant?=Instant.now()
 
     @Column(name = "update_date")
     @UpdateTimestamp

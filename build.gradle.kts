@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.5.21"
 	kotlin("plugin.spring") version "1.5.21"
 	kotlin("plugin.jpa") version "1.5.21"
+	// kotlin("plugin.serialization") version "1.5.21"
 }
 
 group = "com.study"
@@ -31,6 +32,10 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("org.springframework.session:spring-session-data-redis")
+
+	// serializer
+	// implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
 	// db
 	runtimeOnly("com.h2database:h2")

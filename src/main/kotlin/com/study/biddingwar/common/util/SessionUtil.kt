@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  * 현재 JSession 기준으로 작성되어 있음
- * @TODO --> Redis 구성에 맞추어 수정 필요
+ * @TODO --> Redis 구성에 맞추어 수정 필요 !!?
+ * @ISSUE RequestContextHolder가 companion object가 static 처럼 런타임시 저장이 안되는것같음
+ * !! SecurityRedis 를 구성하며 해당 파일 사용하지 않을 것 같음. 일단 유지후 삭제
+ * -> Session 서비스를 작성
  */
 class SessionUtil {
     companion object {

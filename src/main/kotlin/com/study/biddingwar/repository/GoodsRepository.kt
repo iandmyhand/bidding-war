@@ -14,9 +14,10 @@ interface GoodsRepository: JpaRepository<Goods, Long> {
     @Query(
             value = "SELECT g.* FROM Goods g WHERE g.goods_name like %:searchName%"
                     + " and g.goods_category = :searchType"
-            , countQuery = "SELECT count(*) FROM Goods g WHERE g.goods_name like %:searchName%"
+            , countQuery = "SELECT count(g.*) FROM Goods g WHERE g.goods_name like %:searchName%"
                     + " and g.goods_category = :searchType"
             , nativeQuery = true)
-    fun findAllGoodsWithPaginationByNameAndCategory(pageable: Pageable, searchName: String?, searchType: String?): Page<GoodsInfoDto>?
+    fun findAllGoodsWithPaginationByNameAndCategory(pageable: Pageable, searchName: String, searchType: String): Page<GoodsInfoDto>
 
+    fun findByGoodsNameContainingAndGoodsCategoryEquals(pageable: Pageable, goodsName: String, goodsCategory: String): Page<Goods>
 }

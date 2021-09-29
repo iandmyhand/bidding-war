@@ -14,10 +14,12 @@ class UserService(private val userRepository: UserRepository): UserDetailsServic
 
     // Spring-security : BCrypto 활용하여 패스워드 암호화 진행
     fun createUser(signUpDto: SignUpDto): User {
-        val user = User(signUpDto.userId,
+        val user = User(
+                signUpDto.userId,
                 signUpDto.userName,
                 signUpDto.userNick,
                 PasswordBCrypto.hashPassword(signUpDto.userPassword))
+
         return userRepository.save(user);
     }
 

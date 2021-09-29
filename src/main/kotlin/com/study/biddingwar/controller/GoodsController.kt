@@ -1,7 +1,6 @@
 package com.study.biddingwar.controller
 
 import com.study.biddingwar.domain.dto.GoodsInfoDto
-import com.study.biddingwar.domain.dto.GoodsSearchDto
 import com.study.biddingwar.service.GoodsService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -29,40 +28,29 @@ class GoodsController(private val goodsService: GoodsService) {
     @GetMapping("/list")
     fun getGoodsList(@RequestParam(name = "rows") rows: Int
                     , @RequestParam(name = "nowPage") nowPage: Int
-                    , @RequestParam(name = "searchName", required = false) searchName: String
-                    , @RequestParam(name = "searchType", required = false) searchType: String
-    ): ResponseEntity<Page<GoodsInfoDto>> {
-    //  println("rows : $rows, nowPage : $nowPage, name : $searchName, type : $searchType")
-
-        /**
-         * 비효율 적인 것 같음 --> 삭제
-        val goodsSearchDto = GoodsSearchDto(
-            nowPage = nowPage,
-            rows = rows,
-            searchName = searchName,
-            searchType = searchType
-        )
-        **/
-
+                    , @RequestParam(name = "searchName") searchName: String
+                    , @RequestParam(name = "searchType") searchType: String
+    ): ResponseEntity<List<GoodsInfoDto>> {
         val goodsList = this.goodsService.getGoodsList(PageRequest.of(nowPage - 1, rows), searchName, searchType)
-        return ResponseEntity.ok().body(goodsList)
+        println("goodsList: " +  goodsList.toList())
+        // vue 에서 Page 객체 받는 법 확인할 것...Page 객체로 repo에서 받은뒤 서비스에서 분해?
+        return ResponseEntity.ok().body(goodsList.toList())
     }
 
-    @GetMapping("/defatil/{id}")
-    fun getGoodsInfo(@PathVariable(name = "goods_id") goods_id: Long
+    @GetMapping("/detail/{id}")
+    fun getGoodsInfo(@PathVariable(name = "id") goods_id: Long
     ): ResponseEntity<GoodsInfoDto> {
         val goodsInfo = this.goodsService.getGoodsInfo(goods_id)
         return ResponseEntity.ok().body(goodsInfo)
     }
 
-    @PostMapping("/add")
-    fun addGoods(@RequestBody goodsInfoDto: GoodsInfoDto
+    @PostMapping("/regist")
+    fun registGoods(@RequestBody goodsInfoDto: GoodsInfoDto
     ): ResponseEntity<GoodsInfoDto> {
-        val addedGoodsInfo = this.goodsService.addGoods(goodsInfoDto)
+        val addedGoodsInfo = this.goodsService.registGoods(goodsInfoDto)
         return ResponseEntity.ok().body(addedGoodsInfo)
     }
 
-    // post? put? --> put
     @PutMapping("/modify")
     fun modifyGoods(@RequestBody goodsInfoDto: GoodsInfoDto
     ): ResponseEntity<GoodsInfoDto> {

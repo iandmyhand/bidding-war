@@ -1,6 +1,7 @@
 package com.study.biddingwar.domain.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.Instant
 
 data class GoodsInfoDto(
     @get:JsonProperty("goods_id")
@@ -16,5 +17,8 @@ data class GoodsInfoDto(
     val goodsContent: String,
 
     @get:JsonProperty("goods_category")
-    val goodsCatetory: String
+    val goodsCatetory: String,
+
+    @get:JsonProperty("create_date")
+    val createDate: Instant?
 )
