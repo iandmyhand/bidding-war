@@ -1,6 +1,7 @@
 package com.example.biddingwar.controller
 
 import com.example.biddingwar.database.Product
+import com.example.biddingwar.http.product.BidRequest
 import com.example.biddingwar.service.product.ProductService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -20,4 +21,7 @@ class ProductController(val service: ProductService) {
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)
+
+    @PutMapping("/bid/{productId}")
+    fun sell(@PathVariable productId: Long) = ResponseEntity.ok(service.sell(productId))
 }

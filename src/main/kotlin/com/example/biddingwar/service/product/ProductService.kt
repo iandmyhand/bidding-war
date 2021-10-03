@@ -1,6 +1,8 @@
 package com.example.biddingwar.service.product
 
+import com.example.biddingwar.database.Bid
 import com.example.biddingwar.database.Product
+import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ProductRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,7 +13,7 @@ import javax.transaction.Transactional
 
 @Service
 @Transactional
-class ProductService(val repository: ProductRepository) {
+class ProductService(val repository: ProductRepository, val bidRepository: BidRepository) {
 
     fun getAll(): ResponseEntity<MutableIterable<Product>> = ResponseEntity.ok().body(repository.findAll())
 
@@ -31,6 +33,23 @@ class ProductService(val repository: ProductRepository) {
         }
 
         return ResponseEntity.badRequest().body("DELETED_FAILED")
+    }
+
+    fun sell(productId: Long): Product {
+
+        val product: Product = repository.findById(productId).get()
+
+        val bids: List<Bid>? = bidRepository.findByProductId(productId)
+
+        val winningBid = bids?.maxByOrNull { it.biddingPrice }
+        if (winningBid != null) {
+            product.let {
+                it.finalBidPrice = winningBid.biddingPrice
+                it.isBidComplete = true
+            }
+        }
+
+        return product
     }
 
 }
