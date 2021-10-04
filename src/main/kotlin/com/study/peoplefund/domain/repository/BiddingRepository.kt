@@ -7,4 +7,6 @@ interface BiddingRepository : JpaRepository<Bidding, Long?> {
     fun findByProductId(productId: Long): List<Bidding>
 
     fun existsByPriceGreaterThanEqual(price: Long): Boolean
+
+    fun existsByProductId(productId: Long): Boolean
 }

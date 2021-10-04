@@ -2,6 +2,7 @@ package com.study.peoplefund.web
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.study.peoplefund.domain.vo.BiddingStatus
 import com.study.peoplefund.service.AuthService
 import com.study.peoplefund.service.ProductService
 import com.study.peoplefund.web.dto.ProductRequest
@@ -64,12 +65,14 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
                 sellerId = 1L,
                 name = "담보 채권",
                 minPrice = 100_000_000L,
+                status = BiddingStatus.IN_PROGRESS.getValue()
             ),
             ProductResponse(
                 id = 2L,
                 sellerId = 1L,
                 name = "개인 채권",
                 minPrice = 100_000_000L,
+                status = BiddingStatus.IN_PROGRESS.getValue()
             )
         )
 
@@ -89,6 +92,7 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
             sellerId = 1L,
             name = "담보 채권",
             minPrice = 100_000_000L,
+            status = BiddingStatus.IN_PROGRESS.getValue()
         )
 
         `when`(productService.detail(1L)).thenReturn(
@@ -97,6 +101,7 @@ class ProductControllerTest(@Autowired val mockMvc: MockMvc) {
                 sellerId = 1L,
                 name = "담보 채권",
                 minPrice = 100_000_000L,
+                status = BiddingStatus.IN_PROGRESS.getValue()
             )
         )
 

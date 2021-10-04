@@ -26,3 +26,9 @@ export const postBidding = (data, token) => client.post('/api/products/bidding',
 })
 
 export const fetchBiddingList = (productId) => client.get(`/api/products/${productId}/bidding-list`)
+
+export const patchStatus = (productId, data, token) => client.post(`/api/products/${productId}/status`, data, {
+    "headers": {
+        "Authorization": `${token}`
+    }
+})
