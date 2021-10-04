@@ -8,11 +8,13 @@ import com.example.bidding_war.repository.UserRepository
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemRequest
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemResponse
 import com.example.bidding_war.web.dto.AuctionItem.BidRequest
+import com.example.bidding_war.web.dto.AuctionItem.SellRequest
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
-import kotlin.math.acos
+import javax.persistence.EntityNotFoundException
 
 @Service
 class AuctionItemService(
@@ -31,6 +33,8 @@ class AuctionItemService(
             description = request.description,
             startPrice = request.startPrice,
             minBiddingPrice = request.minBiddingPrice,
+            isComplete = false,
+            finalBiddingId = null
             )
         )
         return auctionItem.id!!
@@ -50,7 +54,9 @@ class AuctionItemService(
             startPrice = auctionItem.startPrice,
             minBiddingPrice = auctionItem.minBiddingPrice,
             createDate = auctionItem.createDate,
-            biddings = auctionItem.biddings
+            biddings = auctionItem.biddings,
+            isComplete = auctionItem.isComplete,
+            finalBiddingId = auctionItem.finalBiddingId
         )
     }
 
@@ -63,6 +69,9 @@ class AuctionItemService(
         val auctionItem = auctionItemRepository.findById(request.auctionItemId).orElseThrow()!!
         val owner = auctionItem.owner
 
+        if (auctionItem.isComplete){
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not Acceptable")
+        }
         if (biddingRepository.existsByAmountGreaterThanEqualAndAuctionItemId(request.amount, request.auctionItemId)) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Conflict")
         }
@@ -86,4 +95,43 @@ class AuctionItemService(
 
         return bidding.id!!
     }
+
+    @Transactional
+    fun sell(request: SellRequest): AuctionItemResponse {
+        val auctionItem: AuctionItem = auctionItemRepository.findById(request.auctionItemId).orElseThrow()!!
+        val owner = auctionItem.owner
+
+        if (owner != null) {
+            if (owner.id != request.userId){
+                throw ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed")
+            }
+        }
+        if (auctionItem.isComplete){
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not Acceptable")
+        }
+
+        try {
+            val bid: Bidding = biddingRepository.findFirstByAuctionItemOrderByAmountDesc(auctionItem)
+            auctionItem.let {
+                it.finalBiddingId = bid.id
+                it.isComplete = true
+            }
+        } catch (e: EmptyResultDataAccessException){
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "NOT_FOUND")
+        }
+
+        return AuctionItemResponse(
+            id = auctionItem.id!!,
+            title = auctionItem.title,
+            email = owner!!.email,
+            description = auctionItem.description,
+            startPrice = auctionItem.startPrice,
+            minBiddingPrice = auctionItem.minBiddingPrice,
+            createDate = auctionItem.createDate,
+            biddings = auctionItem.biddings,
+            isComplete = auctionItem.isComplete,
+            finalBiddingId = auctionItem.finalBiddingId
+        )
+    }
+
 }

@@ -15,7 +15,10 @@ const AuctionItemView = ({ history, location, match }) => {
       window.alert(error)
     })
   }
-
+  function formatComplete(isComplete){
+    if (isComplete) return "완료"
+    return "진행중"
+  }
   useEffect(() => {
     setAuctionItem(getAuctionItemById(id));
   }, [ ]);
@@ -51,6 +54,10 @@ const AuctionItemView = ({ history, location, match }) => {
                     data.description
                   }
                 </div>
+              </div>
+              <div className="post-view-row">
+                <label>낙찰 여부</label>
+                <label>{ formatComplete(data.isComplete)}</label>
               </div>
               <div className="post-view-row">
                 <label>시작 가격</label>

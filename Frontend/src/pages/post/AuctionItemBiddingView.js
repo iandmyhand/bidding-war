@@ -3,7 +3,7 @@ import CommonTable from '../../component/table/CommonTable';
 import CommonTableColumn from '../../component/table/CommonTableColumn';
 import CommonTableRow from '../../component/table/CommonTableRow';
 import { fetchBiddingsByAuctionItem } from '../../api/auctionItem/auctionItem_api';
-import { bidding } from '../../api/auctionItem/auctionItem_api';
+import { bidding, sell } from '../../api/auctionItem/auctionItem_api';
 
 const AuctionItemBiddingView = ({ history, location, match }) => {
   
@@ -24,7 +24,7 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
         });
       }; 
     
-      function registerBidding(e){
+    function registerBidding(e){
         e.preventDefault();
         const registerBidding = async () => {
           try{
@@ -42,15 +42,18 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
                 window.alert("요청 가격보다 큰 입찰 금액이 이미 존재합니다.")
                 window.location.reload()
             }
-            else if (error.response.status === 406){
+            else if (error.response.status === 405){
               window.alert("호가 단위에 맞춰서 주문해주세요.")
               window.location.reload()
             }
-            else if (error.response.status === 405){
+            else if (error.response.status === 404){
               window.alert("자신이 올린 물품에는 입찰 요청을 할 수 없습니다.")
               window.location.reload()
             } 
-
+            else if (error.response.status === 406){
+              window.alert("이미 낙찰된 상품에는 주문을 넣을 수 없습니다.")
+              window.location.reload()
+            } 
             else{
                 window.alert('세션이 만료되었습니다. 다시 로그인 해주세요.')
                 window.location.replace("/login");
@@ -61,7 +64,45 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
         }
         registerBidding();
         console.log("아이템 추가됌.")
+      }  
+
+    function requestsell(e){
+      e.preventDefault();
+      const requestsell = async () => {
+        try{
+          const response = await sell({
+              auctionItemId: id,
+              userId: sessionStorage.getItem("user_id"),
+          })
+  
+          window.alert("낙찰을 완료했습니다.")
+          window.location.reload()
+          
+        } catch(error){
+
+          if (error.response.status === 405){
+            window.alert("물품의 소유자가 아닙니다.")
+            window.location.reload()
+          }
+          else if (error.response.status === 404){
+            window.alert("주문 건이 없습니다.")
+            window.location.reload()
+          }
+          else if (error.response.status === 406){
+            window.alert("이미 낙찰된 물품입니다.")
+            window.location.reload()
+          } 
+          else{
+              window.alert('세션이 만료되었습니다. 다시 로그인 해주세요.')
+              window.location.replace("/login");
+          }
+
+        }
+        
       }
+      requestsell();
+      console.log("낙찰 완료함.")
+    }
 
     useEffect(() =>{
         getBiddings();
@@ -99,6 +140,13 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
             <center><input name = "amount" type = "text" required = {true} value = {amount} onChange={onChange} placeholder="입찰가" /></center>
             &nbsp;&nbsp;
             <center><input type = "submit" value = "등록" /></center>
+        </form>
+
+        <form onSubmit={requestsell}>
+            <h2>
+                <center>낙찰 하기</center>
+            </h2>
+            <center><input type = "submit" value = "낙찰" /></center>
         </form>
 
         <CommonTable headersName={['입찰번호','유저', '입찰가', '요청시간']}>

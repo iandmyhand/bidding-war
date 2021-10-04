@@ -21,3 +21,9 @@ export const bidding = (data) => client.post('/api/auctionItem/bidding', data, {
         "Authorization": `${sessionStorage.getItem("token")}`
     }
 })
+
+export const sell = (data) => client.post('/api/auctionItem/sell', data, {
+    "headers": {
+        "Authorization": `${sessionStorage.getItem("token")}`
+    }
+})
