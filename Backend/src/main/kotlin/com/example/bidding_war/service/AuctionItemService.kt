@@ -61,16 +61,21 @@ class AuctionItemService(
     @Transactional
     fun bid(request: BidRequest): Long {
         val auctionItem = auctionItemRepository.findById(request.auctionItemId).orElseThrow()!!
+        val owner = auctionItem.owner
 
         if (biddingRepository.existsByAmountGreaterThanEqualAndAuctionItemId(request.amount, request.auctionItemId)) {
             throw ResponseStatusException(HttpStatus.CONFLICT, "Conflict")
         }
 
-        if (auctionItem.minBiddingPrice > request.amount){
-            throw ResponseStatusException(HttpStatus.CONFLICT, "Conflict")
+        if ((auctionItem.startPrice - request.amount) % auctionItem.minBiddingPrice != 0L){
+            throw ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Method Not Allowed")
         }
 
-
+        if (owner != null) {
+            if (owner.id == request.userId){
+                throw ResponseStatusException(HttpStatus.NOT_FOUND, "NOT_FOUND")
+            }
+        }
 
         val bidding = biddingRepository.save(Bidding(
             auctionItem = auctionItem,

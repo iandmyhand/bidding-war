@@ -39,9 +39,18 @@ const AuctionItemBiddingView = ({ history, location, match }) => {
             
           } catch(error){
             if (error.response.status === 409){
-                window.alert("요청 가격보다 큰 입찰 금액이 이미 존재하거나, 최소 주문 금액보다 작습니다.")
+                window.alert("요청 가격보다 큰 입찰 금액이 이미 존재합니다.")
                 window.location.reload()
             }
+            else if (error.response.status === 406){
+              window.alert("호가 단위에 맞춰서 주문해주세요.")
+              window.location.reload()
+            }
+            else if (error.response.status === 405){
+              window.alert("자신이 올린 물품에는 입찰 요청을 할 수 없습니다.")
+              window.location.reload()
+            } 
+
             else{
                 window.alert('세션이 만료되었습니다. 다시 로그인 해주세요.')
                 window.location.replace("/login");
