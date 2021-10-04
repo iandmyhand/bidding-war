@@ -97,8 +97,6 @@ class ItemController(
             model["winPrice"] = false;
         }
 
-        //    TODO: 낙찰시 입찰 폼 대신, 최고 낙찰 가격 표시
-
         return "items/detail"
     }
 
