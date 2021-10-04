@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
@@ -28,7 +29,9 @@ class SecurityConfig(private val authProvider: CustomAuthProvider,
             .and()
             .authorizeRequests {
                 //일단 모든 path 허용
-                authReq-> authReq.anyRequest().permitAll()
+                authReq->
+                authReq.antMatchers("/v1/user/signup").permitAll()
+                authReq.anyRequest().authenticated()
             }
             .csrf()
             .disable()
@@ -41,6 +44,18 @@ class SecurityConfig(private val authProvider: CustomAuthProvider,
         auth.authenticationProvider(authProvider)
     }
 
+    override fun configure(webSecurity: WebSecurity) {
+        webSecurity.ignoring().antMatchers(
+            "/v2/api-docs",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger/**"
+        )
+    }
+
 
     @Bean
     fun authFailHandler():AuthenticationFailureHandler{
@@ -51,11 +66,11 @@ class SecurityConfig(private val authProvider: CustomAuthProvider,
     fun corsConfigurationSource(): CorsConfigurationSource {
 
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = Arrays.asList("*")
+        configuration.allowedOrigins = Arrays.asList("http://localhost:3000")
         configuration.allowedMethods =
             Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         configuration.allowedHeaders = Arrays.asList("*")
-        configuration.allowCredentials = false
+        configuration.allowCredentials = true
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source

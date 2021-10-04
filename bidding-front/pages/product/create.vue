@@ -62,23 +62,29 @@ export default {
             // const secretKey = this.randomCode()
             // const aseKey = this.encRsaMessage(publicKeys.publicKey, secretKey)
             // data = this.encAesMessage(secretKey, data)
-            
+
             await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
                 {
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
                         // 'RSA-ENCRYPT-KEY-ID':publicKeys.keyId,
                         // 'AES-ENCRYPT-KEY': aseKey,
                         // 'X-CSRF-TOKEN': csrfToken
-                    }
+                    },
+                    withCredentials: true
                 }
             )
             .then(res=>{
-                this.group = ""
-                this.name = ""
-                this.price = 0
-                this.desc = ""
-                alert("created product")
+                if(res.status==200){
+                    this.group = ""
+                    this.name = ""
+                    this.price = 0
+                    this.desc = ""
+                    alert("created product")
+                }else{
+                    alert("fail create")
+                }
+
             })
             .catch(error=>{
                 console.log(error)
@@ -108,19 +114,19 @@ export default {
 
             // encrypt.setPublicKey(publicKey)
             // encrypt.setPrivateKey(privateKey)
-            
+
             let encMsg = crypto.publicEncrypt({key:publicKey, padding: crypto.constants.RSA_PKCS1_PADDING},
                                                 Buffer.from(message, 'utf8'))
             encMsg = encMsg.toString('base64')
             //get으로 parameter로 보낼경우 urlEncode해줘야하고 post body로 보낼경우 하지 말아야함
-            // encMsg = encodeURIComponent(encMsg) 
+            // encMsg = encodeURIComponent(encMsg)
 
             // encMsg = encrypt.encrypt(message)
             console.log(encMsg)
             // let decMsg = encrypt.decrypt(encMsg)
             // let decMsg = crypto.privateDecrypt(privateKey, Buffer.from(encMsg, 'base64'))
             // console.log(decMsg)
-            
+
             return encMsg
         },
         encAesMessage(secretKey, message){
@@ -129,7 +135,7 @@ export default {
             const cihper = crypto.createCipheriv(
              'aes-128-cbc',
              Buffer.from(secretKey),
-             Buffer.from(iv)   
+             Buffer.from(iv)
             )
 
             let encMsg = cihper.update(message, 'utf8', 'base64')

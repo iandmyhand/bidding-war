@@ -21,7 +21,7 @@ export default {
       this.load()
   },
   created(){
-      
+
   },
   methods:{
       async load(){
@@ -34,7 +34,8 @@ export default {
               },
               headers:{
                 //   'X-CSRF-TOKEN': csrfToken
-              }
+              },
+              withCredentials: true
           })
           .then(res=>{
               this.proudcts = res.data

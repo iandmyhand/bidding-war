@@ -25,7 +25,8 @@ export default {
 
             // const data = JSON.stringify(objData);
             this.$axios.post("http://localhost:8080/bidding/v1/auth/signin", data, {
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                withCredentials: true
             }).then(res=>{
                 const resultData = res.data
                 alert("signin user:\n"
