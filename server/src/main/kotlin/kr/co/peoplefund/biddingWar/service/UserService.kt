@@ -4,6 +4,7 @@ import kr.co.peoplefund.biddingWar.controller.dto.LoginRequest
 import kr.co.peoplefund.biddingWar.controller.dto.UserRequest
 import kr.co.peoplefund.biddingWar.controller.dto.LoginResponse
 import kr.co.peoplefund.biddingWar.domain.Session
+import kr.co.peoplefund.biddingWar.domain.User
 import kr.co.peoplefund.biddingWar.domain.repository.SessionRepository
 import kr.co.peoplefund.biddingWar.domain.repository.UserRepository
 import kr.co.peoplefund.biddingWar.utils.PasswordUtils
@@ -36,9 +37,14 @@ class UserService(val userRepository: UserRepository, val sessionRepository: Ses
         return LoginResponse.of(user, session)
     }
 
+    fun getUser(userId: Long): User {
+        return userRepository.findById(userId).orElseThrow()
+    }
+
     @Transactional(readOnly = true)
-    fun validateToken(token: String) {
+    fun validateToken(token: String): Session {
         val session = sessionRepository.findByKey(token).orElseThrow()
         println(session.userId)
+        return session
     }
 }

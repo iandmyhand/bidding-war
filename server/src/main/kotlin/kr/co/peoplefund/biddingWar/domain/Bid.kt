@@ -1,13 +1,14 @@
 package kr.co.peoplefund.biddingWar.domain
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import javax.persistence.*
 
 @Entity
-class Bid(var userId: Long, var biddingPrice: Long) {
-    @Id
-    @GeneratedValue
-    var id: Long? = null
-    var productId: Long? = null
-}
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator::class, property = "id")
+class Bid(
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) var id: Long? = null,
+    @ManyToOne var bidder: User,
+    var biddingPrice: Long,
+    @ManyToOne(fetch = FetchType.LAZY) var product: Product
+    )
