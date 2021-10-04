@@ -6,15 +6,28 @@ import com.study.biddingwar.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+import javax.transaction.NotSupportedException
 
 @Service
 class UserService(private val userRepository: UserRepository):UserDetailsService {
+
     override fun loadUserByUsername(username: String?): UserDetails {
-        TODO("Not yet implemented")
+        throw NotSupportedException("this method not support, use loadUserByUserId")
+    }
+
+    fun loadUserByUserId(userId: String): User{
+        return userRepository.findByUserName( userId!!)
+//            .let(
+//            throw NoSuchElementException("user not found"))
     }
 
     fun createUser(userName:String, password:String):User{
         val user = User(userName= userName, userPassword = BcryptHashUtils.hashed(password))
         return userRepository.save(user)
     }
+
+    fun refreshLoginCount(user: User){
+        userRepository.save(user)
+    }
+
 }

@@ -32,6 +32,7 @@ export default {
     methods:{
         async getRsaPublicKey(){
             await this.$axios.get("https://dev-pf-security-support.s3.ap-northeast-2.amazonaws.com/public_key_cache/publicKeyCache.json")
+            // await this.$axios.get("http://localhost:8081/pf-secure/v1/security/public-key")
             .then(res=>{
                 this.rsaPublicKeys = res.data
                 console.log(this.publicKeys)
@@ -41,8 +42,8 @@ export default {
             })
         },
         async createProduct(){
-            const csrfToken = await this.getCsrfToken()
-            let publicKeys = this.getPublicKey()
+            // const csrfToken = await this.getCsrfToken()
+            // let publicKeys = this.getPublicKey()
             // const objData = {
             //     product_group: this.encMessage(publicKeys.publicKey, this.group),
             //     product_name: this.encMessage(publicKeys.publicKey, this.name),
@@ -58,17 +59,17 @@ export default {
             };
             let data = JSON.stringify(objData);
             console.log("data size : " + data.length)
-            const secretKey = this.randomCode()
-            const aseKey = this.encRsaMessage(publicKeys.publicKey, secretKey)
-            data = this.encAesMessage(secretKey, data)
+            // const secretKey = this.randomCode()
+            // const aseKey = this.encRsaMessage(publicKeys.publicKey, secretKey)
+            // data = this.encAesMessage(secretKey, data)
             
             await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
                 {
                     headers: { 
                         'Content-Type': 'application/json;charset=UTF-8',
-                        'RSA-ENCRYPT-KEY-ID':publicKeys.keyId,
-                        'AES-ENCRYPT-KEY': aseKey,
-                        'X-CSRF-TOKEN': csrfToken
+                        // 'RSA-ENCRYPT-KEY-ID':publicKeys.keyId,
+                        // 'AES-ENCRYPT-KEY': aseKey,
+                        // 'X-CSRF-TOKEN': csrfToken
                     }
                 }
             )
@@ -136,22 +137,22 @@ export default {
 
             return encMsg
         },
-        async sendEncryptTest(){
-            let publicKeys = this.getPublicKey()
+        // async sendEncryptTest(){
+        //     let publicKeys = this.getPublicKey()
 
-            // this.encMessage(publicKey, this.group)
-            await this.$axios.get("http://localhost:8080/bidding/v1/product?"+"msg="+this.encMessage(publicKeys.publicKey, this.group),{
-                headers:{
-                    'RSA-ENCRYPT-KEY-ID':publicKeys.keyId
-                }
-            })
-            .then(res=>{
-                console.log(res.data)
-            })
-            .catch(error=>{
-                console.log(error)
-            })
-        },
+        //     // this.encMessage(publicKey, this.group)
+        //     await this.$axios.get("http://localhost:8080/bidding/v1/product?"+"msg="+this.encMessage(publicKeys.publicKey, this.group),{
+        //         headers:{
+        //             'RSA-ENCRYPT-KEY-ID':publicKeys.keyId
+        //         }
+        //     })
+        //     .then(res=>{
+        //         console.log(res.data)
+        //     })
+        //     .catch(error=>{
+        //         console.log(error)
+        //     })
+        // },
         async getCsrfToken(){
           let csrfToken
           await this.$axios.get("http://localhost:8081/pf-secure/v1/security/csrf-token")

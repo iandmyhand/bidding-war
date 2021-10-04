@@ -14,7 +14,7 @@ class SecuritySupportService(private val securityRedisRepository: RedisRepositor
                              private val objectMapper: ObjectMapper) {
 
     @PostConstruct
-    fun initRsaKetCache(){
+    fun initRsaKeyCache(){
         try {
             refreshRsaKeyCache()
         }catch(e: Exception){

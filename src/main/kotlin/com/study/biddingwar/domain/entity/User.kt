@@ -3,6 +3,7 @@ package com.study.biddingwar.domain.entity
 import org.hibernate.annotations.UpdateTimestamp
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.AuthorityUtils
 import org.springframework.security.core.userdetails.UserDetails
 import java.time.Instant
 import javax.persistence.*
@@ -39,7 +40,7 @@ class User:UserDetails {
     var updatedAt:Instant? = null
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        TODO("Not yet implemented")
+        return AuthorityUtils.createAuthorityList(authorities)
     }
 
     override fun getPassword(): String {
