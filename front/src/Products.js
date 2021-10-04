@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {createProduct, fetchProducts, createBid} from "./api";
+import {createProduct, fetchProducts, createBid, finishBid} from "./api";
 
 const Products = ({token}) => {
     const [products, setProducts] = useState([])
@@ -36,6 +36,17 @@ const Products = ({token}) => {
         await createBid(inputProductId.current.value, {
             'token': token,
             'biddingPrice': inputBiddingPrice.current.value
+        })
+
+        await initProducts()
+    }
+
+    const finishBidding = async (e) => {
+        e.preventDefault();
+        console.log("productId:" + inputProductId.current.value)
+
+        await finishBid(inputProductId.current.value, {
+            'token': token
         })
 
         await initProducts()
@@ -96,30 +107,50 @@ const Products = ({token}) => {
         </table>
     </form>
 
+    const finishBidComponent = <form onSubmit={finishBidding}>
+        <table>
+            <thead>
+            <tr><td colSpan={3}>입찰종료</td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>상품번호:</td>
+                <td><input type="text" ref={inputProductId}/></td>
+            </tr>
+            <tr>
+                <td><button type="submit">입찰종료하기</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+
     return <div>
         <table>
             <thead>
             <tr>
-                <td colSpan="5">상품목록</td>
+                <td colSpan="6">상품목록</td>
             </tr>
             </thead>
             <tbody>
             {products.map(product =>
                 <tr key={product.id}>
                     <td>상품번호: {product.id}</td>
+                    <td>등록자: {product.ownerUserId}</td>
                     <td>상품명: {product.name}</td>
                     <td>상품가: {product.price}</td>
                     <td>최소입찰가: {product.minimumBiddingPrice}</td>
+                    <td>낙찰여부: {product.winningBidId}</td>
                     <td>
                         <table>
                             <thead>
                             <tr>
-                                <td colSpan={2}>입찰목록</td>
+                                <td colSpan={3}>입찰목록</td>
                             </tr>
                             </thead>
                             <tbody>
                     {product.bids.map(bid =>
                         <tr key={bid.id}>
+                            <td>입찰번호: {bid.id}</td>
                             <td>입찰자 유저ID: {bid.bidder.id}</td>
                             <td>입찰가: {bid.biddingPrice}</td>
                         </tr>
@@ -133,6 +164,7 @@ const Products = ({token}) => {
         </table>
         {registerProductComponent}
         {registerBidComponent}
+        {finishBidComponent}
     </div>
 }
 

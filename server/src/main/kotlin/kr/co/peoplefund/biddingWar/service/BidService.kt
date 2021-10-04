@@ -25,9 +25,9 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         return BidResponse.of(bidRepository.findByProductId(productId))
     }
 
-    fun finish(bidder: User, productId: Long) {
+    fun finish(user: User, productId: Long) {
         val product = productRepository.findById(productId).orElseThrow()
-        if (product.owner != bidder) {
+        if (product.owner != user) {
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Only owner has authority for this function.")
         }
         if (product.winningBid != null) {
@@ -35,6 +35,7 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         }
         val bid = bidRepository.findFirstByProductIdOrderByBiddingPriceDesc(productId)
         product.winningBid = bid
+        productRepository.save(product)
     }
 
 }
