@@ -12,5 +12,6 @@ class Product(
     var name: String,
     var price: Long,
     var minimumBiddingPrice: Long,
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product") var bids: MutableList<Bid>
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product") var bids: MutableList<Bid>,
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "product") var winningBid: Bid? = null
 )

@@ -47,6 +47,15 @@ class APIController(val userService: UserService, val productService: ProductSer
         return ResponseEntity.ok(bidService.list(productId))
     }
 
+    @PostMapping("/products/{productId}/finish-bid")
+    fun apiFinishBid(@PathVariable productId: Long, @RequestBody request: BidRequest): ResponseEntity<Void> {
+        val token = request.token
+        val session = userService.validateToken(token)
+        val user = session.userId?.let { userService.getUser(it) }
+        user?.let { bidService.finish(it, productId) }
+        return ResponseEntity.ok().build()
+    }
+
     @PostMapping("/users")
     fun apiRegisterUser(@RequestBody request: UserRequest): ResponseEntity<Void> {
         val id = userService.register(request)
