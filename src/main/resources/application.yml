@@ -1,4 +1,9 @@
 spring:
+  devtools:
+    remote:
+      restart:
+        enabled: true
+
   h2:
     console:
       enable: true # h2 DB, 웹 콘솔 접근 허용
