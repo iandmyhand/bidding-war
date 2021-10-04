@@ -12,29 +12,47 @@
     <dt class="col-sm-3">내용</dt>
     <dd class="col-sm-9"><p>{{item.content}}</p></dd>
 
-    <dt class="col-sm-3">가격</dt>
+    <dt class="col-sm-3">최소 입찰 가격</dt>
     <dd class="col-sm-9"><p>{{item.price}}</p></dd>
 
     <dt class="col-sm-3 text-truncate">생성시간</dt>
     <dd class="col-sm-9"><p>{{item.createdTime}}</p></dd>
 
-    <dt class="col-sm-3 text-truncate">최소입찰 가격</dt>
-    <dd class="col-sm-9"><p>{{item.minPrice}}</p></dd>
+    <dt class="col-sm-3 text-truncate">입찰 상태</dt>
+    <dd class="col-sm-9"><p>{{item.status}}</p></dd>
+
+    {{#winPrice}}
+        <dt class="col-sm-3 text-truncate">낙찰 가격</dt>
+        <dd class="col-sm-9"><p>{{winPrice}}</p></dd>
+    {{/winPrice}}
+
+
+    {{#owner}}
+        {{^winPrice}}
+        <form action="/item/winbid" method="post">
+            <input type="submit" class="col-sm-3 text-truncate" value="낙찰하기" />
+            <input type="hidden" name="itemId" value="{{item.id}}" />
+            <input type="hidden" name="userId" value="{{userId}}" />
+        </form>
+        {{/winPrice}}
+    {{/owner}}
 </dl>
 
-<form class="container" method="post" action="/item/bid">
-    <h3 class="display-5">상품 입찰하기</h3>
-    <input name="itemId" type="hidden" value="{{itemId}}">
-    <input name="userId" type="hidden" value="{{userId}}">
+{{^owner}}
+    {{^winPrice}}
+    <form class="container" method="post" action="/item/bid">
+        <h3 class="display-5">상품 입찰하기</h3>
+        <input name="itemId" type="hidden" value="{{itemId}}">
+        <input name="userId" type="hidden" value="{{userId}}">
 
-    <div class="mb-3">
-        <input name="price" type="number" class="form-control" min="0" placeholder="가격을 입력해주세요">
-    </div>
+        <div class="mb-3">
+            <input name="price" type="number" class="form-control" min="0" placeholder="가격을 입력해주세요">
+        </div>
 
-    <button type="submit" class="btn btn-primary">입찰</button>
-</form>
-
-
+        <button type="submit" class="btn btn-primary">입찰</button>
+    </form>
+    {{/winPrice}}
+{{/owner}}
 <table class="table table-hover text-center row">
     <h3 class="display-5">상품 입찰 내역</h3>
 
