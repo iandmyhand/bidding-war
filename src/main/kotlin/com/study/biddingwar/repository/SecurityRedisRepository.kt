@@ -11,8 +11,8 @@ class SecurityRedisRepository(private val securityRedisTemplate: RedisTemplate<S
         return securityRedisTemplate.opsForValue().get(key)
     }
 
-    fun put(key: String, DATA: Any) {
-        securityRedisTemplate.opsForValue().set(key, DATA)
+    fun<T> put(key: String, DATA: T) {
+        securityRedisTemplate.opsForValue().set(key, DATA!!)
     }
 
     fun delete(key: String) {

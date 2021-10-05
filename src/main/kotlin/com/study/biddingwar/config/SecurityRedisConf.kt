@@ -9,8 +9,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.serializer.RedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession
-import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer
 import java.time.Duration
 
 @Configuration

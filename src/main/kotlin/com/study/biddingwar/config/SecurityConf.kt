@@ -24,8 +24,8 @@ class SecurityConf(private val loginAuthFailureHandler: LoginAuthFailureHandler,
                    private val loginAuthSuccessHandler: LoginAuthSuccessHandler
 ): WebSecurityConfigurerAdapter() {
     companion object {
-        const val SIGNIN_POINT: String = "/user/signin";
-        const val SIGNOUT_POINT: String = "/user/signout";
+        const val SIGNIN_POINT: String = "/v1/user/signin";
+        const val SIGNOUT_POINT: String = "/v1/user/signout";
     }
 
     @Autowired

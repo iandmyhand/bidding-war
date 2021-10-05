@@ -14,6 +14,6 @@ data class SessionDto (
         val userNick: String,
         @get:JsonProperty("user_name")
         val userName: String
-): Serializable
+)
 
 

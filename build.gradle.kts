@@ -32,7 +32,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("org.springframework.session:spring-session-data-redis")
+	// implementation("org.springframework.session:spring-session-data-redis")
 
 	// serializer
 	// implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")

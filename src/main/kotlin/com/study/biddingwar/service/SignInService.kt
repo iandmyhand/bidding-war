@@ -7,7 +7,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Service
 
 @Service
-class SignInService(private val userService: UserService) {
+class SignInService(private val userService: UserService,
+                    private val sessionService: SessionService
+) {
 
     fun signinUser(authId: String, authPw: String): User? {
         val user = userService.loadUserByUsername(authId)
@@ -18,5 +20,9 @@ class SignInService(private val userService: UserService) {
         }
 
         return user
+    }
+
+    fun signoutUser(userId: String) {
+        sessionService.removeSession(userId)
     }
 }
