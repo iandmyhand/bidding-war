@@ -15,12 +15,16 @@ import java.util.*
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val authProvider: CustomAuthProvider,
+class SecurityConfig(private val customAuthEntryPoint: CustomAuthEntryPoint,
+                     private val authProvider: CustomAuthProvider,
                      private val authSuccessHandler: AuthSuccessHandler): WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
 
         http
+            .exceptionHandling()
+                .authenticationEntryPoint(customAuthEntryPoint)
+            .and()
             .formLogin().permitAll()
                 .usernameParameter("user_name")
                 .loginProcessingUrl("/v1/auth/signin")
