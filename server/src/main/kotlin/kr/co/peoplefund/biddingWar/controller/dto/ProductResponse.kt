@@ -5,10 +5,12 @@ import kr.co.peoplefund.biddingWar.domain.Product
 
 class ProductResponse (
     val id: Long,
+    val ownerUserId: Long,
     val name: String,
     val price: Long,
     val minimumBiddingPrice: Long,
-    val bids: MutableList<Bid>
+    val bids: MutableList<Bid>,
+    val winningBidId: Long?
 ) {
     companion object {
         fun of(product: Product): ProductResponse {
@@ -16,10 +18,12 @@ class ProductResponse (
             product.bids.map {println("bid: ${it.id} / ${it.biddingPrice}")}
             return ProductResponse(
                 id = product.id!!,
+                ownerUserId = product.owner.id!!,
                 name = product.name,
                 price = product.price,
                 minimumBiddingPrice = product.minimumBiddingPrice,
-                bids = product.bids
+                bids = product.bids,
+                winningBidId = product.winningBid?.id
             )
         }
 

@@ -17,6 +17,12 @@ export const createBid = (productId, data) => {
     return promise
 }
 
+export const finishBid = (productId, data) => {
+    const promise = client.post('/api/products/' + productId + '/finish-bid', data)
+    console.log("finish bid succeed!!")
+    return promise
+}
+
 export const createUser = (data) => {
     const promise = client.post('/api/users', data)
     console.log("create user succeed!!")

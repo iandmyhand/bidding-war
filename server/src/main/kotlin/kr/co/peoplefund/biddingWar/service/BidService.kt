@@ -15,7 +15,7 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
     fun register(bidder: User, productId: Long, request: BidRequest): Long {
         val product = productRepository.findById(productId).orElseThrow()
         if (product.owner == bidder) {
-            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Not Acceptable")
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Only owner has authority for this function.")
         }
         val bid = request.toBid(bidder, product)
         return bidRepository.save(bid).id!!
@@ -23,6 +23,19 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
 
     fun list(productId: Long): List<BidResponse> {
         return BidResponse.of(bidRepository.findByProductId(productId))
+    }
+
+    fun finish(user: User, productId: Long) {
+        val product = productRepository.findById(productId).orElseThrow()
+        if (product.owner != user) {
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Only owner has authority for this function.")
+        }
+        if (product.winningBid != null) {
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Already finished.")
+        }
+        val bid = bidRepository.findFirstByProductIdOrderByBiddingPriceDesc(productId)
+        product.winningBid = bid
+        productRepository.save(product)
     }
 
 }
