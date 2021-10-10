@@ -5,7 +5,8 @@ const Products = ({token}) => {
     const [products, setProducts] = useState([])
     const inputName = createRef()
     const inputPrice = createRef()
-    const inputProductId = createRef()
+    const inputProductIdRegisterBid = createRef()
+    const inputProductIdFinishBid = createRef()
     const inputBiddingPrice = createRef()
 
     const initProducts = async () => {
@@ -23,6 +24,10 @@ const Products = ({token}) => {
             'token': token,
             'name': inputName.current.value,
             'price': inputPrice.current.value
+        }).catch((error) => {
+            const reason = error.response.data["reason"]
+            console.log(reason)
+            window.alert(reason)
         })
 
         await initProducts()
@@ -30,12 +35,16 @@ const Products = ({token}) => {
 
     const registerBid = async (e) => {
         e.preventDefault();
-        console.log("productId:" + inputProductId.current.value)
+        console.log("productId:" + inputProductIdRegisterBid.current.value)
         console.log("biddingPrice:" + inputBiddingPrice.current.value)
 
-        await createBid(inputProductId.current.value, {
+        await createBid(inputProductIdRegisterBid.current.value, {
             'token': token,
             'biddingPrice': inputBiddingPrice.current.value
+        }).catch((error) => {
+            const reason = error.response.data["reason"]
+            console.log(reason)
+            window.alert(reason)
         })
 
         await initProducts()
@@ -43,10 +52,14 @@ const Products = ({token}) => {
 
     const finishBidding = async (e) => {
         e.preventDefault();
-        console.log("productId:" + inputProductId.current.value)
+        console.log("productId:" + inputProductIdFinishBid.current.value)
 
-        await finishBid(inputProductId.current.value, {
+        await finishBid(inputProductIdFinishBid.current.value, {
             'token': token
+        }).catch((error) => {
+            const reason = error.response.data["reason"]
+            console.log(reason)
+            window.alert(reason)
         })
 
         await initProducts()
@@ -94,7 +107,7 @@ const Products = ({token}) => {
             <tbody>
             <tr>
                 <td>상품번호:</td>
-                <td><input type="text" ref={inputProductId}/></td>
+                <td><input type="number" ref={inputProductIdRegisterBid}/></td>
             </tr>
             <tr>
                 <td>입찰가:</td>
@@ -115,7 +128,7 @@ const Products = ({token}) => {
             <tbody>
             <tr>
                 <td>상품번호:</td>
-                <td><input type="text" ref={inputProductId}/></td>
+                <td><input type="text" ref={inputProductIdFinishBid}/></td>
             </tr>
             <tr>
                 <td><button type="submit">입찰종료하기</button></td>

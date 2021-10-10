@@ -16,13 +16,19 @@ const Login = ({ setUserId, setToken }) => {
         const resLogin = await authLoginUser({
             'email': inputEmail.current.value,
             'password': inputPassword.current.value
+        }).catch((error) => {
+            const reason = error.response.data["reason"]
+            console.log(reason)
+            window.alert(reason)
         });
 
         console.log(JSON.stringify(resLogin));
-        const userId = resLogin.data.id;
-        const token = resLogin.data.sessionKey;
-        setUserId(userId);
-        setToken(token);
+        if (resLogin) {
+            const userId = resLogin.data.id;
+            const token = resLogin.data.sessionKey;
+            setUserId(userId);
+            setToken(token);
+        }
     }
 
     return <div>
