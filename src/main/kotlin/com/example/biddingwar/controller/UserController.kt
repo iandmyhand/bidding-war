@@ -27,6 +27,10 @@ class UserController(@Autowired val userRepository: UserRepository) {
     @ApiOperation(value = "process User sign in", notes = "사용자 회원 가입 처리")
     @PostMapping("/signin")
     fun signin_post(userForm : UserSignInForm): String{
+
+        if(userRepository.findUserByUserId(userForm.userId) != null || userForm.userPw.length < 4){
+            return "redirect:/user/signin"
+        }
         userRepository.save(userForm.toEntity())
 
         return "redirect:/user/login"

@@ -55,7 +55,7 @@ class ItemController(
     fun createItem(form: ItemCreateForm, session: HttpSession, model: Model): String{
         val userId = session.getAttribute("userId")
 
-        return if (userId == null){
+        return if (userId == null || form.price <= 0){
             "redirect:/user/login"
         } else{
             model["item"] = itemRepository.save(form.toEntity(session.getAttribute("userId") as String))
@@ -67,8 +67,6 @@ class ItemController(
 
     @GetMapping("/search")
     fun searchItemForm(session: HttpSession, model: Model): String{
-        val userId = session.getAttribute("userId")
-
         return "items/searchItemForm"
     }
     @GetMapping("/list")
@@ -104,16 +102,13 @@ class ItemController(
     fun bidItem(biddingCreateForm: BiddingCreateForm, session: HttpSession): String {
         var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)!!
 
-        if(session.getAttribute("userId") as String == item.userId) {
-            return "redirect:/item/list"
-        }
-        else if(biddingCreateForm.price < item.price){
-            return "redirect:/item/detail/${biddingCreateForm.itemId}"
-        }
-        else{
+        if((biddingCreateForm.price > item.price && item.status == "낙찰" &&
+                    session.getAttribute("userId") != item.userId)){
             bidRepository.save(biddingCreateForm.toEntity())
             itemRepository.save(item)
 
+            return "redirect:/item/detail/${biddingCreateForm.itemId}"
+            } else {
             return "redirect:/item/detail/${biddingCreateForm.itemId}"
         }
     }
@@ -121,9 +116,8 @@ class ItemController(
     @PostMapping("/winbid")
     fun winBidItem(winBidForm: WinBidForm, session: HttpSession): String {
         var item: Item = itemRepository.findItemById(winBidForm.getItem())!!
-        var user: User = userRepository.findUserByUserId(winBidForm.getUser())!!
 
-        if (session.getAttribute("userId") as String == item.userId) {
+        if (item.status == "입찰" && session.getAttribute("userId") == item.userId) {
             item.status = "낙찰"
             itemRepository.save(item)
         }
