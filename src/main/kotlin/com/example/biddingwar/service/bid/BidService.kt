@@ -8,6 +8,7 @@ import com.example.biddingwar.service.product.ProductService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
@@ -23,6 +24,10 @@ class BidService(val repository: BidRepository) {
     fun getByProductId(productId: Long): List<Bid>? = repository.findByProductId(productId)
 
     fun saveBid(bid: Bid, request: HttpServletRequest): ResponseEntity<Bid> {
+        
+        if (bid.userId == request.session.getAttribute("session")){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Duplicate User Bid")
+        }
         repository.save(bid)
         return ResponseEntity.ok().body(bid)
     }
