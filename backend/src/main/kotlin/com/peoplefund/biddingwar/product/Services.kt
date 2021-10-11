@@ -15,29 +15,3 @@ class ProductService(@Autowired val productRepository: ProductRepository) {
         return productRepository.findAll().toList()
     }
 }
-
-
-@Service
-class UserService(@Autowired val userRepository: UserRepository, @Autowired val passwordEncoder: PasswordEncoder) {
-    fun signUp(signupUser: UserSignupRequest): User {
-        if (userRepository.existsUserByUserId(signupUser.userId)) {
-            throw AlreadyExistUserException()
-        }
-
-        val encodedPassword = passwordEncoder.encode(signupUser.password)
-
-        return userRepository.save(User(signupUser.userId, encodedPassword))
-    }
-
-    fun signIn(userRequestBody: UserSignupRequest): User {
-        val findUser = userRepository
-            .findByUserId(userRequestBody.userId)
-            .orElseThrow { NoMatchedSignInException() }
-
-        if (!passwordEncoder.matches(userRequestBody.password, findUser.password)) {
-            throw NoMatchedSignInException()
-        }
-
-        return findUser
-    }
-}

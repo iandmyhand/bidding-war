@@ -2,8 +2,8 @@ package com.peoplefund.biddingwar
 
 import com.peoplefund.biddingwar.product.Product
 import com.peoplefund.biddingwar.product.ProductRepository
-import com.peoplefund.biddingwar.product.UserService
-import com.peoplefund.biddingwar.product.UserSignupRequest
+import com.peoplefund.biddingwar.users.UserService
+import com.peoplefund.biddingwar.users.UserSignupRequest
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -45,6 +45,6 @@ class DataLoaderConfig(
         productRepository.save(Product("아파트 담보(서울시 강남구) 2233", 5000000L))
         productRepository.save(Product("개인 채권 3234", 7000000L))
 
-        userService.signUp(UserSignupRequest("test1", "1234qwer"))
+        userService.signUp(UserSignupRequest("leon0517@gmail.com", "1234qwer"))
     }
 }
