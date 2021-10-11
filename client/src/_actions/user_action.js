@@ -6,8 +6,8 @@ import {
 } from './types'
 
 
-export function loginUser(dataToSubmit) {
-    const request = axios.post('/api/users/login', dataToSubmit)
+export function signInUser(dataToSubmit) {
+    const request = axios.post('/api/users/signin', dataToSubmit)
         .then(response => response.data )
 
     return {
