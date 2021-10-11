@@ -42,7 +42,13 @@ export default {
                 const resultData = res.data
                 console.log("jaeyoung log :", resultData)
 
-                this.$store.commit("session/setUserInfo", resultData)
+                // this.$store.commit("session/setUserInfo", resultData) --> cookie-universal-nuxt로 대체
+                this.$cookiz.set("authSession", resultData, {
+                    path: "/",
+                    maxAge: 60 * 60 * 24 * 7
+                })
+
+                this.$router.push({ path: "/goods" })
             }).catch(error => {
                 console.log(error)
             })

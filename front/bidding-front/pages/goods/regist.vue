@@ -3,7 +3,9 @@
         <label for="input-name">Name:</label>
         <b-form-input for="input-name" v-model="name" placeholder="Enter product name"></b-form-input>
         <label for="input-price">Price:</label>
-        <b-form-input for="input-price" v-model="price" placeholder="Enter product price"></b-form-input>
+        <b-form-input for="input-bid-price" v-model="bidPrice" placeholder="Enter product bid price"></b-form-input>
+        <label for="input-price">Min-Price:</label>
+        <b-form-input for="input-buy-price" v-model="buyPrice" placeholder="Enter product buy price"></b-form-input>
         <select v-model="category">
             <option disabled value="">Please select one</option>
             <option value="A">A</option>
@@ -21,7 +23,8 @@ export default {
     data() {
         return {
             name: "",
-            price: 0,
+            buyPrice: 0,
+            bidPrice: 0,
             category: "",
             content: ""
         }
@@ -29,6 +32,7 @@ export default {
 
     created() {
         //
+        this.authCheck()
     },
 
     methods: {
@@ -37,7 +41,8 @@ export default {
             
             const paramObj = {
                 goods_name: this.name,
-                goods_price: this.price,
+                goods_bid_price: this.bidPrice,
+                goods_buy_price: this.buyPrice,
                 goods_category: this.category,
                 goods_content: this.content
             };
@@ -53,6 +58,15 @@ export default {
             }).catch(error => {
                 console.log(error)
             })
+        },
+
+        async authCheck() { // 원래는 middleware 인터셉터로 빼야할듯 싶지만.. 페이지별 정의하는것으로 마무리
+            const authSession = this.$cookiz.get("authSession")
+            
+            if (typeof authSession === "undefined") {
+                alert("로그인이 필요합니다.")
+                this.$router.push({ path: "/user/signin" })
+            }
         }
     }
 

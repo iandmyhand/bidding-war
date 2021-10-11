@@ -11,11 +11,13 @@ import javax.persistence.*
 class Goods {
 
     constructor(goodsName: String,
-                goodsPrice: Int,
+                goodsBidPrice: Int,
+                goodsBuyPrice: Int,
                 goodsContent: String,
                 goodsCategory: String) {
         goodsName.also { this.goodsName = it}
-        goodsPrice.also { this.goodsPrice = it }
+        goodsBidPrice.also { this.goodsBidPrice = it }
+        goodsBuyPrice.also { this.goodsBuyPrice = it }
         goodsContent.also { this.goodsContent = it }
         goodsCategory.also { this.goodsCategory = it }
     }
@@ -30,9 +32,18 @@ class Goods {
     @Description("상품 이름")
     var goodsName: String private set
 
+    /* --> 7주차 숙제로 가격의미 변동됨 // 입찰가, 즉시구매가로 수정함
     @Column(name = "goods_price")
     @Description("상품 가격")
-    var goodsPrice: Int private set
+    var goodsPrice: Int private set*/
+
+    @Column(name = "goods_bid_price")
+    @Description("상품 입찰 가격")
+    var goodsBidPrice: Int private set
+
+    @Column(name = "goods_price")
+    @Description("상품 즉시 구매 가격")
+    var goodsBuyPrice: Int private set
 
     @Column(name = "goods_category")
     @Description("상품 카테고리")
@@ -46,12 +57,12 @@ class Goods {
     @Column(name = "create_date")
     @CreationTimestamp
     @Description("상품 생성일")
-    var createDate: Instant?=Instant.now()
+    var createDt: Instant?=Instant.now()
 
     @Column(name = "update_date")
     @UpdateTimestamp
     @Description("상품 수정일")
-    var updateDate: Instant?=Instant.now()
+    var updateDt: Instant?=Instant.now()
 
     // ------------ modify 용 setter 생성 -------------- //
     fun setGoodsName(goodsName: String) {
@@ -60,9 +71,15 @@ class Goods {
         }
     }
 
-    fun setGoodsPrice(goodsPrice: Int) {
-        if (goodsPrice > 0) {
-            this.goodsPrice = goodsPrice
+    fun setGoodsBidPrice(goodsBidPrice: Int) {
+        if (goodsBidPrice > 0) {
+            this.goodsBidPrice = goodsBidPrice
+        }
+    }
+
+    fun setGoodsBuyPrice(goodsBuyPrice: Int) {
+        if (goodsBuyPrice > 0) {
+            this.goodsBuyPrice = goodsBuyPrice
         }
     }
 
