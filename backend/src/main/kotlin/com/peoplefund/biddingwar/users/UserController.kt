@@ -1,6 +1,5 @@
 package com.peoplefund.biddingwar.users
 
-import com.peoplefund.biddingwar.product.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.BindingResult
@@ -20,7 +19,7 @@ class UserController(@Autowired val userService: UserService)  {
 
         return ResponseEntity
             .created(URI.create("/api/users/" + signedUpUser.userId))
-            .build()
+            .body(mapOf("success" to true))
     }
 
     @PostMapping("/signin")

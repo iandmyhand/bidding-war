@@ -10,6 +10,7 @@ data class UserSignupRequest(
 
 data class UserSigninResponse(
     @Size(min=5, max=30) val userId: String,
+    val loginSuccess: Boolean,
 ) {
-    constructor(user: User) : this(user.userId)
+    constructor(user: User) : this(user.userId, true)
 }
