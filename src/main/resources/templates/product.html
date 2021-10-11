@@ -14,13 +14,19 @@
         <div th:text="${product.minimumPrice}"> price </div>
         <div th:text="${product.seller.email}"> seller </div>
         <div th:text="${product.createdDate}"> createdDate </div>
-    </div>
 
+        <div th:if="${finish_bid}">
+            <form th:action="@{|/template/product/${product.id}/bid|}" th:method="POST">
+                <button type="submit">입찰종료</button>
+            </form>
+        </div>
+    </div>
     <table>
         <thead>
         <tr>
             <th>user</th>
             <th>price</th>
+            <th>낙찰여부</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +36,7 @@
         <tr th:each="bidding : ${biddings}">
             <td><span th:text="${bidding.account.email}"> name </span></td>
             <td><span th:text="${bidding.price}"> bidding price </span></td>
+            <td><span th:text="${bidding.is_selected}"> </span></td>
         </tr>
         </tbody>
     </table>
