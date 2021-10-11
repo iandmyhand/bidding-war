@@ -1,5 +1,6 @@
 package com.study.peoplefund.web.arguments.user
 
-@Target(AnnotationTarget.VALUE_PARAMETER)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AuthInfo
+data class AuthInfo(
+    val sessionId: Long,
+    val userId: Long
+)
