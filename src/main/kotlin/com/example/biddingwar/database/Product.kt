@@ -14,6 +14,8 @@ data class Product(
     var name: String,
     var price: Int = 0,
     val description: String,
-    var minimumPrice: Int = 0
+    var minimumPrice: Int = 0,
+    var finalBidPrice: Int = 0,
+    var isBidComplete: Boolean = false
 )
 
