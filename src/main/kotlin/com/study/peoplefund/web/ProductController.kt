@@ -2,10 +2,7 @@ package com.study.peoplefund.web
 
 import com.study.peoplefund.service.ProductService
 import com.study.peoplefund.web.arguments.user.AuthInfo
-import com.study.peoplefund.web.dto.BidRequest
-import com.study.peoplefund.web.dto.BiddingResponse
-import com.study.peoplefund.web.dto.ProductRequest
-import com.study.peoplefund.web.dto.ProductResponse
+import com.study.peoplefund.web.dto.*
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
@@ -40,4 +37,15 @@ class ProductController(val productService: ProductService) {
     fun biddingListOfProduct(@PathVariable productId: Long): ResponseEntity<List<BiddingResponse>> {
         return ResponseEntity.ok(productService.biddingListOfProduct(productId))
     }
+
+    @PostMapping("/{productId}/status")
+    fun updateStatus(
+        @PathVariable productId: Long,
+        @RequestBody request: BiddingStatusRequest
+    ): ResponseEntity<Void> {
+        productService.updateStatus(productId, request)
+
+        return ResponseEntity.noContent().build()
+    }
+
 }

@@ -1,5 +1,5 @@
 import React, {createRef, useEffect, useState} from 'react';
-import {createProduct, createUser, fetchProducts, getToken, postBidding} from "../../api";
+import {createProduct, createUser, fetchProducts, getToken} from "../../api";
 import SignInOrSignUp from "../../components/SignInOrSignUp";
 import {Link} from "react-router-dom";
 
@@ -14,8 +14,6 @@ const Products = () => {
     const signUpName = createRef()
     const productName = createRef()
     const productPrice = createRef()
-    const bidId = createRef()
-    const bidPrice = createRef()
 
     const signIn = async () => {
         try {
@@ -24,16 +22,12 @@ const Products = () => {
                 'password': signInPassword.current.value
             })
 
-            if (response.status !== 200) {
-                alert('로그인에 실패했습니다.')
-            }
-
             sessionStorage.setItem('account', response.data.account)
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('name', response.data.name)
             setHasToken(true)
-        } catch {
-            alert('로그인에 실패했습니다.')
+        } catch (e) {
+            alert(e.response.data)
         }
     }
 
@@ -45,23 +39,20 @@ const Products = () => {
                 'name': signUpName.current.value
             })
 
-            if (response.status === 201) {
-                alert('회원가입에 성공했습니다.')
-                return
-            }
-
-            alert('회원가입에 실패했습니다.')
-        } catch {
-            alert('회원가입에 실패했습니다.')
+            alert('회원가입에 성공했습니다.')
+        } catch (e) {
+            alert(e.response.data)
         }
 
     }
 
     const initProducts = async () => {
-        const response = await fetchProducts()
-        console.log(response.data)
-
-        setProducts(response.data)
+        try {
+            const response = await fetchProducts()
+            setProducts(response.data)
+        } catch (e) {
+            alert(e.response.data)
+        }
     }
 
     const addProduct = async () => {
@@ -71,33 +62,10 @@ const Products = () => {
                 'price': productPrice.current.value
             }, sessionStorage.getItem('token'))
 
-            if (response.status !== 201) {
-                alert('상품 등록에 실패했습니다.')
-                return
-            }
-
             await initProducts()
             alert('상품 등록에 성공했습니다.')
         } catch (e) {
-            alert(e)
-        }
-    }
-
-    const bid = async () => {
-        try {
-            const response = await postBidding({
-                'productId': bidId.current.value,
-                'price': bidPrice.current.value
-            }, sessionStorage.getItem('token'))
-
-            if (response.status !== 201) {
-                alert('입찰 신청에 실패했습니다.')
-                return
-            }
-
-            alert('입찰 신청에 성공했습니다.')
-        } catch {
-            alert('입찰 신청에 실패했습니다.')
+            alert(e.response.data)
         }
     }
 
@@ -135,7 +103,7 @@ const Products = () => {
         {products.map(product =>
             <div key={product.id}>
                 <Link
-                    to={`/products/${product.id}`}>{product.id}</Link> {product.sellerId} {product.name} {product.minPrice}
+                    to={`/products/${product.id}`}>{product.id}</Link> {product.sellerId} {product.name} {product.minPrice} [{product.status}]
             </div>)}
         <br/><br/>
 
@@ -143,13 +111,6 @@ const Products = () => {
         채권: <input type="text" ref={productName}/><br/>
         금액: <input type="number" ref={productPrice}/><br/>
         <button onClick={addProduct}>생성</button>
-        <br/><br/>
-
-        <strong>입찰</strong>
-        <br/>
-        채권 ID: <input type="number" ref={bidId}/><br/>
-        금액: <input type="number" ref={bidPrice}/><br/>
-        <button onClick={bid}>신청</button>
         <br/><br/>
     </div>
 }

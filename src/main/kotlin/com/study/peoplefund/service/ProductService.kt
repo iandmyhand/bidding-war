@@ -5,18 +5,16 @@ import com.study.peoplefund.domain.Product
 import com.study.peoplefund.domain.repository.BiddingRepository
 import com.study.peoplefund.domain.repository.ProductRepository
 import com.study.peoplefund.domain.repository.UserRepository
-import com.study.peoplefund.web.dto.BidRequest
-import com.study.peoplefund.web.dto.BiddingResponse
-import com.study.peoplefund.web.dto.ProductRequest
-import com.study.peoplefund.web.dto.ProductResponse
+import com.study.peoplefund.domain.vo.BiddingStatus
+import com.study.peoplefund.web.dto.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ProductService(
-        val productRepository: ProductRepository,
-        val biddingRepository: BiddingRepository,
-        val userRepository: UserRepository
+    val productRepository: ProductRepository,
+    val biddingRepository: BiddingRepository,
+    val userRepository: UserRepository
 ) {
 
     @Transactional
@@ -69,5 +67,27 @@ class ProductService(
         val biddingList = biddingRepository.findByProductId(productId)
 
         return BiddingResponse.of(biddingList)
+    }
+
+    private fun validateIsExistsBidding(product: Product) {
+        if (!biddingRepository.existsByProductId(product.id!!)) {
+            throw IllegalArgumentException("해당 상품의 입찰 내역이 존재하지 않습니다.")
+        }
+    }
+
+    fun updateStatus(productId: Long, request: BiddingStatusRequest) {
+        val product = productRepository.findById(productId)
+            .orElseThrow { throw IllegalArgumentException("해당 상품이 존재하지 않습니다.") }
+
+        if (request.getBiddingStatus() == BiddingStatus.SUCCESS) {
+            validateIsExistsBidding(product)
+
+            product.status = BiddingStatus.SUCCESS
+            productRepository.save(product)
+
+            return
+        }
+
+        TODO("BiddingStatus에 따른 구현이 필요함")
     }
 }

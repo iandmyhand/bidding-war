@@ -6,7 +6,8 @@ data class ProductResponse(
     val id: Long,
     val sellerId: Long,
     val name: String,
-    val minPrice: Long
+    val minPrice: Long,
+    val status: String
 ) {
     companion object {
         fun of(product: Product): ProductResponse {
@@ -14,7 +15,8 @@ data class ProductResponse(
                 id = product.id!!,
                 sellerId = product.seller.id!!,
                 name = product.name,
-                minPrice = product.minPrice
+                minPrice = product.minPrice,
+                status = product.status.getValue()
             )
         }
 

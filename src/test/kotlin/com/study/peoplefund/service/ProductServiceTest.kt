@@ -5,6 +5,7 @@ import com.study.peoplefund.domain.repository.BiddingRepository
 import com.study.peoplefund.domain.repository.ProductRepository
 import com.study.peoplefund.domain.repository.SessionRepository
 import com.study.peoplefund.domain.repository.UserRepository
+import com.study.peoplefund.domain.vo.BiddingStatus
 import com.study.peoplefund.helper.AuthHelper
 import com.study.peoplefund.web.dto.BidRequest
 import com.study.peoplefund.web.dto.ProductRequest
@@ -64,7 +65,13 @@ class ProductServiceTest @Autowired constructor(
 
         val detail = productService.detail(id)
         assertThat(detail).isEqualTo(
-            ProductResponse(id = id, sellerId = sellerId, name = "개인 채권", minPrice = 10_000_000L)
+            ProductResponse(
+                id = id,
+                sellerId = sellerId,
+                name = "개인 채권",
+                minPrice = 10_000_000L,
+                status = BiddingStatus.IN_PROGRESS.getValue()
+            )
         )
     }
 
