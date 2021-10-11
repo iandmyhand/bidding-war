@@ -13,7 +13,7 @@ class SecurityConfig(@Autowired private val accountService: AccountService,
                      @Autowired private val passwordEncoder: PasswordEncoder): WebSecurityConfigurerAdapter() {
 
     companion object {
-        const val LOGIN_SUCCESS_URL: String = "/view/success"
+        const val LOGIN_SUCCESS_URL: String = "/account/signin/success"
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
