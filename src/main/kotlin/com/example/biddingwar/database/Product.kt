@@ -18,10 +18,10 @@ data class Product(
     var price: Int = 0,
     val description: String,
 
-    @Min(message = "minimum price must be positive integer")
+    @Min(value = 0, message = "minimum price must be positive integer")
     var minimumPrice: Int = 0,
 
-    @Min(message = "final bid price must be positive integer")
+    @Min(value = 0, message = "final bid price must be positive integer")
     var finalBidPrice: Int = 0,
     var isBidComplete: Boolean = false
 )
