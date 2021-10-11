@@ -39,3 +39,5 @@ out/
 
 # front-end
 node_modules
+
+.DS_Store
