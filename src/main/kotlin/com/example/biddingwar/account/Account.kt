@@ -12,6 +12,7 @@ data class Account(
     @GeneratedValue
     var id: Long? = null,
 
+    @Column(unique = true)
     var email: String,
 
     @field:Size(min = 4)
