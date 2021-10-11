@@ -39,6 +39,12 @@ class BidService(val repository: BidRepository, val productRepository: ProductRe
                 )
             }
         }
+
+        val isBidComplete: Boolean = productRepository.findById(bid.productId).get().isBidComplete
+
+        if (isBidComplete) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Bid is already completed")
+        }
         repository.save(bid)
         return ResponseEntity.ok().body(bid)
     }
