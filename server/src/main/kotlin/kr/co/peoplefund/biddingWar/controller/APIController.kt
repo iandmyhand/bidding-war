@@ -7,10 +7,11 @@ import kr.co.peoplefund.biddingWar.service.ProductService
 import kr.co.peoplefund.biddingWar.service.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.net.URI
+import javax.servlet.http.HttpServletRequest
 
 @RestController
-@CrossOrigin(origins = ["http://localhost:8080", "http://localhost:3000"])
 @RequestMapping("/api")
 class APIController(val userService: UserService, val productService: ProductService, val bidService: BidService) {
 
@@ -67,16 +68,23 @@ class APIController(val userService: UserService, val productService: ProductSer
         return ResponseEntity.ok(userService.login(request))
     }
 
+    @ExceptionHandler(value = [ResponseStatusException::class])
+    fun responseStatusException(error: ResponseStatusException, request: HttpServletRequest):
+            ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(reason = error.reason)
+        return ResponseEntity.status(error.status).body(errorResponse)
+    }
+
     @GetMapping("/hack")
     fun apiHack(): ResponseEntity<HackResponse> {
-        val user1 = createUser("a", "a")
-        val user2 = createUser("b", "b")
+        val user1 = createUser("a", "aaaa")
+        val user2 = createUser("b", "bbbb")
         println("${user1.id} / ${user1.email} / ${user1.password}")
         println("${user2.id} / ${user2.email} / ${user2.password}")
 
-        val loginRequest1 = LoginRequest("a", "a")
+        val loginRequest1 = LoginRequest("a", "aaaa")
         val loginResponse1 = userService.login(loginRequest1)
-        val loginRequest2 = LoginRequest("b", "b")
+        val loginRequest2 = LoginRequest("b", "bbbb")
         val loginResponse2 = userService.login(loginRequest2)
         val productRequest = ProductRequest(loginResponse1.sessionKey, "test", 10, 5)
         val productId = productService.register(user1, productRequest)

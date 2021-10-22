@@ -7,4 +7,5 @@ import java.util.*
 interface BidRepository : JpaRepository<Bid, Long?> {
     fun findByProductId(productId: Long): List<Bid>
     fun findFirstByProductIdOrderByBiddingPriceDesc(productId: Long): Bid
+    fun existsByProductId(productId: Long): Boolean
 }

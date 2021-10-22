@@ -13,6 +13,10 @@ const Login = () => {
         await authLoginUser({
             'email': inputEmail.current.value,
             'password': inputPassword.current.value
+        }).catch((error) => {
+            const reason = error.response.data["reason"]
+            console.log(reason)
+            window.alert(reason)
         })
     }
 
