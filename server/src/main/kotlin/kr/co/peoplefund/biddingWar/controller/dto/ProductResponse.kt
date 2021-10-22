@@ -2,6 +2,7 @@ package kr.co.peoplefund.biddingWar.controller.dto
 
 import kr.co.peoplefund.biddingWar.domain.Bid
 import kr.co.peoplefund.biddingWar.domain.Product
+import java.util.*
 
 class ProductResponse (
     val id: Long,
@@ -10,7 +11,8 @@ class ProductResponse (
     val price: Long,
     val minimumBiddingPrice: Long,
     val bids: MutableList<Bid>,
-    val winningBidId: Long?
+    val winningBidId: Long?,
+    val biddingEndTime: Date
 ) {
     companion object {
         fun of(product: Product): ProductResponse {
@@ -23,7 +25,8 @@ class ProductResponse (
                 price = product.price,
                 minimumBiddingPrice = product.minimumBiddingPrice,
                 bids = product.bids,
-                winningBidId = product.winningBid?.id
+                winningBidId = product.winningBid?.id,
+                biddingEndTime = product.biddingEndTime
             )
         }
 

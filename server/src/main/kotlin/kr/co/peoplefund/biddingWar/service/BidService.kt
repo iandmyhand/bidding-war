@@ -7,8 +7,10 @@ import kr.co.peoplefund.biddingWar.domain.repository.BidRepository
 import kr.co.peoplefund.biddingWar.domain.repository.ProductRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Service
 class BidService(val productRepository: ProductRepository, val bidRepository: BidRepository) {
@@ -17,7 +19,7 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         val product = productRepository
             .findById(productId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.") }
-        if (product.owner == bidder) {
+        if (product.owner.id == bidder.id) {
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Owner has not an authority for this function.")
         }
         if (product.winningBid != null) {
@@ -45,7 +47,8 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         val product = productRepository
             .findById(productId)
             .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Not found.") }
-        if (product.owner != user) {
+        if (product.owner.id != user.id) {
+            println("Finishing bids - Owner: ${product.owner.id}, User: ${user.id}")
             throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Only owner has authority for this function.")
         }
         val isBidExist = bidRepository.existsByProductId(productId)
@@ -58,6 +61,16 @@ class BidService(val productRepository: ProductRepository, val bidRepository: Bi
         val winningBid = bidRepository.findFirstByProductIdOrderByBiddingPriceDesc(productId)
         product.winningBid = winningBid
         productRepository.save(product)
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    fun checkBiddingEnds() {
+        val now = Date()
+        val products = productRepository.findByWinningBidIsNullAndBidsExistsBiddingEndTimeLessThanEqual(now)
+        println("입찰을 종료합니다: ${products.size}건, $now")
+        products.map {
+            it.id?.let { productId -> finish(it.owner, productId) }
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package kr.co.peoplefund.biddingWar.domain
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -12,6 +13,7 @@ class Product(
     var name: String,
     var price: Long,
     var minimumBiddingPrice: Long,
+    var biddingEndTime: Date,
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product") var bids: MutableList<Bid>,
     @ManyToOne(fetch = FetchType.LAZY) var winningBid: Bid? = null
 )
