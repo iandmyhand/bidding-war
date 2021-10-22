@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import java.net.URI
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -86,7 +87,7 @@ class APIController(val userService: UserService, val productService: ProductSer
         val loginResponse1 = userService.login(loginRequest1)
         val loginRequest2 = LoginRequest("b", "bbbb")
         val loginResponse2 = userService.login(loginRequest2)
-        val productRequest = ProductRequest(loginResponse1.sessionKey, "test", 10, 5)
+        val productRequest = ProductRequest(loginResponse1.sessionKey, "test", 10, 5, Date())
         val productId = productService.register(user1, productRequest)
         val bidRequest = BidRequest(loginResponse2.sessionKey, 7)
         bidRequest.let {bidService.register(user2, productId, bidRequest)}

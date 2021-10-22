@@ -5,6 +5,7 @@ const Products = ({token}) => {
     const [products, setProducts] = useState([])
     const inputName = createRef()
     const inputPrice = createRef()
+    const inputBiddingEndTime = createRef()
     const inputProductIdRegisterBid = createRef()
     const inputProductIdFinishBid = createRef()
     const inputBiddingPrice = createRef()
@@ -23,7 +24,8 @@ const Products = ({token}) => {
         await createProduct({
             'token': token,
             'name': inputName.current.value,
-            'price': inputPrice.current.value
+            'price': inputPrice.current.value,
+            'biddingEndTime': inputBiddingEndTime.current.value
         }).catch((error) => {
             const reason = error.response.data["reason"]
             console.log(reason)
@@ -89,6 +91,10 @@ const Products = ({token}) => {
                     <td><input type="number" ref={inputPrice}/></td>
                 </tr>
                 <tr>
+                    <td>입찰종료시각:</td>
+                    <td><input type="datetime-local" ref={inputBiddingEndTime}/></td>
+                </tr>
+                <tr>
                     <td><button type="submit">상품 생성하기</button></td>
                 </tr>
                 </tbody>
@@ -141,7 +147,7 @@ const Products = ({token}) => {
         <table>
             <thead>
             <tr>
-                <td colSpan="6">상품목록</td>
+                <td colSpan="7">상품목록</td>
             </tr>
             </thead>
             <tbody>
@@ -152,6 +158,7 @@ const Products = ({token}) => {
                     <td>상품명: {product.name}</td>
                     <td>상품가: {product.price}</td>
                     <td>최소입찰가: {product.minimumBiddingPrice}</td>
+                    <td>입찰종료시각: {product.biddingEndTime}</td>
                     <td>낙찰여부: {product.winningBidId}</td>
                     <td>
                         <table>
