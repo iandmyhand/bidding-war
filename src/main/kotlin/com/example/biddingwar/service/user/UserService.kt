@@ -6,8 +6,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
+import javax.validation.ValidationException
 
 @Service
 @Transactional
@@ -21,6 +23,10 @@ class UserService(val repository: UserRepository) {
         if (signedUpUsers != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DUPLICATE_USER_EMAIL")
             }
+
+        if (user.pwd.length < 4) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Minimum password length is 4")
+        }
 
         user.pwd = bcrypt.encode(user.password)
         repository.save(user)

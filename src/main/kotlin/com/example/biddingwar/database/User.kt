@@ -1,6 +1,7 @@
 package com.example.biddingwar.database
 
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.validator.constraints.Length
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -13,6 +14,8 @@ import javax.persistence.Id
 data class User(
     @Id @GeneratedValue val id: Long,
     var email: String,
+
+    @Length(min = 4)
     var pwd: String,
     var session: Pair<Long, String>? = null,
 

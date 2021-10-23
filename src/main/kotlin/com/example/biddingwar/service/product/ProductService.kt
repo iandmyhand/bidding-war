@@ -7,6 +7,7 @@ import com.example.biddingwar.repository.ProductRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
@@ -35,9 +36,13 @@ class ProductService(val repository: ProductRepository, val bidRepository: BidRe
         return ResponseEntity.badRequest().body("DELETED_FAILED")
     }
 
-    fun sell(productId: Long): Product {
+    fun sell(productId: Long, request: HttpServletRequest): Product {
 
         val product: Product = repository.findById(productId).get()
+
+        if (request.session.getAttribute("session") != product.userId) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Product must be sold by same user")
+        }
 
         val bids: List<Bid>? = bidRepository.findByProductId(productId)
 
