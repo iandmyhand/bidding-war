@@ -88,11 +88,12 @@ class AuctionItemService(
             }
         }
 
-        val bidding = biddingRepository.save(Bidding(
-            auctionItem = auctionItem,
-            amount = request.amount,
-            user = userRepository.findById(request.userId).orElseThrow()
-        )
+        val bidding = biddingRepository.save(
+            Bidding(
+                auctionItem = auctionItem,
+                amount = request.amount,
+                user = userRepository.findById(request.userId).orElseThrow()
+            )
         )
 
         return bidding.id!!
