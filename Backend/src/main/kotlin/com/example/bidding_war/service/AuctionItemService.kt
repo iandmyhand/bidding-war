@@ -11,9 +11,11 @@ import com.example.bidding_war.web.dto.AuctionItem.BidRequest
 import com.example.bidding_war.web.dto.AuctionItem.SellRequest
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
+import java.time.Instant
 import javax.persistence.EntityNotFoundException
 
 @Service
@@ -115,6 +117,7 @@ class AuctionItemService(
             auctionItem.let {
                 it.finalBiddingId = bid.id
                 it.isComplete = true
+                it.endTime = Instant.now()
             }
         } catch (e: EmptyResultDataAccessException){
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "NOT_FOUND")
@@ -130,8 +133,27 @@ class AuctionItemService(
             createDate = auctionItem.createDate,
             biddings = auctionItem.biddings,
             isComplete = auctionItem.isComplete,
-            finalBiddingId = auctionItem.finalBiddingId
+            finalBiddingId = auctionItem.finalBiddingId,
+            endTime = auctionItem.endTime
         )
+    }
+
+    @Scheduled(cron = "0 * * * * *")
+    fun sellByTime(){
+        val finishedAuctionItems: List<AuctionItem> = auctionItemRepository.findByIsisCompleteFalseAndendTimeLessThanEqual(
+                Instant.now()
+        )
+
+        for (auctionItem in finishedAuctionItems) {
+            val bid: Bidding = biddingRepository.findFirstByAuctionItemOrderByAmountDesc(auctionItem)
+            auctionItem.let {
+                it.finalBiddingId = bid.id
+                it.isComplete = true
+                it.endTime = Instant.now()
+            }
+        }
+
+
     }
 
 }
