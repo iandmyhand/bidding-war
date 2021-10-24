@@ -7,6 +7,7 @@ import com.example.bidding_war.service.UserService
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemRequest
 import com.example.bidding_war.web.dto.AuctionItem.AuctionItemResponse
 import com.example.bidding_war.web.dto.AuctionItem.BidRequest
+import com.example.bidding_war.web.dto.AuctionItem.SellRequest
 import com.example.bidding_war.web.dto.User.SignInResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -38,5 +39,10 @@ class AuctionItemController(
     fun bid(@RequestBody request: BidRequest): ResponseEntity<Void> {
         val id = auctionItemService.bid(request)
         return ResponseEntity.created(URI.create("/api/auctionItem/bidding/$id")).build()
+    }
+
+    @PostMapping("/sell")
+    fun sell(@RequestBody request: SellRequest): ResponseEntity<AuctionItemResponse> {
+        return ResponseEntity.ok(auctionItemService.sell(request))
     }
 }

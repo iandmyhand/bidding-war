@@ -11,7 +11,7 @@ class Bidding (
     @ManyToOne
     var user: User,
 
-    var amount: Int,
+    var amount: Long,
 
     var createDate: Date = Date()
 ) {

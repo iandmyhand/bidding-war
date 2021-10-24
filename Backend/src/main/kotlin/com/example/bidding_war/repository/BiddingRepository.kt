@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface BiddingRepository : JpaRepository<Bidding, Long?> {
     fun findByAuctionItemId(auctionItemId: Long): List<Bidding>
-    fun existsByAmountGreaterThanEqualAndAuctionItemId(amount: Int, auctionItem_id: Long): Boolean
+    fun existsByAmountGreaterThanEqualAndAuctionItemId(amount: Long, auctionItem_id: Long): Boolean
+    fun findFirstByAuctionItemOrderByAmountDesc(auctionItem: AuctionItem): Bidding
 }

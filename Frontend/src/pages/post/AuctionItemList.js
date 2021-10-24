@@ -34,9 +34,14 @@ const AuctionItemList = props => {
      return [year, month, day].join('-'); 
   }
 
+  function formatComplete(isComplete){
+    if (isComplete) return "완료"
+    return "진행중"
+  }
+
   return (
     <>
-      <CommonTable headersName={['등록번호', '제목', '소유자', '시작가격', '호가', '생성시간']}>
+      <CommonTable headersName={['등록번호', '제목', '소유자', '낙찰여부','시작가격', '호가', '생성시간']}>
         {
           auctionItems ? auctionItems.map((auctionItem) => {
             return (
@@ -46,6 +51,7 @@ const AuctionItemList = props => {
                   <Link to={`/auctionItem/${auctionItem.id}`}>{ auctionItem.title }</Link>
                 </CommonTableColumn>
                 <CommonTableColumn>{ auctionItem.owner.email }</CommonTableColumn>
+                <CommonTableColumn>{ formatComplete(auctionItem.isComplete) }</CommonTableColumn>
                 <CommonTableColumn>{ Number(auctionItem.startPrice).toLocaleString('ko-KR') + " 원" }</CommonTableColumn>
                 <CommonTableColumn>{ Number(auctionItem.minBiddingPrice).toLocaleString('ko-KR') + " 원"}</CommonTableColumn>
                 <CommonTableColumn>{ formatDate(auctionItem.createDate)}</CommonTableColumn>

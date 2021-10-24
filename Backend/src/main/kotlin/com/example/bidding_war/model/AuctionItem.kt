@@ -18,7 +18,8 @@ class AuctionItem(
     var startPrice: Long,
     var minBiddingPrice: Long,
     var createDate: Date = Date(),
-
+    var isComplete: Boolean = false,
+    var finalBiddingId: Long?,
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

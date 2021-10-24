@@ -12,5 +12,7 @@ data class AuctionItemResponse(
     val startPrice: Long,
     val minBiddingPrice: Long,
     val createDate: Date,
-    val biddings: MutableList<Bidding>?
+    val biddings: MutableList<Bidding>?,
+    val isComplete: Boolean,
+    val finalBiddingId: Long?
 )
