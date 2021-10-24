@@ -6,6 +6,7 @@
             <a :href="`/goods/modify/${data.value}`">{{ data.value }}</a>
         </template>
       </b-table>
+      <b-button @click="signOut">SignOut</b-button>
   </div>
 </template>
 
@@ -19,18 +20,13 @@ export default {
         }
     },
 
-    computed() {
-        //  여기에 쓰일 것은 아니지만..
-        let user = this.$store.getters("session/getUserInfo")
-        console.log("user:", user)
-
-        if (!user) {
-            console.log("로그인 하지 않은 유저입니다.")
-        } else {
-            console.log("로그인 완료!")
-        }
-
+    created() {
+        this.authCheck()
         this.load()
+    },
+
+    computed() {
+        
     },
 
     methods:{
@@ -47,11 +43,26 @@ export default {
             .then(res=> {
                 // 페이징 아직 미처리
                 console.log(res.data)
-                this.goods = res.data
+                this.goods = res.data  
             })
             .catch(error=>{
                 console.log(error)
             })
+        },
+
+        async authCheck() { // 원래는 middleware 인터셉터로 빼야할듯 싶지만.. 페이지별 정의하는것으로 마무리
+            const authSession = this.$cookiz.get("authSession")
+            console.log("authSession:", authSession)
+            
+            if (typeof authSession === "undefined") {
+                alert("로그인이 필요합니다.")
+                this.$router.push({ path: "/user/signin" })
+            }
+        },
+
+        async signOut() {
+            this.$cookiz.remove("authSession")
+            this.$router.push({ path: "/user/signin" })
         }
     }
 }

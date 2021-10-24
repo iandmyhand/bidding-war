@@ -10,8 +10,11 @@ data class GoodsInfoDto(
     @get:JsonProperty("goods_name")
     val goodsName: String,
 
-    @get:JsonProperty("goods_price")
-    val goodsPrice: Int,
+    @get:JsonProperty("goods_bid_price")
+    val goodsBidPrice: Int,
+
+    @get:JsonProperty("goods_buy_price")
+    val goodsBuyPrice: Int,
 
     @get:JsonProperty("goods_content")
     val goodsContent: String,

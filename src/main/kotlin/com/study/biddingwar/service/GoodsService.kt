@@ -25,10 +25,11 @@ class GoodsService(private val goodsRepository: GoodsRepository) {
                             GoodsInfoDto(
                                     it.id!!,
                                     it.goodsName,
-                                    it.goodsPrice,
+                                    it.goodsBidPrice,
+                                    it.goodsBuyPrice,
                                     it.goodsContent,
                                     it.goodsCategory,
-                                    it.createDate)
+                                    it.createDt)
                         }
     }
     
@@ -39,12 +40,13 @@ class GoodsService(private val goodsRepository: GoodsRepository) {
                 .orElseThrow { NoSuchElementException("[getGoodsInfo] no such element goods : $id") } // 개선하고 싶음
 
         return GoodsInfoDto(
-                        goodsInfo.id!!,
-                        goodsInfo.goodsName,
-                        goodsInfo.goodsPrice,
-                        goodsInfo.goodsContent,
-                        goodsInfo.goodsCategory,
-                        goodsInfo.createDate
+                goodsInfo.id!!,
+                goodsInfo.goodsName,
+                goodsInfo.goodsBidPrice,
+                goodsInfo.goodsBuyPrice,
+                goodsInfo.goodsContent,
+                goodsInfo.goodsCategory,
+                goodsInfo.createDt
         )
     }
 
@@ -54,13 +56,20 @@ class GoodsService(private val goodsRepository: GoodsRepository) {
     ): GoodsInfoDto {
         // @TODO:값 검증
         val registGoodsInfo = Goods(
-            goodsName = goodsInfo.goodsName,
-            goodsPrice = goodsInfo.goodsPrice,
-            goodsContent = goodsInfo.goodsContent,
-            goodsCategory = goodsInfo.goodsCatetory
+                goodsName = goodsInfo.goodsName,
+                goodsBidPrice = goodsInfo.goodsBidPrice,
+                goodsBuyPrice = goodsInfo.goodsBuyPrice,
+                goodsContent = goodsInfo.goodsContent,
+                goodsCategory = goodsInfo.goodsCatetory
         )
         return this.goodsRepository.save(registGoodsInfo).let {
-            GoodsInfoDto(it.id!!, it.goodsName, it.goodsPrice, it.goodsContent, it.goodsCategory, it.createDate)
+            GoodsInfoDto(it.id!!,
+                    it.goodsName,
+                    it.goodsBidPrice,
+                    it.goodsBuyPrice,
+                    it.goodsContent,
+                    it.goodsCategory,
+                    it.createDt)
         }
     }
 
@@ -74,10 +83,17 @@ class GoodsService(private val goodsRepository: GoodsRepository) {
         modifyInfo.setGoodsCategory(goodsInfo.goodsCatetory)
         modifyInfo.setGoodsName(goodsInfo.goodsName)
         modifyInfo.setGoodsContent(goodsInfo.goodsContent)
-        modifyInfo.setGoodsPrice(goodsInfo.goodsPrice)
+        modifyInfo.setGoodsBidPrice(goodsInfo.goodsBidPrice)
+        modifyInfo.setGoodsBuyPrice(goodsInfo.goodsBuyPrice)
 
         return this.goodsRepository.save(modifyInfo).let {
-            GoodsInfoDto(it.id!!, it.goodsName, it.goodsPrice, it.goodsContent, it.goodsCategory, it.createDate)
+            GoodsInfoDto(it.id!!,
+                    it.goodsName,
+                    it.goodsBidPrice,
+                    it.goodsBuyPrice,
+                    it.goodsContent,
+                    it.goodsCategory,
+                    it.createDt)
         }
     }
 

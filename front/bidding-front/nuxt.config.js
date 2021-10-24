@@ -35,7 +35,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     "bootstrap-vue/nuxt",
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    ["cookie-universal-nuxt", {alias: "cookiz"}]
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
