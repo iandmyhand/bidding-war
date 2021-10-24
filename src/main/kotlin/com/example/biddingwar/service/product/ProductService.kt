@@ -57,4 +57,13 @@ class ProductService(val repository: ProductRepository, val bidRepository: BidRe
         return product
     }
 
+    @Scheduled(cron = "0 * * * * *")
+    fun finishBid() {
+        val now: Instant = Instant.now()
+        val finishedProducts: List<Product> = repository.findByIsBidCompleteFalseAndBiddingEndTimeLessThanEqual(now)
+
+        for (finishedProduct in finishedProducts) {
+            sell(finishedProduct.id)
+        }
+    }
 }
