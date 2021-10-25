@@ -8,6 +8,7 @@ import javax.persistence.Id
 class Product(
         @Id
         @GeneratedValue
+        var firstOwnerId: Long? = null,
         var id: Long? = null,
 
         var name: String,

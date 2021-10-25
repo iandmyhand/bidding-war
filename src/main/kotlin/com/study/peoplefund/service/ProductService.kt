@@ -38,6 +38,10 @@ class ProductService(
     fun bid(request: BidRequest, userId: Long): Long {
         val product = productRepository.findById(request.id).orElseThrow()!!
 
+        if (product.firstOwnerId == userId){
+            throw IllegalArgumentException("상품 등록자는 입찰에 참여할 수 없습니다")
+        }
+
         if (biddingRepository.existsByPriceGreaterThanEqual(request.price)) {
             throw IllegalArgumentException("요청 가격보다 큰 입찰 금액이 이미 존재합니다.")
         }
