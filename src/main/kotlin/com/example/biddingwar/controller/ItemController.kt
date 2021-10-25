@@ -5,13 +5,14 @@ import com.example.biddingwar.dto.ItemCreateForm
 import com.example.biddingwar.dto.ItemSearchForm
 import com.example.biddingwar.dto.WinBidForm
 import com.example.biddingwar.entity.Item
-import com.example.biddingwar.entity.User
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ItemRepository
 import com.example.biddingwar.repository.UserRepository
+import com.example.biddingwar.task.biddingItem
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -61,7 +62,7 @@ class ItemController(
             model["item"] = itemRepository.save(form.toEntity(session.getAttribute("userId") as String))
             model["userId"] = userId
 
-            "redirect:/welcome/hello"
+            "redirect:/item/"
         }
     }
 
@@ -72,7 +73,8 @@ class ItemController(
     @GetMapping("/list")
     fun listItem(form: ItemSearchForm, session: HttpSession, model: Model): String {
         model["userId"] = session.getAttribute("userId")
-        model["items"] = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc(form.productName)
+//        model["items"] = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc(form.productName)
+        model["items"] = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual("입찰", Date())
 
         return "items/list"
     }
@@ -90,7 +92,7 @@ class ItemController(
         model["owner"] = session.getAttribute("userId") as String == item.userId
 
         if (item.status == "낙찰"){
-            model["winPrice"] = bidRepository.findFirstByItemIdOrderByPriceDesc(itemID).price
+            model["winPrice"] = -1 // bidRepository.findFirstByItemIdOrderByPriceDesc(itemID).price
         } else{
             model["winPrice"] = false;
         }
@@ -102,8 +104,8 @@ class ItemController(
     fun bidItem(biddingCreateForm: BiddingCreateForm, session: HttpSession): String {
         var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)!!
 
-        if((biddingCreateForm.price > item.price && item.status == "낙찰" &&
-                    session.getAttribute("userId") != item.userId)){
+        if(biddingCreateForm.price > item.price && item.status == "입찰" &&
+                    session.getAttribute("userId") != item.userId){
             bidRepository.save(biddingCreateForm.toEntity())
             itemRepository.save(item)
 
@@ -113,16 +115,35 @@ class ItemController(
         }
     }
 
+    fun biddingItem(item: Item) : Boolean{
+        if(item.status != "입찰")
+            return false
+
+        item.status = "낙찰"
+        itemRepository.save(item)
+        return true
+    }
+
     @PostMapping("/winbid")
     fun winBidItem(winBidForm: WinBidForm, session: HttpSession): String {
         var item: Item = itemRepository.findItemById(winBidForm.getItem())!!
 
         if (item.status == "입찰" && session.getAttribute("userId") == item.userId) {
-            item.status = "낙찰"
-            itemRepository.save(item)
+            biddingItem(item)
         }
 
         return "redirect:/item/detail/${item.id}"
+    }
+
+    @Scheduled(cron = "0/1 * * * * *")
+    fun autoBidding(@Autowired itemRepository : ItemRepository) {
+        val now = Date()
+        val status = "입찰"
+        var items = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual(status, now)
+
+        for(item in items){
+            biddingItem(item)
+        }
     }
 
 }

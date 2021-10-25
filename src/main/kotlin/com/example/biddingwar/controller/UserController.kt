@@ -2,7 +2,6 @@ package com.example.biddingwar.controller
 
 import com.example.biddingwar.dto.UserLoginForm
 import com.example.biddingwar.dto.UserSignInForm
-import com.example.biddingwar.entity.User
 import com.example.biddingwar.repository.UserRepository
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
