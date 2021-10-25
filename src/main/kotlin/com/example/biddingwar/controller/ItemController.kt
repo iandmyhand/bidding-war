@@ -8,7 +8,6 @@ import com.example.biddingwar.entity.Item
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ItemRepository
 import com.example.biddingwar.repository.UserRepository
-import com.example.biddingwar.task.biddingItem
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
