@@ -1,12 +1,13 @@
 package com.example.biddingwar.dto
 
 import com.example.biddingwar.entity.Item
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import javax.servlet.http.HttpSession
 
 class ItemCreateForm(val productName: String,
                      val title: String, val content:String,
-                     val price: Int, val createTime:LocalDateTime? = null) {
+                     val price: Int, val bidTime: String,
+                     val createTime:LocalDateTime? = null) {
 
     override fun toString(): String{
         return "ItemForm{\n" +
@@ -17,10 +18,12 @@ class ItemCreateForm(val productName: String,
     }
 
     fun toEntity(userId: String): Item {
+        val bidTiem = SimpleDateFormat("yyyy-MM-dd'T'HH:mm").parse(this.bidTime)
+
         return if (createTime == null) {
-            Item(null, productName, title, content, price, userId)
+            Item(null, productName, title, content, price, userId, bidTiem)
         } else{
-            Item(null, productName, title, content, price, userId, createTime)
+            Item(null, productName, title, content, price, userId, bidTiem, createTime)
         }
     }
 }

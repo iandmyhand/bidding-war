@@ -1,8 +1,5 @@
 package com.example.biddingwar.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import lombok.Getter
-import lombok.Setter
 import javax.persistence.*
 
 @Entity
