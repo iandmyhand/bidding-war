@@ -18,24 +18,31 @@
     <dt class="col-sm-3 text-truncate">생성시간</dt>
     <dd class="col-sm-9"><p>{{item.createdTime}}</p></dd>
 
+
     <dt class="col-sm-3 text-truncate">입찰 상태</dt>
     <dd class="col-sm-9"><p>{{item.status}}</p></dd>
 
     {{#winPrice}}
+        <dt class="col-sm-3 text-truncate">낙찰된 시간</dt>
+        <dd class="col-sm-9"><p>{{item.bidTime}}</p></dd>
+
         <dt class="col-sm-3 text-truncate">낙찰 가격</dt>
         <dd class="col-sm-9"><p>{{winPrice}}</p></dd>
     {{/winPrice}}
 
 
-    {{#owner}}
-        {{^winPrice}}
-        <form action="/item/winbid" method="post">
-            <input type="submit" class="col-sm-3 text-truncate" value="낙찰하기" />
-            <input type="hidden" name="itemId" value="{{item.id}}" />
-            <input type="hidden" name="userId" value="{{userId}}" />
-        </form>
-        {{/winPrice}}
-    {{/owner}}
+    {{^winPrice}}
+        <dt class="col-sm-3 text-truncate">낙찰 예정 시간</dt>
+        <dd class="col-sm-9"><p>{{item.bidTime}}</p></dd>
+
+        {{#owner}}
+            <form action="/item/winbid" method="post">
+                <input type="submit" class="col-sm-3 text-truncate" value="낙찰하기" />
+                <input type="hidden" name="itemId" value="{{item.id}}" />
+                <input type="hidden" name="userId" value="{{userId}}" />
+            </form>
+        {{/owner}}
+    {{/winPrice}}
 </dl>
 
 {{^owner}}

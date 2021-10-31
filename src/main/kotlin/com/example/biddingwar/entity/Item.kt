@@ -1,15 +1,16 @@
 package com.example.biddingwar.entity
 
-import lombok.Value
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
+import java.util.*
 import javax.persistence.*
 
 @Entity
 class Item(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long? = null ,
+        val id: Long? = null,
         @Column(name = "productName")
         var productName: String,
         @Column(name = "title")
@@ -20,10 +21,12 @@ class Item(
         var price: Int,
         @Column(name="user_id", length=20, unique=true)
         val userId: String,
+        @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+        val bidTime: Date,
         @CreatedDate
         val createdTime: LocalDateTime = LocalDateTime.now(),
         @Column(name="status")
-        var status: String = "입찰중",
+        var status: String = "입찰",
         )
 {
         override fun toString(): String{
