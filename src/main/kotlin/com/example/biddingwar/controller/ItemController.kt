@@ -136,7 +136,7 @@ class ItemController(
     }
 
     @Scheduled(cron = "0/1 * * * * *")
-    fun autoBidding(@Autowired itemRepository : ItemRepository) {
+    fun autoBidding() {
         val now = Date()
         val status = "입찰"
         var items = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual(status, now)
