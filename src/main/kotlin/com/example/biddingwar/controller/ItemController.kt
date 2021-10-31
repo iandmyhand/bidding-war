@@ -91,7 +91,7 @@ class ItemController(
         model["owner"] = session.getAttribute("userId") as String == item.userId
 
         if (item.status == "낙찰"){
-            model["winPrice"] = -1 // bidRepository.findFirstByItemIdOrderByPriceDesc(itemID).price
+            model["winPrice"] = bidRepository.findFirstByItemIdOrderByPriceDesc(itemID).price
         } else{
             model["winPrice"] = false;
         }
@@ -135,7 +135,7 @@ class ItemController(
     }
 
     @Scheduled(cron = "0/1 * * * * *")
-    fun autoBidding(@Autowired itemRepository : ItemRepository) {
+    fun autoBidding() {
         val now = Date()
         val status = "입찰"
         var items = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual(status, now)
