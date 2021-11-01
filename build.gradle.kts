@@ -35,6 +35,10 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 //	testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
 //	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+	subprojects.forEach{
+		archives(it)
+	}
 }
 
 tasks.withType<KotlinCompile> {
@@ -47,3 +51,24 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+//subprojects {
+//	group = 'com.example.biddingwar'
+//	version = '0.0.1-SNAPSHOT'
+//
+//	apply plugin: 'jvm'
+//	apply plugin: 'org.springframework.boot'
+//	apply plugin: 'io.spring.dependency-management'
+//
+//	sourceCompatibility = 1.8
+//	targetCompatibility = 1.8
+//
+//	repositories {
+//		gradleCentral()
+//	}
+//
+//	dependencies {
+//		implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+//	}
+//
+//}
