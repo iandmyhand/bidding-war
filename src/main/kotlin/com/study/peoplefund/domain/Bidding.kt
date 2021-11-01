@@ -17,5 +17,7 @@ class Bidding(
         @ManyToOne
         var product: Product,
 
-        var price: Long
+        var price: Long,
+
+        var is_final: Boolean
 )

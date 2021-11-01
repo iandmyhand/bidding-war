@@ -35,7 +35,7 @@ class ProductService(
     }
 
     @Transactional
-    fun bid(request: BidRequest, userId: Long): Long {
+    fun bid(request: BidRequest, userId: Long, is_final: Boolean): Long {
         val product = productRepository.findById(request.id).orElseThrow()!!
 
         if (product.firstOwnerId == userId){
@@ -49,7 +49,8 @@ class ProductService(
         val bidding = biddingRepository.save(Bidding(
                 product = product,
                 price = request.price,
-                user = userRepository.findById(userId).orElseThrow()
+                user = userRepository.findById(userId).orElseThrow(),
+                is_final = is_final
         ))
 
         return bidding.id!!

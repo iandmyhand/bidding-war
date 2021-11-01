@@ -13,5 +13,7 @@ class Product(
 
         var name: String,
 
-        var minPrice: Long
+        var minPrice: Long,
+
+        var is_sold: Boolean
 )
