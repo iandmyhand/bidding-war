@@ -50,13 +50,15 @@ class SecurityConfig(private val customAuthEntryPoint: CustomAuthEntryPoint,
 
     override fun configure(webSecurity: WebSecurity) {
         webSecurity.ignoring().antMatchers(
-            "/v2/api-docs",
-            "/configuration/ui",
-            "/swagger-resources/**",
-            "/configuration/security",
+//            "/configuration/ui",
+//            "/swagger-resources/**",
+//            "/configuration/security",
+//            "/webjars/**",
+//            "/swagger/**",
+            //spring-doc lib에서 swagger ui ignore할 목록
             "/swagger-ui.html",
-            "/webjars/**",
-            "/swagger/**"
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
         )
     }
 

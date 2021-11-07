@@ -33,7 +33,7 @@ class CustomAuthProvider(private val userService: UserService):AuthenticationPro
         details.put("user", user)
 
         if(roles != null){
-            val token = UsernamePasswordAuthenticationToken(userId, password, roles)
+            val token = UsernamePasswordAuthenticationToken(user.id, password, roles)
             token.details = details
             return token
         }

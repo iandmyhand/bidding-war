@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     @ExceptionHandler(CsrfTokenException::class)
-    fun csrfTokenExceptionHanle(e:CsrfTokenException){
+    fun csrfTokenExceptionHandle(e:CsrfTokenException): ResponseEntity<ErrorResponse<Any>> {
         logger.error("${ErrorType.CSRF_TOKEN.message}, ${e.csrfToken}")
-        ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.wrap<Any>(ErrorType.CSRF_TOKEN))
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.wrap<Any>(ErrorType.CSRF_TOKEN))
+    }
+
+    @ExceptionHandler(DataDuplicationException::class)
+    fun dataDuplicationExceptionHandle(e:DataDuplicationException): ResponseEntity<ErrorResponse<Any>> {
+        logger.debug(e.message)
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.wrap<Any>(ErrorType.DATA_DUPLICATION))
     }
 
     companion object{
