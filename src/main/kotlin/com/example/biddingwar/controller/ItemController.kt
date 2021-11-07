@@ -134,15 +134,15 @@ class ItemController(
         return "redirect:/item/detail/${item.id}"
     }
 
-    @Scheduled(cron = "0/1 * * * * *")
-    fun autoBidding() {
-        val now = Date()
-        val status = "입찰"
-        var items = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual(status, now)
-
-        for(item in items){
-            biddingItem(item)
-        }
-    }
+//    @Scheduled(cron = "0/1 * * * * *")
+//    fun autoBidding() {
+//        val now = Date()
+//        val status = "입찰"
+//        var items = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual(status, now)
+//
+//        for(item in items){
+//            biddingItem(item)
+//        }
+//    }
 
 }
