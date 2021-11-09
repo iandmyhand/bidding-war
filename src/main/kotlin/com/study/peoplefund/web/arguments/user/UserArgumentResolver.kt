@@ -15,16 +15,16 @@ class UserArgumentResolver(
 ) : HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean {
-        return parameter.getParameterAnnotation(AuthInfo::class.java) != null
-                && parameter.parameterType == Long::class.java
+        return parameter.getParameterAnnotation(AuthHeader::class.java) != null
+            && parameter.parameterType == AuthInfo::class.java
     }
 
     override fun resolveArgument(
-            parameter: MethodParameter,
-            mavContainer: ModelAndViewContainer?,
-            webRequest: NativeWebRequest,
-            binderFactory: WebDataBinderFactory?
-    ): Long {
+        parameter: MethodParameter,
+        mavContainer: ModelAndViewContainer?,
+        webRequest: NativeWebRequest,
+        binderFactory: WebDataBinderFactory?
+    ): AuthInfo {
         val request = webRequest.nativeRequest as HttpServletRequest
 
         val token = request.getHeader("Authorization")

@@ -28,14 +28,15 @@ class ProductServiceTest @Autowired constructor(
 
     @Test
     fun `상품 등록`() {
-        val sellerId = createTestUser()
+        asSignUp()
+        val authInfo = asSignIn()
 
         val request = ProductRequest(
             name = "담보 채권",
             price = 100_000_000L
         )
 
-        val id = productService.register(request, sellerId)
+        val id = productService.register(request, authInfo)
         val created = productRepository.findAll().first()
 
         assertAll(
@@ -43,7 +44,7 @@ class ProductServiceTest @Autowired constructor(
                 assertThat(id).isEqualTo(created.id)
             },
             {
-                assertThat(created.seller.id).isEqualTo(sellerId)
+                assertThat(created.seller.id).isEqualTo(authInfo.userId)
             },
             {
                 assertThat(created)
@@ -55,7 +56,7 @@ class ProductServiceTest @Autowired constructor(
 
     @Test
     fun `단건 조회`() {
-        val sellerId = createTestUser()
+        val sellerId = asSignUp()
 
         val id = productRepository.save(Product(
             seller = userRepository.getById(sellerId),
@@ -77,7 +78,7 @@ class ProductServiceTest @Autowired constructor(
 
     @Test
     fun `목록 조회`() {
-        val sellerId = createTestUser()
+        val sellerId = asSignUp()
         val seller = userRepository.getById(sellerId)
 
         productRepository.save(Product(seller = seller, name = "담보 채권", minPrice = 100_000_000L))
@@ -90,14 +91,15 @@ class ProductServiceTest @Autowired constructor(
     @Test
     fun `판매자는 자신의 상품에 입찰할 수 없음`() {
         // Given
-        val sellerId = createTestUser()
+        val sellerId = asSignUp()
+        val authInfo = asSignIn()
 
         val productRequest = ProductRequest(
             name = "담보 채권",
             price = 10_000_000L
         )
 
-        val productId = productService.register(productRequest, sellerId)
+        val productId = productService.register(productRequest, authInfo)
 
         // When
         val bidRequest = BidRequest(
@@ -106,7 +108,7 @@ class ProductServiceTest @Autowired constructor(
         )
 
         assertThatThrownBy {
-            productService.bid(bidRequest, sellerId)
+            productService.bid(bidRequest, authInfo)
         }.isInstanceOf(IllegalArgumentException::class.java)
     }
 }

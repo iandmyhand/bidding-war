@@ -5,6 +5,7 @@ import com.study.peoplefund.domain.User
 import com.study.peoplefund.domain.repository.SessionRepository
 import com.study.peoplefund.domain.repository.UserRepository
 import com.study.peoplefund.security.PasswordHasher
+import com.study.peoplefund.web.arguments.user.AuthInfo
 import com.study.peoplefund.web.dto.SignInRequest
 import com.study.peoplefund.web.dto.SignInResponse
 import com.study.peoplefund.web.dto.UserRequest
@@ -23,12 +24,17 @@ class AuthService(
     @Transactional
     fun signUp(request: UserRequest): Long {
         val salt = passwordHasher.generateSalt()
+
+        if (request.password.length < 4) {
+            throw IllegalArgumentException("비밀번호는 4자 이상이어야 합니다.")
+        }
+
         val hashedPassword = passwordHasher.hash(request.password, salt)
         val user = User(
-                account = request.account,
-                password = hashedPassword,
-                name = request.name,
-                salt = salt
+            account = request.account,
+            password = hashedPassword,
+            name = request.name,
+            salt = salt
         )
 
         return userRepository.save(user).id!!
@@ -59,13 +65,13 @@ class AuthService(
     }
 
     @Transactional(readOnly = true)
-    fun validateToken(token: String): Long {
+    fun validateToken(token: String): AuthInfo {
         val session = sessionRepository.findByToken(token).orElseThrow()
 
         if (session.expiration.isBefore(LocalDateTime.now())) {
             throw SecurityException()
         }
 
-        return session.user.id!!
+        return session.toAuthInfo()
     }
 }

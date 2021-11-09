@@ -7,10 +7,6 @@ enum class BiddingStatus(
     FAILURE("취소"),
     IN_PROGRESS("진행 중");
 
-    fun isInProgress(): Boolean {
-        return this == IN_PROGRESS
-    }
-
     fun getValue(): String {
         return this.value
     }

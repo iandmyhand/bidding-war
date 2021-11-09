@@ -7,16 +7,16 @@ import javax.persistence.Id
 
 @Entity
 class User(
-        @Id
-        @GeneratedValue
-        var id: Long? = null,
+    @Id
+    @GeneratedValue
+    var id: Long? = null,
 
-        @Column(unique = true)
-        var account: String,
+    @Column(unique = true)
+    var account: String,
 
-        var password: String,
+    var password: String,
 
-        var name: String,
+    var name: String,
 
-        var salt: ByteArray
+    var salt: ByteArray
 )

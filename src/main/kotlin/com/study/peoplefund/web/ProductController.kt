@@ -1,6 +1,7 @@
 package com.study.peoplefund.web
 
 import com.study.peoplefund.service.ProductService
+import com.study.peoplefund.web.arguments.user.AuthHeader
 import com.study.peoplefund.web.arguments.user.AuthInfo
 import com.study.peoplefund.web.dto.*
 import org.springframework.http.ResponseEntity
@@ -12,8 +13,8 @@ import java.net.URI
 class ProductController(val productService: ProductService) {
 
     @PostMapping
-    fun register(@RequestBody request: ProductRequest, @AuthInfo userId: Long): ResponseEntity<Void> {
-        val id = productService.register(request, userId)
+    fun register(@RequestBody request: ProductRequest, @AuthHeader authInfo: AuthInfo): ResponseEntity<Void> {
+        val id = productService.register(request, authInfo)
         return ResponseEntity.created(URI.create("/api/products/$id")).build()
     }
 
@@ -28,8 +29,8 @@ class ProductController(val productService: ProductService) {
     }
 
     @PostMapping("/bidding")
-    fun bid(@RequestBody request: BidRequest, @AuthInfo userId: Long): ResponseEntity<Void> {
-        val id = productService.bid(request, userId)
+    fun bid(@RequestBody request: BidRequest, @AuthHeader authInfo: AuthInfo): ResponseEntity<Void> {
+        val id = productService.bid(request, authInfo)
         return ResponseEntity.created(URI.create("/api/products/bidding/$id")).build()
     }
 
@@ -41,9 +42,10 @@ class ProductController(val productService: ProductService) {
     @PostMapping("/{productId}/status")
     fun updateStatus(
         @PathVariable productId: Long,
-        @RequestBody request: BiddingStatusRequest
+        @RequestBody request: BiddingStatusRequest,
+        @AuthHeader authInfo: AuthInfo
     ): ResponseEntity<Void> {
-        productService.updateStatus(productId, request)
+        productService.updateStatus(productId, request, authInfo)
 
         return ResponseEntity.noContent().build()
     }
