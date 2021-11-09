@@ -2,6 +2,8 @@ package com.example.biddingwar.database
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import java.time.Instant
+import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -23,6 +25,8 @@ data class Product(
 
     @Min(value = 0, message = "final bid price must be positive integer")
     var finalBidPrice: Int = 0,
-    var isBidComplete: Boolean = false
+    var isBidComplete: Boolean = false,
+
+    var biddingEndTime: Instant? = null // 경매 종료 시각
 )
 

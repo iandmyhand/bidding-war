@@ -1,18 +1,21 @@
 package com.example.biddingwar.service
 
+import com.example.biddingwar.database.Bid
 import com.example.biddingwar.repository.ProductRepository
 import com.example.biddingwar.service.product.ProductService
 import com.example.biddingwar.database.Product
+import com.example.biddingwar.repository.BidRepository
 import io.kotlintest.shouldBe
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
-@DataJpaTest
-class Product @Autowired constructor(repository: ProductRepository, ) {
 
-    val service = ProductService(repository)
+@DataJpaTest
+class Product @Autowired constructor(repository: ProductRepository, bidRepository: BidRepository) {
+
+    val service = ProductService(repository, bidRepository)
 
     @Test
     fun canaryTest() {
@@ -58,11 +61,24 @@ class Product @Autowired constructor(repository: ProductRepository, ) {
         val appleWatch = Product(id = 1L, name = "애플워치", price = 399_000, description = "애플워치 SE")
 
         // When
-        service.save(appleWatch)
+        val savedProduct: Product = service.save(appleWatch)
 
         // Then
-        val savedProduct: Product = service.get(id = 1).get()
-
         assertThat(savedProduct).isEqualTo(Product(id=1L, name="애플워치", price=399000, description="애플워치 SE"))
+    }
+
+    @Test
+    fun finishBid() {
+        // Given
+        val appleWatch = Product(id = 1L, name = "애플워치", price = 399_000, description = "애플워치 SE")
+        service.save(appleWatch)
+
+        val firstBid = Bid(id=3L, productId = appleWatch.id, userId = 1L, biddingPrice = 400_000)
+        service.bidRepository.save(firstBid)
+
+        val secondBid = Bid(id=4L, productId = appleWatch.id, userId = 2L, biddingPrice = 500_000)
+        service.bidRepository.save(secondBid)
+
+        service.finishBid()
     }
 }

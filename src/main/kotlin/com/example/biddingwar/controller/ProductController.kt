@@ -11,19 +11,29 @@ import javax.validation.Valid
 @RequestMapping("/products")
 class ProductController(val service: ProductService) {
     @GetMapping
-    fun products() = service.getAll()
+    fun products() = ResponseEntity.ok(service.getAll())
 
     @GetMapping("/{id}")
-    fun product(@PathVariable id: Long) = service.get(id)
+    fun product(@PathVariable id: Long) = ResponseEntity.ok(service.get(id))
 
     @PostMapping
-    fun create(@Valid @RequestBody product: Product, request: HttpServletRequest) = service.save(product, request)
+    fun create(@Valid @RequestBody product: Product, request: HttpServletRequest) = ResponseEntity.ok(
+        service.save(product)
+    )
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) = service.delete(id)
+    fun delete(@PathVariable id: Long): ResponseEntity<String> {
+        val result = service.delete(id)
+
+        return if (result) {
+            ResponseEntity.ok("DELETED")
+        } else {
+            ResponseEntity.status(400).body("DELETE_FAILED")
+        }
+    }
 
     @PutMapping("/bid/{productId}")
     fun sell(@PathVariable productId: Long, request: HttpServletRequest) = ResponseEntity.ok(
-        service.sell(productId, request)
+        service.sell(productId)
     )
 }

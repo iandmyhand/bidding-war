@@ -5,9 +5,12 @@ import com.example.biddingwar.database.Product
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ProductRepository
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
@@ -16,33 +19,30 @@ import javax.transaction.Transactional
 @Transactional
 class ProductService(val repository: ProductRepository, val bidRepository: BidRepository) {
 
-    fun getAll(): ResponseEntity<MutableIterable<Product>> = ResponseEntity.ok().body(repository.findAll())
+    fun getAll(): MutableIterable<Product> = repository.findAll()
 
     fun get(id: Long): Optional<Product> = repository.findById(id)
 
-    fun save(product: Product, request: HttpServletRequest): ResponseEntity<Product> {
+    fun save(product: Product): Product {
+        product.biddingEndTime = Instant.now().plus(Duration.ofDays(1)) // 입찰기간을 하루로 지정
         repository.save(product)
-        return ResponseEntity.status(HttpStatus.CREATED).body(product)
+        return product
     }
 
-    fun delete(id: Long): ResponseEntity<String> {
+    fun delete(id: Long): Boolean {
         val productToDelete = repository.existsById(id)
 
         if (productToDelete) {
             repository.deleteById(id)
-            return ResponseEntity.ok().body("DELETED")
+            return true
         }
 
-        return ResponseEntity.badRequest().body("DELETED_FAILED")
+        return false
     }
 
-    fun sell(productId: Long, request: HttpServletRequest): Product {
+    fun sell(productId: Long): Product {
 
         val product: Product = repository.findById(productId).get()
-
-        if (request.session.getAttribute("session") != product.userId) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Product must be sold by same user")
-        }
 
         val bids: List<Bid>? = bidRepository.findByProductId(productId)
 
@@ -57,4 +57,13 @@ class ProductService(val repository: ProductRepository, val bidRepository: BidRe
         return product
     }
 
+    @Scheduled(cron = "0 * * * * *")
+    fun finishBid() {
+        val now: Instant = Instant.now()
+        val finishedProducts: List<Product> = repository.findByIsBidCompleteFalseAndBiddingEndTimeLessThanEqual(now)
+
+        for (finishedProduct in finishedProducts) {
+            sell(finishedProduct.id)
+        }
+    }
 }
