@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
-import javax.validation.ValidationException
 
 @Service
 @Transactional
