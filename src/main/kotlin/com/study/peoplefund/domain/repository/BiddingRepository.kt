@@ -9,5 +9,5 @@ interface BiddingRepository : JpaRepository<Bidding, Long?> {
 
     fun existsByPriceGreaterThanEqualAndProduct(price: Long, product: Product): Boolean
 
-    fun existsByProductId(productId: Long): Boolean
+    fun existsByProduct(product: Product): Boolean
 }

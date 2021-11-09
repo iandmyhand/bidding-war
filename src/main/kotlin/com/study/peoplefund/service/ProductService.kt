@@ -23,7 +23,8 @@ class ProductService(
         val product = Product(
             seller = userRepository.findById(sellerInfo.userId).orElseThrow(),
             name = request.name,
-            minPrice = request.price
+            minPrice = request.price,
+            endDateTime = request.endDateTime ?: Product.getDefaultEndTime()
         )
         return productRepository.save(product).id!!
     }
@@ -92,7 +93,7 @@ class ProductService(
     }
 
     private fun validateIsExistsBidding(product: Product) {
-        if (!biddingRepository.existsByProductId(product.id!!)) {
+        if (!biddingRepository.existsByProduct(product)) {
             throw IllegalArgumentException("해당 상품의 입찰 내역이 존재하지 않습니다.")
         }
     }
