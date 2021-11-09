@@ -20,19 +20,21 @@ class SecurityConfig(val userService: UserService) : WebSecurityConfigurerAdapte
     override fun authenticationManagerBean() = super.authenticationManagerBean()!!
 
     override fun configure(http: HttpSecurity) {
-//        http.authorizeRequests()
-//                .antMatchers("/login", "/signup", "/user").permitAll()
-//                .antMatchers("/").hasRole("USER")
-//                .anyRequest().authenticated()
-//            .and()
+        http.authorizeRequests()
+                .antMatchers("/", "/signup").permitAll()
+                .antMatchers("/user").hasRole("USER")
+                .anyRequest().authenticated()
+            .and()
 //                .formLogin().loginPage("/login").defaultSuccessUrl("/")
-//            .and()
-//                .logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
-        http.formLogin()
+                .formLogin().defaultSuccessUrl("/")
+            .and()
+                .logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(userService).passwordEncoder(BCryptPasswordEncoder())
+//        auth.userDetailsService(userService).passwordEncoder(BCryptPasswordEncoder())
+        auth.inMemoryAuthentication()
+            .withUser("seungwan").password("1234").roles("USER")
     }
 
 }

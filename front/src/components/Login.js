@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { useState } from 'react'
+import { Redirect } from 'react-router'
 
 const Login = () => {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
+    const [loggedIn, setLoggedIn] = useState(false)
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -13,14 +15,18 @@ const Login = () => {
             return
         }
 
-        axios.post('/login', {
-            'name': name,
-            'password': password,
+        axios.get('/login', {
+            auth: { username: name, password: password }
         }).then(response => {
             console.log(response)
+            setLoggedIn(true)
         }).catch(error => {
             console.log(error)
         })
+    }
+
+    if (loggedIn) {
+        return <Redirect to="/" />
     }
 
     return (
