@@ -1,6 +1,7 @@
 package com.example.bidding_war.web.dto.AuctionItem
 
 import com.example.bidding_war.model.Bidding
+import java.time.Instant
 import java.util.*
 
 
@@ -14,5 +15,6 @@ data class AuctionItemResponse(
     val createDate: Date,
     val biddings: MutableList<Bidding>?,
     val isComplete: Boolean,
-    val finalBiddingId: Long?
+    val finalBiddingId: Long?,
+    val endTime: Instant? = null
 )

@@ -1,29 +1,31 @@
 package com.example.bidding_war.model
 
+import java.time.Instant
 import java.util.*
 import javax.persistence.*
 
 
 @Entity
 class AuctionItem(
-    var title: String,
+    val title: String,
 
     @ManyToOne
-    var owner: User?,
+    val owner: User?,
 
     @OneToMany
-    val biddings: MutableList<Bidding>?,
+    var biddings: MutableList<Bidding>?,
 
-    var description: String,
-    var startPrice: Long,
-    var minBiddingPrice: Long,
+    val description: String,
+    val startPrice: Long,
+    val minBiddingPrice: Long,
     var createDate: Date = Date(),
     var isComplete: Boolean = false,
     var finalBiddingId: Long?,
+    var endTime: Instant? = null
     ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    val id: Long? = null
 
     @PrePersist
     private fun setCrDate() { createDate = Date() }
