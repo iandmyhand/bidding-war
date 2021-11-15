@@ -1,6 +1,5 @@
 package com.example.biddingwar.service.product
 
-import com.example.biddingwar.database.Bid
 import com.example.biddingwar.database.Product
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ProductRepository
@@ -40,9 +39,11 @@ class ProductService(val repository: ProductRepository, val bidRepository: BidRe
 
         val product: Product = repository.findById(productId).get()
 
-        val bids: List<Bid>? = bidRepository.findByProductId(productId)
+//        val bids: List<Bid>? = bidRepository.findByProductId(productId)
+//
+//        val winningBid = bids?.maxByOrNull { it.biddingPrice }
+        val winningBid = bidRepository.findFirstByProductIdOrderByBiddingPriceDesc(productId)
 
-        val winningBid = bids?.maxByOrNull { it.biddingPrice }
         if (winningBid != null) {
             product.let {
                 it.finalBidPrice = winningBid.biddingPrice
