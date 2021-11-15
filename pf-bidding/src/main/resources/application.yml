@@ -61,3 +61,8 @@ logging:
 
 server:
   port: 9090
+
+springdoc:
+  version: '@springdoc.version@'
+  api-docs:
+    enabled:  true

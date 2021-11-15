@@ -2,6 +2,11 @@ package com.study.pf.bidding.controller
 
 import com.study.pf.bidding.service.GoodsService
 import com.study.pf.bidding.domain.dto.GoodsInfoDto
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.Parameters
+import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -24,6 +29,29 @@ class GoodsController(private val goodsService: GoodsService) {
      * - 밸리데이션은 추후 고도화
      */
 
+    @Operation(summary = "goods list paging show",
+        description = "상품 리스트 페이징 조회",
+        security = [SecurityRequirement(name = "bearer-key")])
+    @Parameters(
+        value = [
+            Parameter(
+                name = "rows",
+                description = "show lines - int", `in` = ParameterIn.HEADER
+            ),
+            Parameter(
+                name = "nowPage",
+                description = "now showing page - int", `in` = ParameterIn.HEADER
+            ),
+            Parameter(
+                name = "searchName",
+                description = "goods Id OR Name .. - String", `in` = ParameterIn.HEADER
+            ),
+            Parameter(
+                name = "searchType",
+                description = "goods Type(category) - String", `in` = ParameterIn.HEADER
+            )
+        ]
+    )
     @GetMapping("/list")
     fun getGoodsList(@RequestParam(name = "rows") rows: Int
                     , @RequestParam(name = "nowPage") nowPage: Int
