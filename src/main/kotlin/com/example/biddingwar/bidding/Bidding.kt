@@ -6,6 +6,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToOne
+import javax.validation.constraints.Min
 
 @Entity
 class Bidding (
@@ -20,6 +21,7 @@ class Bidding (
     @ManyToOne
     var account: Account?,
 
+    @field:Min(value = 1)
     var price: Int,
 
     var is_selected: Boolean = false,

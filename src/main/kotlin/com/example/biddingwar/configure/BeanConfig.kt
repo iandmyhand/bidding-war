@@ -47,7 +47,7 @@ class BeanConfig {
                     1,
                     "initial product",
                     "initial product",
-                    0,
+                    1,
                     10000,
                     seller
                 )

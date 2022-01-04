@@ -6,10 +6,13 @@ import com.example.biddingwar.account.AccountService
 import com.example.biddingwar.bidding.Bidding
 import com.example.biddingwar.bidding.BiddingService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
+import javax.validation.Valid
 
 @Controller
 class ProductTemplateController(val service: ProductService,
@@ -23,7 +26,7 @@ class ProductTemplateController(val service: ProductService,
     }
 
     @RequestMapping(value=["/template/product"], method = [RequestMethod.POST])
-    fun createProduct(model: Model, product: Product, authentication: Authentication):String {
+    fun createProduct(model: Model, @Valid product: Product, authentication: Authentication):String {
         val account: Account = accountService.getUserByUsername(authentication.name)
         product.seller = account
         service.save(product)
@@ -40,6 +43,7 @@ class ProductTemplateController(val service: ProductService,
         val account: Account = accountService.getUserByUsername(authentication.name)
         service.getProduct(product_id).ifPresent {
             model.addAttribute("product", it)
+            // 본인 상품은 본인만 입찰종료
             if (account == it.seller) {
                 model.addAttribute("finish_bid", "finish_bid")
             }
@@ -53,10 +57,14 @@ class ProductTemplateController(val service: ProductService,
     fun createBidding(
         @PathVariable("product_id") product_id: Long,
         model: Model,
-        bidding: Bidding,
+        @Valid bidding: Bidding,
         authentication: Authentication
     ): String {
         service.getProduct(product_id).ifPresent { bidding.product = it }
+        // 낙찰 후 입찰 방지
+        if (biddingService.biddingFinished(product_id)){
+            throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
+        }
         val account: Account = accountService.getUserByUsername(authentication.name)
         bidding.account = account
         biddingService.save(bidding)
@@ -71,6 +79,7 @@ class ProductTemplateController(val service: ProductService,
         model: Model,
         authentication: Authentication
     ): String {
+        // 입찰 할 때 기존에 입찰한 금액보다 초과하는 금액만 입찰
         val highest_bidding = biddingService.getHighestBiddingByProduct(product_id)
         highest_bidding?.is_selected = true
         if (highest_bidding != null) {biddingService.save(highest_bidding)}
