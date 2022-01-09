@@ -14,6 +14,7 @@ const Products = () => {
     const signUpName = createRef()
     const productName = createRef()
     const productPrice = createRef()
+    const productEndDateTime = createRef()
 
     const signIn = async () => {
         try {
@@ -59,7 +60,8 @@ const Products = () => {
         try {
             const response = await createProduct({
                 'name': productName.current.value,
-                'price': productPrice.current.value
+                'price': productPrice.current.value,
+                'endDateTime': productEndDateTime.current.value
             }, sessionStorage.getItem('token'))
 
             await initProducts()
@@ -110,6 +112,7 @@ const Products = () => {
         <strong>상품 등록</strong><br/>
         채권: <input type="text" ref={productName}/><br/>
         금액: <input type="number" ref={productPrice}/><br/>
+        종료: <input type="datetime-local" ref={productEndDateTime}/><br/>
         <button onClick={addProduct}>생성</button>
         <br/><br/>
     </div>
