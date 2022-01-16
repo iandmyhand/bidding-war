@@ -3,9 +3,9 @@ package com.study.biddingwar.service
 import com.study.biddingwar.domain.dto.ProductDto
 import com.study.biddingwar.domain.dto.ProductResultDto
 import com.study.biddingwar.domain.entity.ProductInfo
+import com.study.biddingwar.exception.NotPermissionException
 import com.study.biddingwar.repository.ProductInfoRepository
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
@@ -24,13 +24,16 @@ class ProductInfoService(private val productInfoRepository: ProductInfoRepositor
             productInfo.productGroup,
             productInfo.productName,
             productInfo.productDesc,
-            productInfo.productPrice)
+            productInfo.productPrice,
+            productInfo.userId?:0,
+            productInfo.bidStatus
+        )
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     fun getProducts(pageRequest: PageRequest): List<ProductResultDto> {
         return productInfoRepository.findAll(pageRequest).map {
-            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice)
+            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice, it.userId?:0, it.bidStatus)
         }.toList()
     }
 
@@ -49,12 +52,24 @@ class ProductInfoService(private val productInfoRepository: ProductInfoRepositor
             productGroup = productDto.productGroup,
             productName = productDto.productName,
             productPrice = productDto.productPrice,
-            productDesc = productDto.productDesc
+            productDesc = productDto.productDesc,
+            userId = productDto.userId
         )
 
         return productInfoRepository.save(productInfo).let{
-            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice)
+            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice, it.userId?:0, it.bidStatus)
         }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    fun modifyBidStatus(productId:Long, userId:Long, status:String){
+        val productInfo = productInfoRepository.findById(productId)
+            .orElseThrow { NoSuchElementException("No found productId: $productId")}
+
+        if(productInfo.userId != userId)
+            throw NotPermissionException("not creation by user")
+
+        productInfo.bidStatus = status
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -68,7 +83,7 @@ class ProductInfoService(private val productInfoRepository: ProductInfoRepositor
         productInfo.setProductDesc(productDto.productDesc)
 
         return productInfoRepository.save(productInfo).let{
-            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice)
+            ProductResultDto(it.id!!, it.productGroup, it.productName, it.productDesc, it.productPrice, it.userId?:0, it.bidStatus)
         }
     }
 
@@ -82,6 +97,8 @@ class ProductInfoService(private val productInfoRepository: ProductInfoRepositor
             productInfo.productGroup,
             productInfo.productName,
             productInfo.productDesc,
-            productInfo.productPrice)
+            productInfo.productPrice,
+            productInfo.userId?:0,
+            productInfo.bidStatus)
     }
 }

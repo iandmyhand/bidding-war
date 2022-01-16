@@ -24,7 +24,7 @@ export default {
             data.append('password',this.password)
 
             // const data = JSON.stringify(objData);
-            this.$axios.post("http://localhost:8080/bidding/v1/auth/signin", data, {
+            this.$axios.post("http://test.service.com:8081/bidding/v1/auth/signin", data, {
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 withCredentials: true
             }).then(res=>{

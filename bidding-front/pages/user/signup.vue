@@ -23,7 +23,7 @@ export default {
                 user_password:this.userPassword
             }
             const data = JSON.stringify(objData);
-            this.$axios.post("http://localhost:8080/bidding/v1/user/signup", data, {
+            this.$axios.post("http://localhost:8081/bidding/v1/user/signup", data, {
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 withCredentials: true
             }).then(res=>{

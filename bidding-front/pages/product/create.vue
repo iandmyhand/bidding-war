@@ -27,7 +27,7 @@ export default {
         }
     },
     created(){
-        this.getRsaPublicKey()
+        // this.getRsaPublicKey()
     },
     methods:{
         async getRsaPublicKey(){
@@ -50,7 +50,7 @@ export default {
             //     product_price: this.price,
             //     product_desc: this.encMessage(publicKeys.publicKey, this.desc)
             // };
-
+            this.getCsrfToken()
             const objData = {
                 product_group: this.group,
                 product_name: this.name,
@@ -63,7 +63,7 @@ export default {
             // const aseKey = this.encRsaMessage(publicKeys.publicKey, secretKey)
             // data = this.encAesMessage(secretKey, data)
 
-            await this.$axios.post("http://localhost:8080/bidding/v1/product", data,
+            await this.$axios.post("http://test.service.com:8081/bidding/v1/product", data,
                 {
                     headers: {
                         'Content-Type': 'application/json;charset=UTF-8',
@@ -162,7 +162,15 @@ export default {
         // },
         async getCsrfToken(){
           let csrfToken
-          await this.$axios.get("http://localhost:8081/pf-secure/v1/security/csrf-token")
+          await this.$axios.get("http://test.service.com:8081/pf-secure/v1/security/csrf-token/?_=123141"
+        //   await this.$axios.get("https://dev-api.dev.peoplefund.co.kr/pf-secure/v1/security/csrf-token/?_=123141",
+            // {
+                // headers: {
+                //     'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjc3NDcsInBhcmVudF91c2VyX2lkIjoxMjc3NDcsImV4cCI6MTYzNTkyOTM3NSwiaWF0IjoxNjM1OTI1Nzc1fQ.NSj_UvHqSz7z3fpiObjJErF8wj8V-9v972ie0wHE2C4'
+                // },
+                // withCredentials: true
+            // }
+          )
           .then(res=>{
               csrfToken = res.data.csrf_token
           })

@@ -3,6 +3,7 @@ package com.study.biddingwar.controller
 import com.study.biddingwar.domain.dto.BiddingDto
 import com.study.biddingwar.domain.dto.BiddingResultDto
 import com.study.biddingwar.domain.entity.BiddingInfo
+import com.study.biddingwar.service.BiddingInfoService
 import com.study.biddingwar.service.BiddingService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -36,5 +37,14 @@ class BiddingController(private val biddingService: BiddingService) {
         biddingDto.productId = productId
         val resultDto = biddingService.bidOnProduct(biddingDto)
         return ResponseEntity.ok().body(resultDto)
+    }
+
+    @PatchMapping("/bidding/product/{productId}/complete")
+    fun completeBiddingProduct(principal: Principal,
+                               @PathVariable(name="productId")productId:Long
+    ): ResponseEntity.BodyBuilder {
+        val userId = principal.name
+        biddingService.completeBiddingProduct(productId, userId.toLong())
+        return ResponseEntity.ok()
     }
 }

@@ -1,93 +1,54 @@
 package com.study.biddingwar.service
 
-import com.study.biddingwar.domain.aggregate.BiddingAggregate
 import com.study.biddingwar.domain.dto.BiddingDto
 import com.study.biddingwar.domain.dto.BiddingResultDto
 import com.study.biddingwar.domain.entity.BiddingInfo
-import com.study.biddingwar.exception.DataDuplicationException
-import com.study.biddingwar.repository.BiddingAggregateRepository
-import com.study.biddingwar.repository.BiddingInfoRepository
-import org.springframework.dao.DataIntegrityViolationException
+import com.study.biddingwar.exception.NotPermissionException
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation
-import org.springframework.transaction.annotation.Transactional
-import java.sql.SQLException
 
 @Service
-class BiddingService(private val biddingInfoRepository: BiddingInfoRepository,
-                     private val biddingAggregateRepository: BiddingAggregateRepository) {
+class BiddingService(private val productInfoService: ProductInfoService,
+                     private val biddingInfoService: BiddingInfoService) {
 
-    @Transactional(propagation = Propagation.REQUIRED)
     fun bidOnProduct(biddingDto: BiddingDto): BiddingInfo {
 
+        val product = productInfoService.getProduct(biddingDto.productId)
 
-        var biddingInfo = BiddingInfo(
-            biddingDto.productId,
-            biddingDto.userId!!,
-            biddingDto.biddingPrice
-            )
-        try{
-            biddingInfo = biddingInfoRepository.save(biddingInfo)
-        }catch (e:DataIntegrityViolationException){
-            throw DataDuplicationException("data duplication productId:${biddingDto.productId}, " +
-                    "userId:${biddingDto.userId}")
-        }
+        //상품 등록한 사용자가 입찰 불가능
+        if(product.userId != biddingDto.userId)
+            throw NotPermissionException("product not bid by creation product user")
 
-        return biddingInfo
+        //기본가격 보다 같거나 작게 입찰 불가능
+        if(product.productPrice <= biddingDto.biddingPrice)
+            throw RuntimeException("not bid product over basic price")
+
+        //경매가 끝난거면 입찰 할수 없음
+        if(product.bidStatus == "C")
+            throw RuntimeException("this product complete bidding")
+
+        return biddingInfoService.bidOnProduct(biddingDto)
     }
 
+    //제품의 입찰자 목록 조회
     fun getProductForBidding(productId:Long): List<BiddingResultDto> {
-        val results:List<BiddingAggregate> = biddingAggregateRepository.findAllByProductInfoId(productId)
-
-        if(results.isEmpty()){
-            throw NoSuchElementException("No Data Not Found")
-        }
-
-        val resultDtos:List<BiddingResultDto> = results.map{
-            it -> BiddingResultDto(
-                biddingId = it.id!!,
-                productId = it.productInfo!!.id!!,
-                productName = it.productInfo!!.productName,
-                userId = it.user!!.id!!,
-                userName = it.user!!.userName,
-                biddingPrice = it.biddingPrice,
-                biddingAt = it.createAt
-            )
-        }
-
-        return resultDtos
+        return biddingInfoService.getProductForBidding(productId)
     }
 
+    //입찰한 사용자 정보 조회
     fun getBiddingWithProductAndUser(productId:Long, userId:Long): BiddingResultDto {
-        val result = biddingAggregateRepository.findByProductInfoIdAndUserId(productId, userId)?:
-            throw NoSuchElementException("No Data Not Found")
-
-        val resultDto = result.let {
-            BiddingResultDto(
-                biddingId = it.id!!,
-                productId = it.productInfo!!.id!!,
-                productName = it.productInfo!!.productName,
-                userId = it.user!!.id!!,
-                userName = it.user!!.userName,
-                biddingPrice = it.biddingPrice,
-                biddingAt = it.createAt
-            )
-        }
-
-        return resultDto
-
+        return biddingInfoService.getBiddingWithProductAndUser(productId, userId)
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    fun modifyBiddingProduct(biddingId:Long, biddingDto: BiddingDto){
-        val biddingInfo = biddingInfoRepository.findById(biddingId).get()
-        biddingInfo.biddingPrice = biddingDto.biddingPrice
-        biddingInfo.productId = biddingDto.productId
+    //입찰 종료
+    fun completeBiddingProduct(productId:Long, userId: Long) {
+        productInfoService.modifyBidStatus(productId, userId, "C")
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    fun modifyBiddingProduct(biddingId:Long, biddingDto: BiddingDto) {
+        biddingInfoService.modifyBiddingProduct(biddingId, biddingDto)
+    }
+
     fun cancelBiddingProduct(biddingId:Long){
-        val biddingInfo = biddingInfoRepository.findById(biddingId).get()
-        biddingInfoRepository.delete(biddingInfo)
+        biddingInfoService.cancelBiddingProduct(biddingId)
     }
 }

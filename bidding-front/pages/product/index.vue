@@ -25,9 +25,9 @@ export default {
   },
   methods:{
       async load(){
-        //    const csrfToken = await this.getCsrfToken()
+           const csrfToken = await this.getCsrfToken()
 
-          await this.$axios.get("http://localhost:8080/bidding/v1/products", {
+          await this.$axios.get("http://test.service.com:8081/bidding/v1/products", {
               params:{
                   page: 1,
                   size: 10
@@ -46,7 +46,10 @@ export default {
       },
       async getCsrfToken(){
           let csrfToken
-          await this.$axios.get("http://localhost:8081/pf-secure/v1/security/csrf-token")
+          await this.$axios.get("http://test.service.com:8081/pf-secure/v1/security/csrf-token",
+          {
+            //   withCredentials: true
+          })
           .then(res=>{
               csrfToken = res.data.csrf_token
           })

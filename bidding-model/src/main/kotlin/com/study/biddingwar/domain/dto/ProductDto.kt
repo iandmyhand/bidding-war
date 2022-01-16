@@ -1,5 +1,6 @@
 package com.study.biddingwar.domain.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ProductDto(
@@ -11,5 +12,7 @@ data class ProductDto(
     @get:JsonProperty("product_desc")
     var productDesc:String,
     @get:JsonProperty("product_price")
-    var productPrice:Int
+    var productPrice:Int,
+    @JsonIgnore
+    var userId:Long
 )

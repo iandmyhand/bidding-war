@@ -18,7 +18,6 @@ group = "com.study"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-
 subprojects{
 
 	apply {
@@ -36,6 +35,7 @@ subprojects{
 	dependencies {
 		implementation("org.springframework.boot:spring-boot-starter-actuator")
 		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+		implementation("org.springframework.boot:spring-boot-starter-batch")
 		implementation("org.springframework.boot:spring-boot-starter-jdbc")
 		implementation("org.springframework.boot:spring-boot-starter-security")
 		implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -46,6 +46,9 @@ subprojects{
 		//open api
 		implementation("org.springdoc:springdoc-openapi-ui:1.5.9")
 		implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
+
+		//elastic api
+//		compileOnly("co.elastic.apm:apm-agent-attach:1.28.4")
 
 		developmentOnly("org.springframework.boot:spring-boot-devtools")
 //		runtimeOnly("com.h2database:h2")

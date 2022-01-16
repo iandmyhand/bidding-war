@@ -1,7 +1,7 @@
 package com.study.biddingwar.domain.entity
 
+import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import org.springframework.data.annotation.CreatedDate
 
 import java.time.Instant
 import javax.persistence.*
@@ -12,15 +12,21 @@ class ProductInfo{
     constructor(productGroup: String,
                 productName: String,
                 productPrice:Int,
-                productDesc:String){
+                productDesc:String,
+                userId:Long){
         productGroup.also { this.productGroup = it }
         productName.also { this.productName = it }
         productPrice.also { this.productPrice = it }
         productDesc.also { this.productDesc = it }
+        userId.also { this.userId = it }
+        this.bidStatus = "L"
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id:Long?=null
+
+    @Column(name = "user_id")
+    var userId: Long?=null
 
     @Column(name = "product_group")
     var productGroup:String
@@ -38,8 +44,11 @@ class ProductInfo{
     var productDesc:String? = ""
         private set
 
+    @Column(name = "bid_status")
+    var bidStatus:String = "L" //L:Live, C:Complete
+
     @Column(name = "created_at")
-    @CreatedDate
+    @CreationTimestamp
     val createdAt:Instant?=Instant.now()
 
     @Column(name = "updated_at")
