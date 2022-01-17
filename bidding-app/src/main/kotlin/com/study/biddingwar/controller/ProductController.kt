@@ -1,8 +1,5 @@
 package com.study.biddingwar.controller
 
-import com.study.biddingwar.common.DecryptRsa
-import com.study.biddingwar.common.crypto.CryptoRsaUtils
-import com.study.biddingwar.domain.RsaKeyStore
 import com.study.biddingwar.domain.dto.ProductDto
 import com.study.biddingwar.domain.dto.ProductResultDto
 import com.study.biddingwar.service.ProductService
@@ -10,7 +7,6 @@ import com.study.biddingwar.service.SecuritySupportService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.security.PrivateKey
 
 @RestController
 @RequestMapping("/v1")
@@ -41,7 +37,7 @@ class ProductController(private val productService: ProductService,
     }
 
     @GetMapping("/product")
-    fun createProductTest(@RequestParam("msg")@DecryptRsa message:String): ResponseEntity<String> {
+    fun createProductTest(@RequestParam("msg")message:String): ResponseEntity<String> {
         return ResponseEntity.ok().body(message)
     }
 
