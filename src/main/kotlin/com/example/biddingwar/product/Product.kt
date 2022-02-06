@@ -24,4 +24,6 @@ data class Product(
 
     // @CreatedDate
     val createdDate: LocalDateTime = LocalDateTime.now(),
+
+    val biddingEndDateTime: LocalDateTime?
 )

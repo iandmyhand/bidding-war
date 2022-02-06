@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
+import java.time.LocalDateTime
 
 @Configuration
 class BeanConfig {
@@ -49,7 +50,8 @@ class BeanConfig {
                     "initial product",
                     0,
                     10000,
-                    seller
+                    seller,
+                    biddingEndDateTime = LocalDateTime.now().plusMinutes(2)
                 )
                 productService.save(product)
             }
