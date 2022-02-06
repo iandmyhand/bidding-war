@@ -14,6 +14,7 @@
         <div th:text="${product.minimumPrice}"> price </div>
         <div th:text="${product.seller.email}"> seller </div>
         <div th:text="${product.createdDate}"> createdDate </div>
+        <div th:text="${product.biddingEndDateTime}"> biddingEndDateTime </div>
 
         <div th:if="${finish_bid}">
             <form th:action="@{|/template/product/${product.id}/bid|}" th:method="POST">

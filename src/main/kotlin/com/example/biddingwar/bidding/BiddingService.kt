@@ -14,8 +14,7 @@ class BiddingService(val repository: BiddingRepository){
     fun getBiddingByProduct(productId: Long) = repository.findByProductId(productId)
 
     fun getHighestBiddingByProduct(productId: Long) : Bidding? {
-        val biddings = repository.findByProductId(productId)
-        return biddings?.maxByOrNull { it -> it.price }
+        return repository.findHighestBiddingByProductId(productId)
     }
 
     fun biddingFinished(productId: Long): Boolean {
