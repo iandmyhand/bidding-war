@@ -1,0 +1,12 @@
+{{> layouts/header }}
+
+<script>
+    alert(
+        "오류 발생\n" +
+        "상태 코드: {{status}}\n" +
+        "오류 메시지: {{message}}"
+    );
+    window.history.back();
+</script>
+
+{{> layouts/footer }}
