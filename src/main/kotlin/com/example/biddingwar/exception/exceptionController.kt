@@ -9,13 +9,6 @@ import org.springframework.web.server.ResponseStatusException
 
 @ControllerAdvice
 class GlobalExceptionController{
-//    @ExceptionHandler(value = [NotFoundException::class])
-//    fun notFountException(e: NotFoundException, model: Model): String {
-//
-//        model["message"] = "잘못된 경로 입니다. $e"
-//        return "exceptions/exception"
-//    }
-
     @ExceptionHandler(value = [ResponseStatusException::class])
     fun responseStatusException(e: ResponseStatusException, model: Model): String {
 
