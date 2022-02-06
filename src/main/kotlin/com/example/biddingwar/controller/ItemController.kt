@@ -9,7 +9,6 @@ import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ItemRepository
 import com.example.biddingwar.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Controller
@@ -29,39 +28,40 @@ class ItemController(
 
     @GetMapping("/")
     fun items(session: HttpSession, model:Model): String{
-        try {
+        return try {
             model["userId"] = session.getAttribute("userId")
-        } catch(e: NullPointerException){
-            val i = 1
-        }
-        model["items"] = itemRepository.findAll()
+            model["items"] = itemRepository.findAll()
 
-        return "items/list"
+            "items/list"
+        } catch(e: NullPointerException){
+            "redirect:/user/login"
+        }
     }
 
     @GetMapping("/create")
     fun createItemForm(session: HttpSession, model:Model): String{
-        val userId = session.getAttribute("userId")
-
-        return if (userId == null){
-            "redirect:/user/login"
-        } else{
-            model["userId"] = userId
+        return try {
+            model["userId"] = session.getAttribute("userId")
+            model["items"] = itemRepository.findAll()
 
             "items/createItemForm"
+        } catch(e: NullPointerException){
+            "redirect:/user/login"
         }
     }
     @PostMapping("/create")
     fun createItem(form: ItemCreateForm, session: HttpSession, model: Model): String{
-        val userId = session.getAttribute("userId")
+        if (form.price <= 0){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "제품 가격은 0원 보다 커야 합니다.")
+        }
 
-        return if (userId == null || form.price <= 0){
-            "redirect:/user/login"
-        } else{
-            model["item"] = itemRepository.save(form.toEntity(session.getAttribute("userId") as String))
-            model["userId"] = userId
+        return try {
+            model["userId"] = session.getAttribute("userId")
+            model["items"] = itemRepository.findAll()
 
             "redirect:/item/"
+        } catch(e: NullPointerException){
+            "redirect:/user/login"
         }
     }
 
@@ -72,7 +72,6 @@ class ItemController(
     @GetMapping("/list")
     fun listItem(form: ItemSearchForm, session: HttpSession, model: Model): String {
         model["userId"] = session.getAttribute("userId")
-//        model["items"] = itemRepository.findAllByProductNameContainingOrderByCreatedTimeDesc(form.productName)
         model["items"] = itemRepository.findAllByStatusAndBidTimeIsLessThanEqual("입찰", Date())
 
         return "items/list"
@@ -81,8 +80,8 @@ class ItemController(
     @GetMapping("/detail/{itemID}")
     fun detailItembyItemId(@PathVariable itemID: Long, session: HttpSession, model: Model): String{
         var bid_list = bidRepository.findAllByItemId(itemID)!!
-        var item = itemRepository.findByIdOrNull(itemID)?:
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "This item does not exist")
+        var item = itemRepository.findItemById(itemID)?:
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이템을 찾을 수 없습니다.")
 
         model["item"] = item
         model["itemId"] = itemID
@@ -101,17 +100,23 @@ class ItemController(
 
     @PostMapping("/bid")
     fun bidItem(biddingCreateForm: BiddingCreateForm, session: HttpSession): String {
-        var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)!!
+        var item: Item = itemRepository.findItemById(biddingCreateForm.itemId)?:
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이템을 찾을 수 없습니다.")
 
-        if(biddingCreateForm.price > item.price && item.status == "입찰" &&
-                    session.getAttribute("userId") != item.userId){
-            bidRepository.save(biddingCreateForm.toEntity())
-            itemRepository.save(item)
-
-            return "redirect:/item/detail/${biddingCreateForm.itemId}"
-            } else {
-            return "redirect:/item/detail/${biddingCreateForm.itemId}"
+        if(biddingCreateForm.price < item.price){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "입찰 가격은 제춤 가격 이상이어야 합니다.")
         }
+        if(item.status != "입찰"){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "제품 상태가 '입찰' 상태일 경우에만 입찰 할 수 있습니다.")
+        }
+        if(session.getAttribute("userId") == item.userId){
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "자신의 제품에 입찰할 수 없습니다.")
+        }
+
+        bidRepository.save(biddingCreateForm.toEntity())
+        itemRepository.save(item)
+
+        return "redirect:/item/detail/${biddingCreateForm.itemId}"
     }
 
     fun biddingItem(item: Item) : Boolean{
@@ -125,7 +130,8 @@ class ItemController(
 
     @PostMapping("/winbid")
     fun winBidItem(winBidForm: WinBidForm, session: HttpSession): String {
-        var item: Item = itemRepository.findItemById(winBidForm.getItem())!!
+        var item: Item = itemRepository.findItemById(winBidForm.getItem())?:
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, "해당 아이템을 찾을 수 없습니다.")
 
         if (item.status == "입찰" && session.getAttribute("userId") == item.userId) {
             biddingItem(item)
