@@ -6,7 +6,10 @@ import com.study.biddingwar.service.ProductService
 import com.study.biddingwar.service.SecuritySupportService
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
 @RequestMapping("/v1")
@@ -30,7 +33,10 @@ class ProductController(private val productService: ProductService,
     }
 
     @PostMapping("/product")
-    fun createProduct(@RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
+    fun createProduct(principal: Principal,
+                      @RequestBody productDto: ProductDto): ResponseEntity<ProductResultDto> {
+        val userId = principal.name.toLong()
+        productDto.userId = userId
         val product = productService.createProduct(productDto)
 
         return ResponseEntity.ok().body(product)

@@ -1,5 +1,6 @@
 package com.study.biddingwar.domain.entity
 
+import org.hibernate.annotations.CreationTimestamp
 import org.springframework.data.annotation.CreatedDate
 import java.time.Instant
 import javax.persistence.*
@@ -27,7 +28,7 @@ class BiddingInfo {
     @Column(name="bidding_price")
     var biddingPrice:Long = 0
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(name="create_at")
     val createAt:Instant = Instant.now()
 

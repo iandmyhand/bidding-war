@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface BiddingAggregateRepository:JpaRepository<BiddingAggregate, Long> {
     fun findAllByProductInfoId(productId:Long):List<BiddingAggregate>
-    fun findByProductInfoIdAndUserId(productId: Long, userId:Long):BiddingAggregate?
+    fun findByProductInfoIdAndUserId(productId: Long, userId:Long): BiddingAggregate?
 }

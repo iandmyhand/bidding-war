@@ -1,6 +1,7 @@
 package com.study.biddingwar.service
 
 import com.study.biddingwar.common.crypto.BcryptHashUtils
+import com.study.biddingwar.common.crypto.Pbkdf2HashUtils
 import com.study.biddingwar.domain.entity.User
 import com.study.biddingwar.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
@@ -22,8 +23,14 @@ class UserService(private val userRepository: UserRepository):UserDetailsService
     }
 
     fun createUser(userName:String, password:String):User{
-        val user = User(userName= userName, userPassword = BcryptHashUtils.hashed(password))
+//        val user = User(userName= userName, userPassword = BcryptHashUtils.hashed(password))
+        val user = User(userName= userName, userPassword = Pbkdf2HashUtils.hashed(password))
         return userRepository.save(user)
+    }
+
+    fun modifyPassword(user:User, password:String){
+        user.userPassword = Pbkdf2HashUtils.hashed(password)
+        userRepository.save(user)
     }
 
     fun refreshLoginCount(user: User){

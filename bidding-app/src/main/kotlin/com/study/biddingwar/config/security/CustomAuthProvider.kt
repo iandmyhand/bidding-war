@@ -1,8 +1,10 @@
 package com.study.biddingwar.config.security
 
 import com.study.biddingwar.common.crypto.BcryptHashUtils
+import com.study.biddingwar.common.crypto.Pbkdf2HashUtils
 import com.study.biddingwar.domain.entity.User
 import com.study.biddingwar.service.UserService
+import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
@@ -20,11 +22,32 @@ class CustomAuthProvider(private val userService: UserService):AuthenticationPro
         var details = HashMap<String, Any>()
 
         //password valid check
-        if(!BcryptHashUtils.checkPw(password, user.password)){
-            user.failedCnt = user.failedCnt++
-            userService.refreshLoginCount(user)
-            throw RuntimeException("password invalid")
+        var hasModifyPwd = false
+        try{
+            if(!BcryptHashUtils.checkPw(password, user.password)){
+                user.failedCnt = user.failedCnt++
+                userService.refreshLoginCount(user)
+                throw RuntimeException("password invalid")
+            }else{
+                userService.modifyPassword(user, password)
+                hasModifyPwd = true
+            }
+        }catch(e:Exception){
+            logger.error("other password, ${e.message}", e)
         }
+
+        try{
+            if(!hasModifyPwd){
+                if(!Pbkdf2HashUtils.checkPw(password, user.password)){
+                    user.failedCnt = user.failedCnt++
+                    userService.refreshLoginCount(user)
+                    throw RuntimeException("password invalid")
+                }
+            }
+        }catch(e:Exception){
+            logger.error("other password, ${e.message}", e)
+        }
+
         //user login 성공하면 count 0으로 초기화
         user.failedCnt = 0
         userService.refreshLoginCount(user)
@@ -50,5 +73,9 @@ class CustomAuthProvider(private val userService: UserService):AuthenticationPro
 
     override fun supports(authentication: Class<*>): Boolean {
         return authentication == UsernamePasswordAuthenticationToken::class.java
+    }
+
+    companion object{
+        private val logger = LoggerFactory.getLogger(this::class.java)
     }
 }

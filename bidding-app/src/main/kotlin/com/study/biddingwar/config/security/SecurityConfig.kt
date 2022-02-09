@@ -34,7 +34,7 @@ class SecurityConfig(private val customAuthEntryPoint: CustomAuthEntryPoint,
             .authorizeRequests {
                 //일단 모든 path 허용
                 authReq->
-                authReq.antMatchers("/v1/user/signup").permitAll()
+                authReq.antMatchers("/v1/user/signup", "/test/call").permitAll()
                 authReq.anyRequest().authenticated()
             }
             .csrf()
@@ -72,7 +72,7 @@ class SecurityConfig(private val customAuthEntryPoint: CustomAuthEntryPoint,
     fun corsConfigurationSource(): CorsConfigurationSource {
 
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = Arrays.asList("http://localhost:3000")
+        configuration.allowedOriginPatterns = Arrays.asList("*")
         configuration.allowedMethods =
             Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         configuration.allowedHeaders = Arrays.asList("*")

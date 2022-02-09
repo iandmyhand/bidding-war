@@ -7,5 +7,6 @@ import org.springframework.boot.runApplication
 class BiddingWarApplication
 
 fun main(args: Array<String>) {
+//    ElasticApmAttacher.attach()
     runApplication<BiddingWarApplication>(*args)
 }

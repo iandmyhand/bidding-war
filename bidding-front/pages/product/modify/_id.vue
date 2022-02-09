@@ -22,7 +22,7 @@ export default {
     async load(){
       const id = this.$route.params.id
       
-      await this.$axios.get("http://localhost:8080/bidding/v1/products/"+id)
+      await this.$axios.get("http://localhost:8081/bidding/v1/products/"+id)
       .then(res=>{
         this.product = res.data
       })

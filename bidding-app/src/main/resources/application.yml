@@ -5,3 +5,4 @@ spring:
 server:
   servlet:
     context-path: /bidding
+  port: 8081
