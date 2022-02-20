@@ -1,6 +1,6 @@
 package com.example.biddingwar.service.product
 
-import com.example.biddingwar.database.Product
+import com.example.biddingwar.database.entity.Product
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ProductRepository
 import org.springframework.scheduling.annotation.Scheduled

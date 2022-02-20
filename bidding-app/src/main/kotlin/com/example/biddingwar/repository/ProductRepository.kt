@@ -1,6 +1,6 @@
 package com.example.biddingwar.repository
 
-import com.example.biddingwar.database.Product
+import com.example.biddingwar.database.entity.Product
 import org.springframework.data.repository.CrudRepository
 import java.time.Instant
 

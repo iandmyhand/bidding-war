@@ -1,6 +1,6 @@
 package com.example.biddingwar.controller
 
-import com.example.biddingwar.database.Bid
+import com.example.biddingwar.database.entity.Bid
 import com.example.biddingwar.service.bid.BidService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation

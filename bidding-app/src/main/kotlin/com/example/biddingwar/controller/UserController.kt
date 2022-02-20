@@ -1,6 +1,8 @@
 package com.example.biddingwar.controller
 
-import com.example.biddingwar.database.User
+import com.example.biddingwar.database.dto.UserSignUpRequestDto
+import com.example.biddingwar.database.dto.UserSignUpResponseDto
+import com.example.biddingwar.database.entity.User
 import com.example.biddingwar.service.user.UserService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -18,8 +20,8 @@ class UserController(val service: UserService) {
 
     @PostMapping("/sign-up")
     @ApiOperation(value = "회원가입", notes = "회원가입 POST API")
-    fun signUp(@RequestBody user: User) : ResponseEntity<String> {
-        return service.signUp(user)
+    fun signUp(@RequestBody userSignUpRequestDto: UserSignUpRequestDto) : ResponseEntity<UserSignUpResponseDto> {
+        return ResponseEntity.ok().body(service.signUp(userSignUpRequestDto))
     }
 
     @PostMapping("/sign-in")
