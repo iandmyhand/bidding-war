@@ -7,7 +7,6 @@ import java.util.*
 
 interface ItemRepository : JpaRepository<Item, Long> {
     fun findAllByProductNameContainingOrderByCreatedTimeDesc(productName: String): Iterable<Item>
-    fun findItemById(id: Long) : Item?
     fun findAllByStatusAndBidTimeIsLessThanEqual(status: String, bidTime: Date): Iterable<Item>
-    fun findAllByStatus(status: String): Iterable<Item>
+    fun findItemById(itemId: Long): Item?
 }
