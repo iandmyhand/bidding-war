@@ -1,6 +1,6 @@
 package com.example.biddingwar.service.user
 
-import com.example.biddingwar.database.User
+import com.example.biddingwar.database.entity.User
 import com.example.biddingwar.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetailsService

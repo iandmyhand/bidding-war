@@ -1,36 +1,35 @@
 package com.example.biddingwar.service.user
 
-import com.example.biddingwar.database.User
+import com.example.biddingwar.database.dto.UserSignUpRequestDto
+import com.example.biddingwar.database.dto.UserSignUpResponseDto
+import com.example.biddingwar.database.entity.User
 import com.example.biddingwar.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
+import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 import javax.transaction.Transactional
 
 @Service
 @Transactional
 class UserService(val repository: UserRepository) {
-
     val bcrypt = BCryptPasswordEncoder(11)
 
-    fun signUp(user: User): ResponseEntity<String> {
-        val signedUpUsers: User? = repository.findByEmail(user.email)
+    fun signUp(userSignUpRequestDto: UserSignUpRequestDto): UserSignUpResponseDto {
+        val signedUpUsers: User? = repository.findByEmail(userSignUpRequestDto.email)
 
         if (signedUpUsers != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("DUPLICATE_USER_EMAIL")
+                throw Exception("Duplicated User Email")
             }
 
-        if (user.pwd.length < 4) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Minimum password length is 4")
+        if (userSignUpRequestDto.password.length < 4) {
+            throw Exception("Minimum password length is 4")
         }
 
-        user.pwd = bcrypt.encode(user.password)
-        repository.save(user)
-
-        return ResponseEntity.ok().body("OK")
+        val user = createUser(userEmail = userSignUpRequestDto.email, userPassword = userSignUpRequestDto.password)
+        return UserSignUpResponseDto(id = user.id!!, email = user.email, createdAt = user.createDt)
     }
 
     fun signIn(userRequest: User, request: HttpServletRequest): ResponseEntity<String> {
@@ -51,4 +50,9 @@ class UserService(val repository: UserRepository) {
     }
 
     fun getAll() = repository.findAll()
+
+    fun createUser(userEmail: String, userPassword: String): User {
+        return repository.save(User(email = userEmail, pwd = bcrypt.encode(userPassword)))
+
+    }
 }

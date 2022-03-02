@@ -1,6 +1,6 @@
 package com.example.biddingwar.repository
 
-import com.example.biddingwar.database.Bid
+import com.example.biddingwar.database.entity.Bid
 import io.kotlintest.shouldBe
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

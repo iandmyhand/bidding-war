@@ -1,10 +1,9 @@
 package com.example.biddingwar.controller
 
-import com.example.biddingwar.database.Product
+import com.example.biddingwar.database.entity.Product
 import com.example.biddingwar.service.product.ProductService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import jdk.jfr.Description
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest

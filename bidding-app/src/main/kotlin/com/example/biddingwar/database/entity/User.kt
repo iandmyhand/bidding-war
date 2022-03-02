@@ -1,6 +1,7 @@
-package com.example.biddingwar.database
+package com.example.biddingwar.database.entity
 
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import org.hibernate.validator.constraints.Length
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -12,15 +13,17 @@ import javax.persistence.Id
 
 @Entity
 data class User(
-    @Id @GeneratedValue val id: Long,
+    @Id
+    @GeneratedValue
+    val id: Long? = null,
     var email: String,
-
     @Length(min = 4)
     var pwd: String,
     var session: Pair<Long, String>? = null,
-
     @CreationTimestamp
-    var createDt: LocalDateTime = LocalDateTime.now()
+    var createDt: LocalDateTime = LocalDateTime.now(),
+    @UpdateTimestamp
+    var updatedAt: LocalDateTime? = null
 ): UserDetails {
 
     override fun getPassword(): String = pwd

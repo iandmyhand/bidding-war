@@ -1,6 +1,6 @@
 package com.example.biddingwar.service.bid
 
-import com.example.biddingwar.database.Bid
+import com.example.biddingwar.database.entity.Bid
 import com.example.biddingwar.repository.BidRepository
 import com.example.biddingwar.repository.ProductRepository
 import org.springframework.http.HttpStatus

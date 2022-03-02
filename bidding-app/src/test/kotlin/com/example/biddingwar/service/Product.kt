@@ -1,9 +1,9 @@
 package com.example.biddingwar.service
 
-import com.example.biddingwar.database.Bid
+import com.example.biddingwar.database.entity.Bid
 import com.example.biddingwar.repository.ProductRepository
 import com.example.biddingwar.service.product.ProductService
-import com.example.biddingwar.database.Product
+import com.example.biddingwar.database.entity.Product
 import com.example.biddingwar.repository.BidRepository
 import io.kotlintest.shouldBe
 import org.assertj.core.api.Assertions.assertThat
